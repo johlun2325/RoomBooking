@@ -1,2 +1,23 @@
-package com.example.roombooking.models;public class Room {
+package com.example.roombooking.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Room {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private Type type;
+    private double price;
+
 }

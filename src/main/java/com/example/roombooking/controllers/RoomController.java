@@ -1,2 +1,7 @@
-package com.example.roombooking.controllers;public class RoomController {
+package com.example.roombooking.controllers;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class RoomController {
 }
