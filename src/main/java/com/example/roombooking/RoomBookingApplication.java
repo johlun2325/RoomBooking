@@ -30,18 +30,16 @@ public class RoomBookingApplication {
 //        return args -> {
 //
 //            RoomType singleRoom = new RoomType("Single", 0);
-//            RoomType largeSingleRoom = new RoomType("LargeSingle", 1);
+//            RoomType largeSingleRoom = new RoomType("Large Single", 1);
 //            RoomType doubleRoom = new RoomType("Double", 1);
-//            RoomType largeDoubleRoom = new RoomType("LargeDouble", 2);
-//
+//            RoomType largeDoubleRoom = new RoomType("Large Double", 2);
 //
 //            typeRepo.saveAll(List.of(singleRoom, largeSingleRoom, doubleRoom, largeDoubleRoom));
 //
-//
-//            Room room1 = new Room(singleRoom, 995.95);
-//            Room room2 = new Room(largeSingleRoom, 995.95);
-//            Room room3 = new Room(doubleRoom, 1995.95);
-//            Room room4 = new Room(largeDoubleRoom, 2995.95);
+//            Room room1 = new Room(995.95, singleRoom);
+//            Room room2 = new Room(995.95, largeSingleRoom);
+//            Room room3 = new Room(1995.95, doubleRoom);
+//            Room room4 = new Room(2995.95, largeDoubleRoom);
 //
 //            roomRepo.saveAll(List.of(room1, room2, room3, room4));
 //
@@ -57,8 +55,6 @@ public class RoomBookingApplication {
 //            Booking booking3 = new Booking(customer3, room3, LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 20));
 //
 //            bookingRepo.saveAll(List.of(booking1, booking2, booking3));
-//
-//
 //        };
 //    }
 
