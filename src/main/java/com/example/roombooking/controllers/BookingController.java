@@ -1,8 +1,11 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Customer;
 import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.services.BookingService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
@@ -19,42 +22,49 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/booking")
+@RequiredArgsConstructor
 class BookingController {
 
-    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
-    private final BookingRepo bookingRepo;
 
-    public BookingController(BookingRepo bookingRepo) {
-        this.bookingRepo = bookingRepo;
-    }
+    private final BookingService bookingService;
 
     @GetMapping()
-    CollectionModel<EntityModel<Booking>> all() {
-
-        List<EntityModel<Booking>> bookings = bookingRepo.findAll().stream()
-                .map(booking -> EntityModel.of(booking,
-                        linkTo(methodOn(BookingController.class).one(booking.getId())).withSelfRel(),
-                        linkTo(methodOn(BookingController.class).all()).withRel("bookings")))
-                .toList();
-
-        return CollectionModel.of(bookings, linkTo(methodOn(BookingController.class).all()).withSelfRel());
+    List<BookingDTO> getAllBookings() {
+        return bookingService.getAllBookingDTOs();
     }
 
-    @GetMapping("/{id}")
-    EntityModel<Booking> one(@PathVariable Long id) {
-
-        Booking booking = bookingRepo.findById(id)
-                .orElseThrow(() -> {
-                    final String WARNING_MESSAGE = "No bookings with ID: %s was found".formatted(id);
-                    logger.warn(WARNING_MESSAGE);
-                    return new NoSuchElementException(WARNING_MESSAGE);
-                });
-
-        return EntityModel.of(booking,
-                linkTo(methodOn(BookingController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(BookingController.class).all()).withRel("bookings"));
+    @GetMapping({"/{id}"})
+    BookingDTO getAllBookings(@PathVariable Long id) {
+        return bookingService.getBookingDTO(id);
     }
+
+//    @GetMapping()
+//    CollectionModel<EntityModel<Booking>> all() {
+//
+//        List<EntityModel<Booking>> bookings = bookingRepo.findAll().stream()
+//                .map(booking -> EntityModel.of(booking,
+//                        linkTo(methodOn(BookingController.class).one(booking.getId())).withSelfRel(),
+//                        linkTo(methodOn(BookingController.class).all()).withRel("bookings")))
+//                .toList();
+//
+//        return CollectionModel.of(bookings, linkTo(methodOn(BookingController.class).all()).withSelfRel());
+//    }
+//
+//    @GetMapping("/{id}")
+//    EntityModel<Booking> one(@PathVariable Long id) {
+//
+//        Booking booking = bookingRepo.findById(id)
+//                .orElseThrow(() -> {
+//                    final String WARNING_MESSAGE = "No bookings with ID: %s was found".formatted(id);
+//                    logger.warn(WARNING_MESSAGE);
+//                    return new NoSuchElementException(WARNING_MESSAGE);
+//                });
+//
+//        return EntityModel.of(booking,
+//                linkTo(methodOn(BookingController.class).one(id)).withSelfRel(),
+//                linkTo(methodOn(BookingController.class).all()).withRel("bookings"));
+//    }
 
     // Todo:
     //  Define and implement the behaviour of the booking functionality:

@@ -34,12 +34,15 @@ public class Customer {
         this.bookings = new ArrayList<>();
     }
 
-    public void addBooking() {
-        //add
+    public void addBooking(Booking booking) {
+        boolean notFound = bookings.stream().noneMatch(it -> it.equals(booking));
+        if (notFound) {
+            bookings.add(booking);
+        }
     }
 
-    public void removeBooking() {
-        //remove
+    public void removeBooking(Booking booking) {
+        bookings.removeIf(it -> it.equals(booking));
     }
 
 }
