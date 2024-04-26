@@ -1,12 +1,17 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.MiniRoomDTO;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/room")
@@ -17,6 +22,17 @@ public class RoomController {
 
     private final RoomService roomService;
     private final RoomRepo roomRepo;
+
+
+    @GetMapping()
+    List<MiniRoomDTO> getAllCustomers() {
+        return roomService.findAllRooms();
+    }
+
+    @GetMapping({"/{id}"})
+    MiniRoomDTO getCustomer(@PathVariable Long id) {
+        return roomService.findRoomById(id);
+    }
 
 
 //    private Room findRoom(Long id) {
@@ -46,7 +62,5 @@ public class RoomController {
 //                linkTo(methodOn(RoomController.class).one(id)).withSelfRel(),
 //                linkTo(methodOn(RoomController.class).all()).withRel("rooms"));
 //    }
-
-
 
 }

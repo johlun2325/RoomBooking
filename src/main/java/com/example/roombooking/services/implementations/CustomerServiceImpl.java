@@ -78,9 +78,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String addCustomer(CustomerDTO newCustomer) {
-
-        var customer = customerRepo.findById(newCustomer.getId());
-
-        return "Customer added";
+        return null;
     }
 }
