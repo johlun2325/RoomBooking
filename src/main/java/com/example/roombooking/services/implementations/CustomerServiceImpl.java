@@ -6,12 +6,10 @@ import com.example.roombooking.dto.MiniCustomerDTO;
 import com.example.roombooking.dto.MiniRoomDTO;
 import com.example.roombooking.models.Customer;
 import com.example.roombooking.repos.CustomerRepo;
-import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -20,6 +18,16 @@ import java.util.NoSuchElementException;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepo customerRepo;
+
+    @Override
+    public Customer customerDTOtoCustomer(CustomerDTO customer) {
+        return Customer.builder()
+                .id(customer.getId())
+                .name(customer.getName())
+                .ssn(customer.getSsn())
+                .email(customer.getEmail())
+                .build();
+    }
 
     @Override
     public MiniCustomerDTO customerToMiniCustomerDTO(Customer customer) {
@@ -46,6 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
                                         booking.getRoom().getId(),
                                         booking.getRoom().getPrice(),
                                         booking.getRoom().getRoomType()),
+                                booking.getNumberOfPeople(),
                                 booking.getStartDate(),
                                 booking.getEndDate()))
                         .toList())
@@ -65,5 +74,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.findById(id)
                 .map(this::customerToCustomerDTO)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public String addCustomer(CustomerDTO newCustomer) {
+
+        var customer = customerRepo.findById(newCustomer.getId());
+
+        return "Customer added";
     }
 }

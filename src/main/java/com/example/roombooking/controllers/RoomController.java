@@ -1,21 +1,12 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.BookingDTO;
-import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/room")
@@ -25,6 +16,7 @@ public class RoomController {
     private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
     private final RoomService roomService;
+    private final RoomRepo roomRepo;
 
 
 //    private Room findRoom(Long id) {
@@ -34,7 +26,7 @@ public class RoomController {
 //            return new NoSuchElementException(WARNING_MESSAGE);
 //        });
 //    }
-
+//
 //    @GetMapping()
 //    CollectionModel<EntityModel<Room>> all() {
 //

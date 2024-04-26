@@ -15,6 +15,7 @@ public class MiniBookingDTO {
 
     private Long id;
     private MiniRoomDTO room;
+    private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
 

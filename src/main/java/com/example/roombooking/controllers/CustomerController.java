@@ -1,9 +1,6 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.CustomerDTO;
-import com.example.roombooking.models.Customer;
-import com.example.roombooking.repos.BookingRepo;
-import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -11,9 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/customer")
@@ -34,10 +28,16 @@ public class CustomerController {
         return customerService.getCustomerDTO(id);
     }
 
+    @PostMapping("/add")
+    public String addCustomer(@RequestBody CustomerDTO newCustomer) {
+
+        return null;
+    }
+
 //    @GetMapping()
-//    CollectionModel<EntityModel<Customer>> all() {
+//    CollectionModel<EntityModel<CustomerDTO>> all() {
 //
-//        List<EntityModel<Customer>> customers = customerRepo.findAll().stream()
+//        List<EntityModel<CustomerDTO>> customers = customerService.getAllCustomersDTO().stream()
 //                .map(customer -> EntityModel.of(customer,
 //                        linkTo(methodOn(CustomerController.class).one(customer.getId())).withSelfRel(),
 //                        linkTo(methodOn(CustomerController.class).all()).withRel("customers")))
@@ -47,34 +47,15 @@ public class CustomerController {
 //    }
 //
 //    @GetMapping("/{id}")
-//    EntityModel<Customer> one(@PathVariable Long id) {
+//    EntityModel<CustomerDTO> one(@PathVariable Long id) {
 //
-//        Customer customer = customerRepo.findById(id)
-//                .orElseThrow(() -> {
-//                    final String WARNING_MESSAGE = "No customer with ID: %s was found".formatted(id);
-//                    logger.warn(WARNING_MESSAGE);
-//                    return new NoSuchElementException(WARNING_MESSAGE);
-//                });
+//        CustomerDTO customer = customerService.getCustomerDTO(id);
 //
 //        return EntityModel.of(customer,
 //                linkTo(methodOn(CustomerController.class).one(id)).withSelfRel(),
 //                linkTo(methodOn(CustomerController.class).all()).withRel("customers"));
 //    }
 //
-//    @PostMapping("/add")
-//    public CollectionModel<EntityModel<Customer>> addCustomer(@RequestBody NewCustomerRequest request) {
-//
-//        var newCustomer = customerRepo.findCustomerBySsn(request.getSsn());
-//
-//        if (newCustomer.isEmpty()) {
-//            customerRepo.save(new Customer(request.getName(), request.getSsn(), request.getEmail()));
-//            logger.info("New customer was added");
-//            return all();
-//        }
-//
-//        logger.warn("Customer is already present: ID {}", newCustomer.get().getId());
-//        return all();
-//    }
 //
 //    @PutMapping("/updateEmail")
 //    public CollectionModel<EntityModel<Customer>> updateCustomer(@RequestBody CustomerUpdateEmailRequest request) {

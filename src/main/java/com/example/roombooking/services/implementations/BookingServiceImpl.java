@@ -6,9 +6,7 @@ import com.example.roombooking.dto.MiniCustomerDTO;
 import com.example.roombooking.dto.MiniRoomDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.repos.BookingRepo;
-import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,7 @@ public class BookingServiceImpl implements BookingService {
                         booking.getRoom().getId(),
                         booking.getRoom().getPrice(),
                         booking.getRoom().getRoomType()))
+                .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
                 .build();
@@ -48,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
                         booking.getRoom().getId(),
                         booking.getRoom().getPrice(),
                         booking.getRoom().getRoomType()))
+                .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
                 .build();
