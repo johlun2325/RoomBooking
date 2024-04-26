@@ -1,6 +1,6 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.RoomUpdatePriceRequest;
+//import com.example.roombooking.dto.RoomUpdatePriceRequest;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import org.slf4j.Logger;
@@ -54,15 +54,15 @@ public class RoomController {
                 linkTo(methodOn(RoomController.class).all()).withRel("rooms"));
     }
 
-    @PutMapping("/updatePrice")
-    CollectionModel<EntityModel<Room>> updatePrice(@RequestBody RoomUpdatePriceRequest roomUpdatePriceRequest) {
-
-        Room room = findRoom(roomUpdatePriceRequest.getId());
-        room.setPrice(roomUpdatePriceRequest.getPrice());
-        roomRepo.save(room);
-        logger.info("Room with ID {} price updated: {}", room.getId(), room.getPrice());
-
-        return all();
-    }
+//    @PutMapping("/updatePrice")
+//    CollectionModel<EntityModel<Room>> updatePrice(@RequestBody RoomUpdatePriceRequest roomUpdatePriceRequest) {
+//
+//        Room room = findRoom(roomUpdatePriceRequest.getId());
+//        room.setPrice(roomUpdatePriceRequest.getPrice());
+//        roomRepo.save(room);
+//        logger.info("Room with ID {} price updated: {}", room.getId(), room.getPrice());
+//
+//        return all();
+//    }
 
 }
