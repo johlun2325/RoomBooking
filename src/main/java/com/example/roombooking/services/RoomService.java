@@ -1,6 +1,6 @@
 package com.example.roombooking.services;
 
-import com.example.roombooking.dto.MiniRoomDTO;
+import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
 
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public interface RoomService {
 
 
-    MiniRoomDTO roomToMiniRoomDTO(Room room);
+    RoomLiteDTO roomToMiniRoomDTO(Room room);
 
-    Room minRoomDTOroom (MiniRoomDTO room);
+    Room minRoomDTOroom (RoomLiteDTO room);
 
-    List<MiniRoomDTO> findAllRooms();
+    List<RoomLiteDTO> findAllRooms();
 
-    MiniRoomDTO findRoomById(Long id);
+    RoomLiteDTO findRoomById(Long id);
 }

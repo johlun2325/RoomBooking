@@ -5,17 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MiniCustomerDTO {
+public class BookingLiteDTO {
 
     private Long id;
-    private String name;
-    private String ssn;
-    private String email;
+    private RoomLiteDTO room;
+    private int numberOfPeople;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 }

@@ -17,7 +17,6 @@ public class CustomerDTO {
     private String name;
     private String ssn;
     private String email;
-
-    private List<MiniBookingDTO> bookings;
+    private List<BookingLiteDTO> bookings;
 
 }

@@ -1,6 +1,5 @@
 package com.example.roombooking.dto;
 
-import com.example.roombooking.models.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MiniRoomDTO {
+public class CustomerLiteDTO {
 
     private Long id;
-    private double price;
-    private RoomType roomType;
+    private String name;
+    private String ssn;
+    private String email;
 
 }

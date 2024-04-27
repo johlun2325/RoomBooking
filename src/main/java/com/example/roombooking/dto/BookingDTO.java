@@ -14,8 +14,8 @@ import java.time.LocalDate;
 public class BookingDTO {
 
     private Long id;
-    private MiniCustomerDTO customer;
-    private MiniRoomDTO room;
+    private CustomerLiteDTO customer;
+    private RoomLiteDTO room;
     private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;

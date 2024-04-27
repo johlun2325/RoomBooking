@@ -3,10 +3,7 @@ package com.example.roombooking.controllers;
 import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.services.BookingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,7 +11,6 @@ import java.util.List;
 @RequestMapping("/booking")
 @RequiredArgsConstructor
 class BookingController {
-
 
     private final BookingService bookingService;
 
@@ -25,6 +21,11 @@ class BookingController {
 
     @GetMapping({"/{id}"})
     BookingDTO getAllBookings(@PathVariable Long id) {
+        return bookingService.getBookingDTO(id);
+    }
+
+    @DeleteMapping({"/delete"})
+    BookingDTO deleteCustomer(@PathVariable Long id) {
         return bookingService.getBookingDTO(id);
     }
 
