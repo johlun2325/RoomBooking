@@ -1,13 +1,17 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.models.Customer;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController {
@@ -15,12 +19,17 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("all")
-    List<CustomerDTO> getAllCustomers() {
-        return customerService.findAllCustomers();
+    public String getAllCustomers(Model model) {
+        List<CustomerDTO> all = customerService.findAllCustomers();
+        model.addAttribute("allCustomers", all);
+        model.addAttribute("header", "Alla kunder");
+        model.addAttribute("id", "Id");
+        model.addAttribute("name", "Namn");
+        return "allCustomers";
     }
 
     @GetMapping({"/{id}"})
-    CustomerDTO getCustomer(@PathVariable Long id) {
+    public CustomerDTO getCustomer(@PathVariable Long id) {
         return customerService.findCustomerById(id);
     }
 
