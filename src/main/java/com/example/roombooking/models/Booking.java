@@ -2,6 +2,7 @@ package com.example.roombooking.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Booking {
 
     @Id
@@ -25,12 +27,15 @@ public class Booking {
     @JoinColumn
     private Room room;
 
+    private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate) {
+
+    public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
         this.room = room;
+        this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
     }

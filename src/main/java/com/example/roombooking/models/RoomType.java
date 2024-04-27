@@ -1,14 +1,12 @@
 package com.example.roombooking.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@EqualsAndHashCode(callSuper = false)
 @Entity
-@Data()
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

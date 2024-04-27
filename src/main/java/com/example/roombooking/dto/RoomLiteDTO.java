@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MiniRoomDTO {
+public class RoomLiteDTO {
 
     private Long id;
     private double price;
