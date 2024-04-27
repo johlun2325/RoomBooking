@@ -149,6 +149,12 @@ public class CustomerServiceImpl implements CustomerService {
                 });
     }
 
+    //thymeleaf delete
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepo.deleteById(id);
+    }
+
     // HATEOAS: Not used
     @Override
     public CollectionModel<EntityModel<CustomerDTO>> all() {

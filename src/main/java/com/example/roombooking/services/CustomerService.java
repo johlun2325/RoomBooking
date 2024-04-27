@@ -30,6 +30,9 @@ public interface CustomerService {
 
     String deleteCustomer(CustomerDTO customer);
 
+    //thymeleaf delete
+    void deleteCustomerById(Long id);
+
     String updateCustomer(CustomerDTO customer);
 
 }

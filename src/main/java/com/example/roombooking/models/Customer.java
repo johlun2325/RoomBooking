@@ -25,7 +25,7 @@ public class Customer {
     private String ssn;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL) //ska det kaskada härifrån?
     private List<Booking> bookings;
 
     public Customer(String name, String ssn, String email) {

@@ -25,6 +25,7 @@ public class CustomerController {
         model.addAttribute("header", "Alla kunder");
         model.addAttribute("id", "Id");
         model.addAttribute("name", "Namn");
+        model.addAttribute("delete", "Delete");
         return "allCustomers";
     }
 
@@ -43,10 +44,17 @@ public class CustomerController {
         return customerService.updateCustomer(customer);
     }
 
-    @DeleteMapping("/delete")
-    public String deleteCustomer(@RequestBody CustomerDTO customer) {
-        return customerService.deleteCustomer(customer);
+
+    //delete with thymeleaf - lägg till kolla om bokning finns, då ej ta bort.
+    @RequestMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomerById(id);
+        return "redirect:/customer/all";
     }
+//    @DeleteMapping("/delete")
+//    public String deleteCustomer(@RequestBody CustomerDTO customer) {
+//        return customerService.deleteCustomer(customer);
+//    }
 
     // HATEOAS: Not used
 //    @GetMapping()
