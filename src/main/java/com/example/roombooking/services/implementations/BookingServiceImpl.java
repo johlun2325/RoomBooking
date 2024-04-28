@@ -1,12 +1,12 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.BookingDTO;
-import com.example.roombooking.dto.BookingLiteDTO;
-import com.example.roombooking.dto.CustomerLiteDTO;
-import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.dto.*;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.services.CustomerService;
+import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -25,6 +26,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepo bookingRepo;
+    private final CustomerService customerService;
+    private final RoomService roomService;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     @Override
@@ -87,9 +90,75 @@ public class BookingServiceImpl implements BookingService {
     private LocalDate startDate;
     private LocalDate endDate;
      */
+    // Usage: When a new customer creates a new booking!
     @Override
     public Booking convertDtoToBooking(BookingDTO booking) {
-        return null;
+        return Booking.builder()
+                .id(booking.getId())
+                .customer(customerService.convertLiteDtoToCustomer(booking.getCustomer()))
+                .room(roomService.convertLiteDtoToRoom(booking.getRoom()))
+                .numberOfPeople(booking.getNumberOfPeople())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+    }
+
+    /*
+    private Long id;
+    private String name;
+    private String ssn;
+    private String email;
+    private List<Booking> bookings;
+     */
+    @Override
+    public String addBooking(BookingDTO booking) {
+
+        // När vi har kommit hit... har det bara visats tillgängliga rum (Datum och antal personer)
+
+        var existingBooking = bookingRepo.findById(booking.getId());
+
+        if (existingBooking.isPresent()) {
+            return "Booking already exists";
+        }
+
+        var roomType = booking.getRoom().getRoomType();
+
+
+
+
+        var customerExists = customerService.findCustomerById(booking.getCustomer().getId());
+
+        if (customerExists.getId() == null) {
+
+        }
+
+
+
+
+
+        return "New booking added";
+//        var message = new AtomicReference<String>();
+//        return bookingRepo.findById(booking.getId())
+//                .map(foundBooking -> {
+//                    message.set("Booking with ID: %s exists".formatted(booking.getId()));
+//                    LOGGER.warn(message.get());
+//                    return message.get();
+//                })
+//                .orElseGet(() -> {
+//                    message.set("Booking with ID: %s added".formatted(booking.getId()));
+//                    LOGGER.info(message.get());
+//                    return message.get();
+//                });
+    }
+
+    @Override
+    public String deleteBooking(BookingDTO booking) {
+        return "";
+    }
+
+    @Override
+    public String updateBooking(BookingDTO booking) {
+        return "";
     }
 
     // HATEOAS: Not used

@@ -33,8 +33,9 @@ public class RoomServiceImpl  implements RoomService {
                 .build();
     }
 
+    // Usage: When a new customer creates a new booking!
     @Override
-    public Room convertDtoToRoom(RoomLiteDTO room) {
+    public Room convertLiteDtoToRoom(RoomLiteDTO room) {
         return Room.builder()
                 .id(room.getId())
                 .price(room.getPrice())

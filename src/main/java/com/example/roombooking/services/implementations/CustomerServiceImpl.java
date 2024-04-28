@@ -72,6 +72,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
+    // Usage: When a new customer creates a new booking!
+    @Override
+    public Customer convertLiteDtoToCustomer(CustomerLiteDTO customer) {
+        return Customer.builder()
+                .id(customer.getId())
+                .name(customer.getName())
+                .ssn(customer.getSsn())
+                .email(customer.getEmail())
+                .build();
+    }
+
     @Override
     public List<CustomerDTO> findAllCustomers() {
         return customerRepo.findAll()

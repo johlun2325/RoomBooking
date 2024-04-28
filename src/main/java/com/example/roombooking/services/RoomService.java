@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface RoomService {
 
-
-    Room convertDtoToRoom(RoomLiteDTO room);
+    // Usage: When a new customer creates a new booking!
+    Room convertLiteDtoToRoom(RoomLiteDTO room);
 
     RoomLiteDTO convertToRoomLiteDto(Room room);
 

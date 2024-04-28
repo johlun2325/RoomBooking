@@ -25,4 +25,10 @@ public interface BookingService {
 
     // HATEOAS: Not used
     EntityModel<BookingDTO> one(Long id);
+
+    String addBooking(BookingDTO booking);
+
+    String deleteBooking(BookingDTO booking);
+
+    String updateBooking(BookingDTO booking);
 }

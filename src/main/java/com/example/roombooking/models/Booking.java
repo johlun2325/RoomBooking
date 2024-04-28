@@ -31,7 +31,6 @@ public class Booking {
     private LocalDate startDate;
     private LocalDate endDate;
 
-
     public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
         this.room = room;

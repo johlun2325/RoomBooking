@@ -16,6 +16,9 @@ public interface CustomerService {
 
     CustomerDTO convertToCustomerDto(Customer customer);
 
+    // Usage: When a new customer creates a new booking!
+    Customer convertLiteDtoToCustomer(CustomerLiteDTO customer);
+
     List<CustomerDTO> findAllCustomers();
 
     CustomerDTO findCustomerById(Long id);
