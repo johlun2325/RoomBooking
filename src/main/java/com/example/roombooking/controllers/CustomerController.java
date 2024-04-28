@@ -1,7 +1,6 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.CustomerDTO;
-import com.example.roombooking.models.Customer;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
