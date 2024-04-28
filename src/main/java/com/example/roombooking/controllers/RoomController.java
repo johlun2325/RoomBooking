@@ -1,10 +1,18 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/room")
@@ -12,39 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     private final RoomService roomService;
-    private final RoomRepo roomRepo;
 
+    @GetMapping()
+    List<RoomLiteDTO> getAllRooms() {
+        return roomService.findAllRooms();
+    }
 
+    @GetMapping({"/{id}"})
+    RoomLiteDTO getRoom(@PathVariable Long id) {
+        return roomService.findRoomById(id);
+    }
+
+//    // HATEOAS: Not used
 //    @GetMapping()
-//    List<RoomLiteDTO> getAllCustomers() {
-//        return roomService.findAllRooms();
+//    CollectionModel<EntityModel<RoomLiteDTO>> findAllRooms() {
+//        return roomService.all();
 //    }
 //
-//    @GetMapping({"/{id}"})
-//    RoomLiteDTO getCustomer(@PathVariable Long id) {
-//        return roomService.findRoomById(id);
-//    }
-
-
-
-//    @GetMapping()
-//    CollectionModel<EntityModel<Room>> findAllRooms() {
-//
-//        List<EntityModel<Room>> rooms = roomRepo.findAll().stream()
-//                .map(room -> EntityModel.of(room,
-//                        linkTo(methodOn(RoomController.class).one(room.getId())).withSelfRel(),
-//                        linkTo(methodOn(RoomController.class).all()).withRel("rooms")))
-//                .toList();
-//
-//        return CollectionModel.of(rooms, linkTo(methodOn(RoomController.class).all()).withSelfRel());
-//    }
-
+//    // HATEOAS: Not used
 //    @GetMapping("/{id}")
-//    EntityModel<Room> findRoomById(@PathVariable Long id) {
-//
-//        return EntityModel.of((id),
-//                linkTo(methodOn(RoomController.class).one(id)).withSelfRel(),
-//                linkTo(methodOn(RoomController.class).all()).withRel("rooms"));
+//    EntityModel<RoomLiteDTO> findRoomById(@PathVariable Long id) {
+//        return roomService.one(id);
 //    }
 
 }

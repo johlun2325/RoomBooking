@@ -7,10 +7,15 @@ import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +25,7 @@ public class RoomServiceImpl  implements RoomService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     @Override
-    public RoomLiteDTO roomToMiniRoomDTO(Room room) {
+    public RoomLiteDTO convertToRoomLiteDto(Room room) {
         return RoomLiteDTO.builder()
                 .id(room.getId())
                 .price(room.getPrice())
@@ -29,7 +34,7 @@ public class RoomServiceImpl  implements RoomService {
     }
 
     @Override
-    public Room minRoomDTOroom(RoomLiteDTO room) {
+    public Room convertDtoToRoom(RoomLiteDTO room) {
         return Room.builder()
                 .id(room.getId())
                 .price(room.getPrice())
@@ -41,7 +46,7 @@ public class RoomServiceImpl  implements RoomService {
     public List<RoomLiteDTO> findAllRooms() {
         return roomRepo.findAll()
                 .stream()
-                .map(this::roomToMiniRoomDTO)
+                .map(this::convertToRoomLiteDto)
                 .peek(room -> LOGGER.info("Room data listed: ID %S".formatted(room.getId())))
                 .toList();
     }
@@ -50,7 +55,30 @@ public class RoomServiceImpl  implements RoomService {
     @Override
     public RoomLiteDTO findRoomById(Long id) {
         return roomRepo.findById(id)
-                .map(this::roomToMiniRoomDTO)
+                .map(this::convertToRoomLiteDto)
                 .orElseThrow(NoSuchElementException::new);
     }
+
+    // HATEOAS: Not used
+    @Override
+    public CollectionModel<EntityModel<RoomLiteDTO>> all() {
+        List<EntityModel<RoomLiteDTO>> customers = findAllRooms().stream()
+                .map(room -> EntityModel.of(room,
+                        linkTo(methodOn(RoomServiceImpl.class).one(room.getId())).withSelfRel(),
+                        linkTo(methodOn(RoomServiceImpl.class).all()).withRel("rooms")))
+                .toList();
+
+        return CollectionModel.of(customers, linkTo(methodOn(RoomServiceImpl.class).all()).withSelfRel());
+    }
+
+    // HATEOAS: Not used
+    @Override
+    public EntityModel<RoomLiteDTO> one(Long id) {
+        RoomLiteDTO room = findRoomById(id);
+
+        return EntityModel.of(room,
+                linkTo(methodOn(RoomServiceImpl.class).one(id)).withSelfRel(),
+                linkTo(methodOn(RoomServiceImpl.class).all()).withRel("rooms"));
+    }
+
 }

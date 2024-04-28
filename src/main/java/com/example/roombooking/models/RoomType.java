@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.ArrayList;
+
 @Entity
 @Data
 @Builder
@@ -20,13 +22,13 @@ public class RoomType {
 
 //    @OneToMany(mappedBy = "roomType")
 //    private List<Room> rooms;
-
-    public RoomType(String type, int extraBeds) {
-        this.type = type;
-        this.extraBeds = extraBeds;
+//
+//    public RoomType(String type, int extraBeds) {
+//        this.type = type;
+//        this.extraBeds = extraBeds;
 //        this.rooms = new ArrayList<>();
-    }
-
+//    }
+//
 //    public void addRoom(Room room) {
 //        boolean notFound = rooms.stream().noneMatch(it -> it.equals(room));
 //        if (notFound) {
