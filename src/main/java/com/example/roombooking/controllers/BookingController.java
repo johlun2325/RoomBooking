@@ -1,22 +1,42 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.BookingDTO;
+import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.models.Booking;
 import com.example.roombooking.services.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/booking")
 @RequiredArgsConstructor
 class BookingController {
 
     private final BookingService bookingService;
 
-    @GetMapping()
-    List<BookingDTO> getAllBookings() {
-        return bookingService.getAllBookingDTOs();
+
+    @GetMapping("/all")
+    String getAllBookings(Model model) {
+        List<BookingDTO> all = bookingService.getAllBookingDTOs();
+        model.addAttribute("allBookings", all);
+        model.addAttribute("header", "Alla bokningar");
+        model.addAttribute("bookingId", "Boknings-Id");
+        model.addAttribute("customerId", "Kund-Id");
+        model.addAttribute("roomId", "Rums-Id");
+        model.addAttribute("roomType", "Rums-typ");
+        model.addAttribute("delete", "Delete");
+        model.addAttribute("hem", "Hem");
+        return "allBookings";
+    }
+
+    @RequestMapping("/delete/{id}")
+    public String deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBookingById(id);
+        return "redirect:/booking/all";
     }
 
     @GetMapping({"/{id}"})

@@ -19,7 +19,7 @@ public class Booking {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Customer customer;
 

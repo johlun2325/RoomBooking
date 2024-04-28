@@ -72,5 +72,11 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    //delete by id with thymeleaf
+    @Override
+    public void deleteBookingById(Long id) {
+        bookingRepo.deleteById(id);
+    }
+
 
 }

@@ -18,6 +18,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+
+    //get all with thymeleaf
     @GetMapping("all")
     public String getAllCustomers(Model model) {
         List<CustomerDTO> all = customerService.findAllCustomers();
