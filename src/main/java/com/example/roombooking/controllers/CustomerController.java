@@ -26,6 +26,7 @@ public class CustomerController {
         model.addAttribute("id", "Id");
         model.addAttribute("name", "Namn");
         model.addAttribute("delete", "Delete");
+        model.addAttribute("hem", "Hem");
         return "allCustomers";
     }
 
