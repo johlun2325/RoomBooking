@@ -7,8 +7,6 @@ import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,9 +15,6 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -97,28 +92,6 @@ public class RoomServiceImpl implements RoomService {
 //                        && room.getRoomType().getExtraBeds() <= numberOfPeople)
                 .map(this::convertToRoomLiteDto)
                 .collect(Collectors.toList());
-    }
-
-    // HATEOAS: Not used
-    @Override
-    public CollectionModel<EntityModel<RoomLiteDTO>> all() {
-        List<EntityModel<RoomLiteDTO>> customers = findAllRooms().stream()
-                .map(room -> EntityModel.of(room,
-                        linkTo(methodOn(RoomServiceImpl.class).one(room.getId())).withSelfRel(),
-                        linkTo(methodOn(RoomServiceImpl.class).all()).withRel("rooms")))
-                .toList();
-
-        return CollectionModel.of(customers, linkTo(methodOn(RoomServiceImpl.class).all()).withSelfRel());
-    }
-
-    // HATEOAS: Not used
-    @Override
-    public EntityModel<RoomLiteDTO> one(Long id) {
-        RoomLiteDTO room = findRoomById(id);
-
-        return EntityModel.of(room,
-                linkTo(methodOn(RoomServiceImpl.class).one(id)).withSelfRel(),
-                linkTo(methodOn(RoomServiceImpl.class).all()).withRel("rooms"));
     }
 
 }

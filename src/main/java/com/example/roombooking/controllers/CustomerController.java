@@ -39,16 +39,4 @@ public class CustomerController {
         return customerService.deleteCustomer(customer);
     }
 
-    // HATEOAS: Not used
-//    @GetMapping()
-//    CollectionModel<EntityModel<CustomerDTO>> all() {
-//        return customerService.all();
-//    }
-
-    // HATEOAS: Not used
-//    @GetMapping("/{id}")
-//    EntityModel<CustomerDTO> one(@PathVariable Long id) {
-//        return customerService.one(id);
-//    }
-
 }

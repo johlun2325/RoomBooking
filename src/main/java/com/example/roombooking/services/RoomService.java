@@ -1,10 +1,7 @@
 package com.example.roombooking.services;
 
-import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
 
@@ -21,9 +18,4 @@ public interface RoomService {
 
     List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople);
 
-    // HATEOAS: Not used
-    CollectionModel<EntityModel<RoomLiteDTO>> all();
-
-    // HATEOAS: Not used
-    EntityModel<RoomLiteDTO> one(Long id);
 }

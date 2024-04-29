@@ -11,16 +11,11 @@ import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -160,25 +155,4 @@ public class CustomerServiceImpl implements CustomerService {
                 });
     }
 
-    // HATEOAS: Not used
-    @Override
-    public CollectionModel<EntityModel<CustomerDTO>> all() {
-        List<EntityModel<CustomerDTO>> customers = findAllCustomers().stream()
-                .map(customer -> EntityModel.of(customer,
-                        linkTo(methodOn(CustomerServiceImpl.class).one(customer.getId())).withSelfRel(),
-                        linkTo(methodOn(CustomerServiceImpl.class).all()).withRel("customers")))
-                .toList();
-
-        return CollectionModel.of(customers, linkTo(methodOn(CustomerServiceImpl.class).all()).withSelfRel());
-    }
-
-    // HATEOAS: Not used
-    @Override
-    public EntityModel<CustomerDTO> one(Long id) {
-        CustomerDTO customer = findCustomerById(id);
-
-        return EntityModel.of(customer,
-                linkTo(methodOn(CustomerServiceImpl.class).one(id)).withSelfRel(),
-                linkTo(methodOn(CustomerServiceImpl.class).all()).withRel("customers"));
-    }
 }
