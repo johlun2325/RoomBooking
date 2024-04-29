@@ -24,13 +24,11 @@ public class Room {
     @GeneratedValue
     private Long id;
 
-    @NotBlank(message = "Price is mandatory")
-    @Min(value = 1, message = "Price must be at least 1")
+//    @Min(value = 1, message = "Price must be at least 1")
     private double price;
 
     @ManyToOne
     @JoinColumn
-    @NotBlank(message = "Room type is mandatory")
     private RoomType roomType;
 
     @OneToMany(mappedBy = "room")
