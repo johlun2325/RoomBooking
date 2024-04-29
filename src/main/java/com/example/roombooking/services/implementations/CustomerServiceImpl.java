@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -24,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepo customerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
-
+    //customerDTO till customer
     @Override
     public Customer convertDtoToCustomer(CustomerDTO customer) {
         return Customer.builder()
@@ -35,6 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
+    //customer till customerLiteDTO
     @Override
     public CustomerLiteDTO convertToCustomerLiteDto(Customer customer) {
         return CustomerLiteDTO.builder()
@@ -45,6 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
+    //customer till customerDTO
     @Override
     public CustomerDTO convertToCustomerDto(Customer customer) {
         return CustomerDTO.builder()
@@ -78,6 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
+    //find all customers - lista
     @Override
     public List<CustomerDTO> findAllCustomers() {
         return customerRepo.findAll()
@@ -88,6 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // TODO: No LOGGER here
+    //find 1 customer by id - obj
     @Override
     public CustomerDTO findCustomerById(Long id) {
         return customerRepo.findById(id)
@@ -95,22 +102,31 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    //add new customer - DTO in, Msg out
     @Override
     public String addCustomer(CustomerDTO customer) {
-        var message = new AtomicReference<String>();
-        return customerRepo.findCustomerBySsn(customer.getSsn())
-                .map(foundCustomer -> {
-                    message.set("Customer with SSN: %s exists".formatted(customer.getSsn()));
-                    LOGGER.warn(message.get());
-                    return message.get();
-                })
-                .orElseGet(() -> {
-                    customerRepo.save(convertDtoToCustomer(customer));
-                    message.set("Customer with SSN: %s added".formatted(customer.getSsn()));
-                    LOGGER.info(message.get());
-                    return message.get();
-                });
+        Customer c = convertDtoToCustomer(customer);
+        customerRepo.save(c);
+        return "Customer saved";
     }
+
+    // Not used!
+//    @Override
+//    public String addCustomer2(CustomerDTO customer) {
+//        var message = new AtomicReference<String>();
+//        return customerRepo.findCustomerBySsn(customer.getSsn())
+//                .map(foundCustomer -> {
+//                    message.set("Customer with SSN: %s exists".formatted(customer.getSsn()));
+//                    LOGGER.warn(message.get());
+//                    return message.get();
+//                })
+//                .orElseGet(() -> {
+//                    customerRepo.save(convertDtoToCustomer(customer));
+//                    message.set("Customer with SSN: %s added".formatted(customer.getSsn()));
+//                    LOGGER.info(message.get());
+//                    return message.get();
+//                });
+//    }
 
     @Override
     public String updateCustomer(CustomerDTO customer) {
@@ -155,4 +171,12 @@ public class CustomerServiceImpl implements CustomerService {
                 });
     }
 
+    //thymeleaf delete
+    //delete customer by id
+    @Override
+    public String deleteCustomerById(Long id) {
+        //kolla att kund ej har bokning i listan/kopplad till sig
+        customerRepo.deleteById(id);
+        return "Customer with id " + id + " deleted";
+    }
 }

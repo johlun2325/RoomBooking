@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Booking</title>
+</head>
+<body>
+<form action="#" th:action="@{/booking/update}" th:object="${booking}" method="post">
+    <label for="ppl">Antal Personer</label><br>
+    <input type="text" id="ppl" th:field="*{numberOfPeople}"><br>
+    <input type="hidden" id="id" th:field="*{id}"><br>
+    <input type="submit" value="Submit">
+
+<!--    private Long id;-->
+<!--    private CustomerLiteDTO customer;-->
+<!--    private RoomLiteDTO room;-->
+<!--    private int numberOfPeople;-->
+<!--    private LocalDate startDate;-->
+<!--    private LocalDate endDate;-->
+</form>
+</body>
+</html>

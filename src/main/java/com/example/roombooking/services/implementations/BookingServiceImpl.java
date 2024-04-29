@@ -5,7 +5,11 @@ import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.Customer;
+import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.repos.CustomerRepo;
+import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.CustomerService;
 import com.example.roombooking.services.RoomService;
@@ -23,10 +27,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepo bookingRepo;
-    private final CustomerService customerService;
-    private final RoomService roomService;
+    private final CustomerRepo customerRepo;
+    private final RoomRepo roomRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
+    //Booking till BookingLiteDTO
     @Override
     public BookingLiteDTO convertToBookingLiteDto(Booking booking) {
         return BookingLiteDTO.builder()
@@ -41,6 +46,7 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
+    //Booking till BookingDTO
     @Override
     public BookingDTO convertDtoToBooking(Booking booking) {
         return BookingDTO.builder()
@@ -60,6 +66,24 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
+    //BookingDTO till booking - kolla om funkar
+    @Override
+    public Booking bookingDTOToBooking(BookingDTO booking) {
+
+
+        Customer c = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
+        Room r = roomRepo.findById(booking.getRoom().getId()).get();
+
+        return Booking.builder()
+                .id(booking.getId())
+                .numberOfPeople(booking.getNumberOfPeople())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .customer(c)
+                .room(r).build();
+    }
+
+
     @Override
     public List<BookingDTO> findAllBookings() {
         return bookingRepo.findAll()
@@ -77,46 +101,30 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    // Usage: When a new customer creates a new booking!
+    //delete by id with thymeleaf
     @Override
-    public Booking convertDtoToBooking(BookingDTO booking) {
-        return Booking.builder()
-                .id(booking.getId())
-                .customer(customerService.convertLiteDtoToCustomer(booking.getCustomer()))
-                .room(roomService.convertLiteDtoToRoom(booking.getRoom()))
-                .numberOfPeople(booking.getNumberOfPeople())
-                .startDate(booking.getStartDate())
-                .endDate(booking.getEndDate())
-                .build();
+    public String deleteBookingById(Long id) {
+        bookingRepo.deleteById(id);
+        return "Booking with id " + id + " deleted";
     }
 
     @Override
     public String addBooking(BookingDTO booking) {
-
-        // När vi har kommit hit, så har det bara listats tillgängliga rum (via sökningen: datum och antal personer)
-
         var message = new AtomicReference<String>();
         return bookingRepo.findById(booking.getId())
                 .map(foundBooking -> {
-                    message.set("Booking with ID: %s exists".formatted(booking.getId()));
-                    LOGGER.warn(message.get());
+                    foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
+                    bookingRepo.save(foundBooking);
+                    message.set("Customer with ID: %s updated".formatted(booking.getId()));
+                    LOGGER.info(message.get());
                     return message.get();
                 })
                 .orElseGet(() -> {
-                    message.set("Booking with ID: %s added".formatted(booking.getId()));
-                    LOGGER.info(message.get());
+                    message.set("Booking with ID: %s not found".formatted(booking.getId()));
+                    LOGGER.warn(message.get());
                     return message.get();
                 });
     }
 
-    @Override
-    public String deleteBooking(BookingDTO booking) {
-        return "";
-    }
-
-    @Override
-    public String updateBooking(BookingDTO booking) {
-        return "";
-    }
 
 }

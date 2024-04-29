@@ -14,13 +14,15 @@ public interface BookingService {
 
     Booking convertDtoToBooking(BookingDTO booking);
 
+    Booking bookingDTOToBooking(BookingDTO booking);
+
     List<BookingDTO> findAllBookings();
 
+    //delete by id with thymeleaf
+    String deleteBookingById(Long id);
     BookingDTO findBookingById(Long id);
 
     String addBooking(BookingDTO booking);
 
-    String deleteBooking(BookingDTO booking);
 
-    String updateBooking(BookingDTO booking);
 }
