@@ -58,6 +58,7 @@ public class CustomerController {
         model.addAttribute("customer", c);
         return "updateCustomerForm";
     }
+
     @PostMapping("/update")
     public String addCustomer(Model model, CustomerDTO c){
         customerService.addCustomer(c);

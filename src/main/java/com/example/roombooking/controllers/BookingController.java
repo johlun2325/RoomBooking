@@ -20,7 +20,7 @@ class BookingController {
 
     @GetMapping("/all")
     String getAllBookings(Model model) {
-        List<BookingDTO> all = bookingService.getAllBookingDTOs();
+        List<BookingDTO> all = bookingService.findAllBookings();
         model.addAttribute("allBookings", all);
         model.addAttribute("header", "Alla bokningar");
         model.addAttribute("bookingId", "Boknings-Id");

@@ -126,5 +126,8 @@ public class BookingServiceImpl implements BookingService {
                 });
     }
 
-
+    @Override
+    public Booking convertDtoToBooking(BookingDTO booking) {
+        return null;
+    }
 }
