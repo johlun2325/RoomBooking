@@ -11,8 +11,6 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.services.CustomerService;
-import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
 
     //Booking till BookingDTO
     @Override
-    public BookingDTO convertDtoToBooking(Booking booking) {
+    public BookingDTO convertToDto(Booking booking) {
         return BookingDTO.builder()
                 .id(booking.getId())
                 .customer(new CustomerLiteDTO(
@@ -68,28 +65,26 @@ public class BookingServiceImpl implements BookingService {
 
     //BookingDTO till booking - kolla om funkar
     @Override
-    public Booking bookingDTOToBooking(BookingDTO booking) {
-
-
-        Customer c = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
-        Room r = roomRepo.findById(booking.getRoom().getId()).get();
+    public Booking convertDtoToBooking(BookingDTO booking) {
+        Customer customer = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
+        Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
         return Booking.builder()
                 .id(booking.getId())
+                .customer(customer)
+                .room(room)
                 .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
-                .customer(c)
-                .room(r).build();
+                .build();
     }
-
 
     @Override
     public List<BookingDTO> findAllBookings() {
         return bookingRepo.findAll()
                 .stream()
-                .map(this::convertDtoToBooking)
-                .peek(booking -> LOGGER.info("Booking data listed: ID %S".formatted(booking.getId())))
+                .map(this::convertToDto)
+                .peek(booking -> LOGGER.info("Booking data listed: ID {}", booking.getId()))
                 .toList();
     }
 
@@ -97,37 +92,35 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDTO findBookingById(Long id) {
         return bookingRepo.findById(id)
-                .map(this::convertDtoToBooking)
+                .map(this::convertToDto)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+
+    @Override
+    public String addBooking(BookingDTO booking) {
+
+        // TODO: Define addBooking method
+
+
+        return null;
+    }
+
+    @Override
+    public void updateBooking(BookingDTO booking) {
+        bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
+            foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
+            bookingRepo.save(foundBooking);
+            LOGGER.info("Booking with ID: {} updated", booking.getId());
+        }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
     }
 
     //delete by id with thymeleaf
     @Override
-    public String deleteBookingById(Long id) {
-        bookingRepo.deleteById(id);
-        return "Booking with id " + id + " deleted";
-    }
-
-    @Override
-    public String addBooking(BookingDTO booking) {
-        var message = new AtomicReference<String>();
-        return bookingRepo.findById(booking.getId())
-                .map(foundBooking -> {
-                    foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
-                    bookingRepo.save(foundBooking);
-                    message.set("Customer with ID: %s updated".formatted(booking.getId()));
-                    LOGGER.info(message.get());
-                    return message.get();
-                })
-                .orElseGet(() -> {
-                    message.set("Booking with ID: %s not found".formatted(booking.getId()));
-                    LOGGER.warn(message.get());
-                    return message.get();
-                });
-    }
-
-    @Override
-    public Booking convertDtoToBooking(BookingDTO booking) {
-        return null;
+    public void deleteBookingById(Long id) {
+        bookingRepo.findById(id).ifPresentOrElse(foundBooking -> {
+            bookingRepo.delete(foundBooking);
+            LOGGER.info("Booking with ID: {} deleted", id);
+        }, () -> LOGGER.warn("Booking with ID: {} not found", id));
     }
 }

@@ -1,6 +1,9 @@
 package com.example.roombooking.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +22,21 @@ public class Customer {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotBlank(message = "Name is mandatory")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Name can only contain Swedish letters and spaces")
     private String name;
 
-    @Column(unique = true) //kvar?
+    @Column(unique = true)
+    @NotBlank(message = "Social security number is mandatory")
+    @Pattern(regexp = "\\d{2}(0[1-9]|1[0-2])(0[1-9]|1[0-2]|3[0-1])-\\d{4}",
+             message = "Personal number must be in the format YYMMDD-XXXX")
     private String ssn;
+
+    @NotBlank(message = "Email is mandatory")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    // TODO: Regex pattern for email
     private String email;
 
     @OneToMany(mappedBy = "customer")

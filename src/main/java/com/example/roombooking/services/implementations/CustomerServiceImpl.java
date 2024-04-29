@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -83,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    //find all customers - lista
+    // Find all customers - lista
     @Override
     public List<CustomerDTO> findAllCustomers() {
         return customerRepo.findAll()
@@ -94,7 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // TODO: No LOGGER here
-    //find 1 customer by id - obj
+    // Find 1 customer by id - obj
     @Override
     public CustomerDTO findCustomerById(Long id) {
         return customerRepo.findById(id)
@@ -102,31 +99,16 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    //add new customer - DTO in, Msg out
+    // Add new customer - DTO in, Msg out
     @Override
-    public String addCustomer(CustomerDTO customer) {
-        Customer c = convertDtoToCustomer(customer);
-        customerRepo.save(c);
-        return "Customer saved";
+    public void addCustomer(CustomerDTO customer) {
+        customerRepo.findById(customer.getId())
+                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with ID: {} exists", customer.getId()),
+                        () -> {
+                    customerRepo.save(convertDtoToCustomer(customer));
+                    LOGGER.info("Customer with ID: {} added", customer.getId());
+                });
     }
-
-    // Not used!
-//    @Override
-//    public String addCustomer2(CustomerDTO customer) {
-//        var message = new AtomicReference<String>();
-//        return customerRepo.findCustomerBySsn(customer.getSsn())
-//                .map(foundCustomer -> {
-//                    message.set("Customer with SSN: %s exists".formatted(customer.getSsn()));
-//                    LOGGER.warn(message.get());
-//                    return message.get();
-//                })
-//                .orElseGet(() -> {
-//                    customerRepo.save(convertDtoToCustomer(customer));
-//                    message.set("Customer with SSN: %s added".formatted(customer.getSsn()));
-//                    LOGGER.info(message.get());
-//                    return message.get();
-//                });
-//    }
 
     @Override
     public String updateCustomer(CustomerDTO customer) {
@@ -148,35 +130,16 @@ public class CustomerServiceImpl implements CustomerService {
                 });
     }
 
+    // Thymeleaf Delete: Delete customer by ID
     @Override
-    public String deleteCustomer(CustomerDTO customer) {
-        var message = new AtomicReference<String>();
-        return customerRepo.findById(customer.getId())
-                .map(foundCustomer -> {
-                    if (!foundCustomer.getBookings().isEmpty()) {
-                        message.set("Customer with ID: %s has booking history and thereby not deleted"
-                                .formatted(customer.getId()));
-                        LOGGER.warn(message.get());
-                        return message.get();
-                    }
-                    customerRepo.delete(foundCustomer);
-                    message.set("Customer with ID: %s deleted".formatted(customer.getId()));
-                    LOGGER.info(message.get());
-                    return message.get();
-                })
-                .orElseGet(() -> {
-                    message.set("Customer with ID: %s not found".formatted(customer.getId()));
-                    LOGGER.warn(message.get());
-                    return message.get();
-                });
-    }
-
-    //thymeleaf delete
-    //delete customer by id
-    @Override
-    public String deleteCustomerById(Long id) {
-        //kolla att kund ej har bokning i listan/kopplad till sig
-        customerRepo.deleteById(id);
-        return "Customer with id " + id + " deleted";
+    public void deleteCustomerById(Long id) {
+        customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
+            if (!foundCustomer.getBookings().isEmpty())
+                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+            else {
+                customerRepo.delete(foundCustomer);
+                LOGGER.info("Customer with ID: {} deleted", id);
+            }
+        }, () -> LOGGER.warn("Customer with ID: {} not found", id));
     }
 }
