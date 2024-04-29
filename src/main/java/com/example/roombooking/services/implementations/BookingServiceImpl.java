@@ -8,15 +8,21 @@ import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.CustomerService;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.Interval;
+import org.hibernate.internal.util.compare.CalendarComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -124,16 +130,11 @@ public class BookingServiceImpl implements BookingService {
         var roomType = booking.getRoom().getRoomType();
 
 
-
-
         var customerExists = customerService.findCustomerById(booking.getCustomer().getId());
 
         if (customerExists.getId() == null) {
 
         }
-
-
-
 
 
         return "New booking added";
@@ -181,5 +182,34 @@ public class BookingServiceImpl implements BookingService {
         return EntityModel.of(booking,
                 linkTo(methodOn(BookingServiceImpl.class).one(id)).withSelfRel(),
                 linkTo(methodOn(BookingServiceImpl.class).all()).withRel("bookings"));
+    }
+
+    private boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+        return !(end1.isBefore(start2) || start1.isAfter(end2));
+    }
+
+    private LocalDate convertToLocalDate(String date) {
+        Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
+
+        Matcher matcher = datePattern.matcher(date);
+        if (!matcher.find()) throw new RuntimeException("Illegal date format");
+
+        int yyyy = Integer.parseInt(matcher.group(1));
+        int mm = Integer.parseInt(matcher.group(2));
+        int dd = Integer.parseInt(matcher.group(3));
+
+        return LocalDate.of(yyyy, mm, dd);
+    }
+
+    @Override
+    public List<BookingDTO> searchBookings(String startDate, String endDate, int numberOfPeople) {
+        return findAllBookings().stream()
+                .filter(booking -> areDatesOverlapping(
+                        convertToLocalDate(startDate),
+                        convertToLocalDate(endDate),
+                        booking.getStartDate(),
+                        booking.getEndDate())
+                        && booking.getNumberOfPeople() >= numberOfPeople)
+                .toList();
     }
 }

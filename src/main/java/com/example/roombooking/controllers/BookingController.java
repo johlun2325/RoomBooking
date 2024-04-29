@@ -1,6 +1,7 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.BookingDTO;
+import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.services.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,13 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
+    // http://localhost:8080/booking/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
+    @GetMapping("/search")
+    public List<BookingDTO> searchBooking(@RequestParam String startDate,
+                                          @RequestParam String endDate,
+                                          @RequestParam int numberOfPeople) {
+        return bookingService.searchBookings(startDate, endDate, numberOfPeople);
+    }
 
 //    @GetMapping()
 //    CollectionModel<EntityModel<BookingDTO>> all() {
