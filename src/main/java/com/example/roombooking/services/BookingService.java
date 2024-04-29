@@ -31,6 +31,4 @@ public interface BookingService {
     String deleteBooking(BookingDTO booking);
 
     String updateBooking(BookingDTO booking);
-
-    List<BookingDTO> searchBookings(String startDate, String endDate, int numberOfPeople);
 }

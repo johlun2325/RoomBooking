@@ -1,5 +1,6 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
@@ -7,10 +8,7 @@ import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +27,14 @@ public class RoomController {
     @GetMapping({"/{id}"})
     RoomLiteDTO getRoom(@PathVariable Long id) {
         return roomService.findRoomById(id);
+    }
+
+    // http://localhost:8080/room/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
+    @GetMapping("/search")
+    public List<RoomLiteDTO> searchBooking(@RequestParam String startDate,
+                                          @RequestParam String endDate,
+                                          @RequestParam int numberOfPeople) {
+        return roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
     }
 
 //    // HATEOAS: Not used

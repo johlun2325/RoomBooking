@@ -33,14 +33,6 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
-    // http://localhost:8080/booking/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
-    @GetMapping("/search")
-    public List<BookingDTO> searchBooking(@RequestParam String startDate,
-                                          @RequestParam String endDate,
-                                          @RequestParam int numberOfPeople) {
-        return bookingService.searchBookings(startDate, endDate, numberOfPeople);
-    }
-
 //    @GetMapping()
 //    CollectionModel<EntityModel<BookingDTO>> all() {
 //        return bookingService.all();

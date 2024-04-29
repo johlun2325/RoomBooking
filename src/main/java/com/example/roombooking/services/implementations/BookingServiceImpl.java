@@ -2,6 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.*;
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
@@ -184,32 +185,4 @@ public class BookingServiceImpl implements BookingService {
                 linkTo(methodOn(BookingServiceImpl.class).all()).withRel("bookings"));
     }
 
-    private boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-        return !(end1.isBefore(start2) || start1.isAfter(end2));
-    }
-
-    private LocalDate convertToLocalDate(String date) {
-        Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-
-        Matcher matcher = datePattern.matcher(date);
-        if (!matcher.find()) throw new RuntimeException("Illegal date format");
-
-        int yyyy = Integer.parseInt(matcher.group(1));
-        int mm = Integer.parseInt(matcher.group(2));
-        int dd = Integer.parseInt(matcher.group(3));
-
-        return LocalDate.of(yyyy, mm, dd);
-    }
-
-    @Override
-    public List<BookingDTO> searchBookings(String startDate, String endDate, int numberOfPeople) {
-        return findAllBookings().stream()
-                .filter(booking -> areDatesOverlapping(
-                        convertToLocalDate(startDate),
-                        convertToLocalDate(endDate),
-                        booking.getStartDate(),
-                        booking.getEndDate())
-                        && booking.getNumberOfPeople() >= numberOfPeople)
-                .toList();
-    }
 }
