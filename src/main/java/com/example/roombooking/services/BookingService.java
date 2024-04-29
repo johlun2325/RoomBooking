@@ -12,12 +12,17 @@ public interface BookingService {
 
     BookingDTO bookingToBookingDTO(Booking booking);
 
+    Booking bookingDTOToBooking(BookingDTO booking);
+
     List<BookingDTO> getAllBookingDTOs();
 
     BookingDTO getBookingDTO(Long id);
 
     //delete by id with thymeleaf
-    void deleteBookingById(Long id);
+    String deleteBookingById(Long id);
+    BookingDTO findBookingById(Long id);
+
+    String addBooking(BookingDTO b);
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 @Controller
 @RequestMapping("/customer")
@@ -27,6 +29,7 @@ public class CustomerController {
         model.addAttribute("id", "Id");
         model.addAttribute("name", "Namn");
         model.addAttribute("delete", "Delete");
+        model.addAttribute("update", "Update");
         model.addAttribute("hem", "Hem");
         return "allCustomers";
     }
@@ -41,33 +44,38 @@ public class CustomerController {
         return customerService.addCustomer(customer);
     }
 
-    @PutMapping("/update")
-    public String updateCustomer(@RequestBody CustomerDTO customer) {
-        return customerService.updateCustomer(customer);
+//    @PutMapping("/update")
+//    public String updateCustomer(@RequestBody CustomerDTO customer) {
+//        return customerService.updateCustomer(customer);
+//    }
+
+
+
+    //thymeleaf update
+    @RequestMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable Long id, Model model) {
+        CustomerDTO c = customerService.findCustomerById(id);
+        model.addAttribute("customer", c);
+        return "updateCustomerForm";
+    }
+    @PostMapping("/update")
+    public String addCustomer(Model model, CustomerDTO c){
+        customerService.addCustomer(c);
+        return "redirect:/customer/all";
     }
 
 
-    //delete with thymeleaf - lägg till kolla om bokning finns, då ej ta bort.
+    //delete with thymeleaf - lägg till kolla om bokning finns, då ej ta bort. I service ist?
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id) {
+        CustomerDTO c = customerService.findCustomerById(id);
+        List<BookingLiteDTO> b =  c.getBookings();
         customerService.deleteCustomerById(id);
         return "redirect:/customer/all";
     }
 //    @DeleteMapping("/delete")
 //    public String deleteCustomer(@RequestBody CustomerDTO customer) {
 //        return customerService.deleteCustomer(customer);
-//    }
-
-    // HATEOAS: Not used
-//    @GetMapping()
-//    CollectionModel<EntityModel<CustomerDTO>> all() {
-//        return customerService.all();
-//    }
-
-    // HATEOAS: Not used
-//    @GetMapping("/{id}")
-//    EntityModel<CustomerDTO> one(@PathVariable Long id) {
-//        return customerService.one(id);
 //    }
 
 }

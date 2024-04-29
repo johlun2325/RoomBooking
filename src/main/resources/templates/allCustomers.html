@@ -20,8 +20,9 @@
     <tbody>
     <tr th:each="cust : ${allCustomers}">
         <td th:text="${cust.id}">ID</td>
-        <td th:text="${cust.name}">Name</td>
+        <td th:text="${cust.name}">NameF
         <td><a th:text="${delete}" th:href="@{/customer/delete/{id}(id=${cust.id})}"></a></td>
+        <td><a th:text="${update}" th:href="@{/customer/updateForm/{id}(id=${cust.id})}"></a></td>
     </tr>
     </tbody>
 </table>

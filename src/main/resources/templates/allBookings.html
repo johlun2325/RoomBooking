@@ -18,6 +18,7 @@
     <th th:text="${customerId}"></th>
     <th th:text="${roomId}"></th>
     <th th:text="${roomType}"></th>
+    <th th:text="${nrOfPeople}"></th>
   </tr>
   </thead>
   <tbody>
@@ -26,7 +27,9 @@
     <td th:text="${book.customer.id}"></td>
     <td th:text="${book.room.id}"></td>
     <td th:text="${book.room.roomType.type}"></td>
+    <td th:text="${book.numberOfPeople}"></td>
     <td><a th:text="${delete}" th:href="@{/booking/delete/{id}(id=${book.id})}"></a></td>
+    <td><a th:text="${update}" th:href="@{/booking/updateForm/{id}(id=${book.id})}"></a></td>
   </tr>
   </tbody>
 </table>

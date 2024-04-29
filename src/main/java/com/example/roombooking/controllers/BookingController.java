@@ -1,6 +1,7 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.BookingDTO;
+import com.example.roombooking.models.Booking;
 import com.example.roombooking.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,9 @@ class BookingController {
         model.addAttribute("customerId", "Kund-Id");
         model.addAttribute("roomId", "Rums-Id");
         model.addAttribute("roomType", "Rums-typ");
+        model.addAttribute("nrOfPeople", "Antal personer");
         model.addAttribute("delete", "Delete");
+        model.addAttribute("update", "Update");
         model.addAttribute("hem", "Hem");
         return "allBookings";
     }
@@ -37,6 +40,21 @@ class BookingController {
         return "redirect:/booking/all";
     }
 
+    ///updateForm/{id}
+    @RequestMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable Long id, Model model){
+        BookingDTO b = bookingService.findBookingById(id);
+        model.addAttribute("booking", b);
+        return "updateBookingForm";
+    }
+
+    @PostMapping("/update")
+    public String updateBooking(BookingDTO booking) {
+        bookingService.addBooking(booking);
+        return "redirect booking/all";
+    }
+
+
     @GetMapping({"/{id}"})
     BookingDTO getAllBookings(@PathVariable Long id) {
         return bookingService.getBookingDTO(id);
@@ -46,35 +64,6 @@ class BookingController {
     BookingDTO deleteCustomer(@PathVariable Long id) {
         return bookingService.getBookingDTO(id);
     }
-
-
-
-//    @GetMapping()
-//    CollectionModel<EntityModel<Booking>> all() {
-//
-//        List<EntityModel<Booking>> bookings = bookingRepo.findAll().stream()
-//                .map(booking -> EntityModel.of(booking,
-//                        linkTo(methodOn(BookingController.class).one(booking.getId())).withSelfRel(),
-//                        linkTo(methodOn(BookingController.class).all()).withRel("bookings")))
-//                .toList();
-//
-//        return CollectionModel.of(bookings, linkTo(methodOn(BookingController.class).all()).withSelfRel());
-//    }
-//
-//    @GetMapping("/{id}")
-//    EntityModel<Booking> one(@PathVariable Long id) {
-//
-//        Booking booking = bookingRepo.findById(id)
-//                .orElseThrow(() -> {
-//                    final String WARNING_MESSAGE = "No bookings with ID: %s was found".formatted(id);
-//                    logger.warn(WARNING_MESSAGE);
-//                    return new NoSuchElementException(WARNING_MESSAGE);
-//                });
-//
-//        return EntityModel.of(booking,
-//                linkTo(methodOn(BookingController.class).one(id)).withSelfRel(),
-//                linkTo(methodOn(BookingController.class).all()).withRel("bookings"));
-//    }
 
     // Todo:
     //  Define and implement the behaviour of the booking functionality:
