@@ -113,10 +113,21 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public String addBooking(BookingDTO b) {
-        //konvertera dto till entity - save
-        bookingRepo.save(bookingDTOToBooking(b));
-        return "Din bokning har lagts till/uppdaterats";
+    public String addBooking(BookingDTO booking) {
+        var message = new AtomicReference<String>();
+        return bookingRepo.findById(booking.getId())
+                .map(foundBooking -> {
+                    foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
+                    bookingRepo.save(foundBooking);
+                    message.set("Customer with ID: %s updated".formatted(booking.getId()));
+                    LOGGER.info(message.get());
+                    return message.get();
+                })
+                .orElseGet(() -> {
+                    message.set("Booking with ID: %s not found".formatted(booking.getId()));
+                    LOGGER.warn(message.get());
+                    return message.get();
+                });
     }
 
 

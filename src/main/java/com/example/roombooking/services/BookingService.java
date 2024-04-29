@@ -22,7 +22,7 @@ public interface BookingService {
     String deleteBookingById(Long id);
     BookingDTO findBookingById(Long id);
 
-    String addBooking(BookingDTO b);
+    String addBooking(BookingDTO booking);
 
 
 }

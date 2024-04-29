@@ -51,7 +51,7 @@ class BookingController {
     @PostMapping("/update")
     public String updateBooking(BookingDTO booking) {
         bookingService.addBooking(booking);
-        return "redirect booking/all";
+        return "redirect:/booking/all";
     }
 
 
