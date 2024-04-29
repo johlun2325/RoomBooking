@@ -16,13 +16,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
-public class RoomServiceImpl  implements RoomService {
+public class RoomServiceImpl implements RoomService {
 
     private final RoomRepo roomRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
@@ -83,14 +84,19 @@ public class RoomServiceImpl  implements RoomService {
         return LocalDate.of(yyyy, mm, dd);
     }
 
+    // TODO: Bestämma hur vi ska söka på antal personer och jämföra i logiken
     @Override
     public List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople) {
-        var rooms = roomRepo.findAll();
-
-
-
-
-        return null;
+        return roomRepo.findAll().stream()
+                .filter(room -> room.getBookings().stream()
+                        .noneMatch(booking -> areDatesOverlapping(
+                                booking.getStartDate(),
+                                booking.getEndDate(),
+                                convertToLocalDate(startDate),
+                                convertToLocalDate(endDate))))
+//                        && room.getRoomType().getExtraBeds() <= numberOfPeople)
+                .map(this::convertToRoomLiteDto)
+                .collect(Collectors.toList());
     }
 
     // HATEOAS: Not used
