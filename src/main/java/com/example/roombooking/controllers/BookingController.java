@@ -62,4 +62,9 @@ class BookingController {
         return "redirect:/booking/all";
     }
 
+    @RequestMapping("/search")
+    public String searchBooking() {
+        return "searchForm";
+    }
+
 }

@@ -6,17 +6,31 @@
 </head>
 <body>
 <h1>Sök rum</h1>
-<form action="#" th:action="@{/booking/search}">
-    <label for="ppl">Antal personer</label><br>
-    <input type="text" id="ppl" th:field="*{ppl}"><br>
+<form action="#" th:action="@{/room/search}" method="post">
 
     <label for="startDate">Start datum</label><br>
-    <input type="text" id="startDate" th:field="*{start}"><br>
+    <input type="date" id="startDate" name="startDate" required><br>
 
-    <label for="endDate">Name</label><br>
-    <input type="text" id="endDate" th:field="*{end}"><br>
+    <label for="endDate">Slut datum</label><br>
+    <input type="date" id="endDate" name="endDate" required><br>
 
-    <input type="submit" value="Submit">
+    <label for="numberOfPeople">Antal personer</label><br>
+    <input type="number" id="numberOfPeople" name="numberOfPeople" required><br>
+
+    <input type="submit" value="Book">
 </form>
+
+<!--<div class="availableRooms" th:unless="${#lists.isEmpty(availableRooms)}">-->
+<!--    <table>-->
+<!--        <tbody>-->
+<!--        <tr th:each="room : ${availableRooms}">-->
+<!--            <td th:text="${room.roomType}"></td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+
 </body>
 </html>
+
+<!--DO not use-->

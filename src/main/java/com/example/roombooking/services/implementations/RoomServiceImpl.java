@@ -88,7 +88,7 @@ public class RoomServiceImpl implements RoomService {
                                 booking.getEndDate(),
                                 convertToLocalDate(startDate),
                                 convertToLocalDate(endDate)))
-                        && room.getRoomType().getExtraBeds() + room.getRoomType().getCapacity() <= numberOfPeople)
+                        && numberOfPeople <= room.getRoomType().getCapacity())
                 .map(this::convertToRoomLiteDto)
                 .collect(Collectors.toList());
     }
