@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
@@ -69,11 +69,22 @@ class CustomerServiceImplTest {
 
     }
 
+
+//    @Test
+//    void getAllKonto() {
+//        when(kontoRepo.findAll()).thenReturn(Arrays.asList(konto));
+//        KontoServiceImpl service2 = new KontoServiceImp(kontoRepo, kundRepo);
+//        List<DetailedKontoDto> allKontos = service2.getAllKonto();
+//
+//        assertTrue(allKontos.size() == 1);
+//    }
     @Test
     void findAllCustomers() {
+        when(repo.findAll()).thenReturn(Arrays.asList(customer));
+        CustomerServiceImpl serv = new CustomerServiceImpl(repo);
 
-
-
+        List<CustomerDTO> allCustomers = serv.findAllCustomers();
+        assertTrue(allCustomers.size() == 1);
     }
 
     @Test
