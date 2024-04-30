@@ -18,9 +18,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -69,15 +70,6 @@ class CustomerServiceImplTest {
 
     }
 
-
-//    @Test
-//    void getAllKonto() {
-//        when(kontoRepo.findAll()).thenReturn(Arrays.asList(konto));
-//        KontoServiceImpl service2 = new KontoServiceImp(kontoRepo, kundRepo);
-//        List<DetailedKontoDto> allKontos = service2.getAllKonto();
-//
-//        assertTrue(allKontos.size() == 1);
-//    }
     @Test
     void findAllCustomers() {
         when(repo.findAll()).thenReturn(Arrays.asList(customer));
@@ -89,6 +81,14 @@ class CustomerServiceImplTest {
 
     @Test
     void findCustomerById() {
+        when(repo.findById(customer.getId())).thenReturn(Optional.of(customer));
+        CustomerServiceImpl serv = new CustomerServiceImpl(repo);
+        CustomerDTO foundCustomer = serv.findCustomerById(customer.getId());
+
+        assertEquals(customer.getId(), foundCustomer.getId());
+        assertEquals(customer.getName(), foundCustomer.getName());
+        assertEquals(customer.getSsn(), foundCustomer.getSsn());
+        assertEquals(customer.getEmail(), foundCustomer.getEmail());
     }
 
     @Test
