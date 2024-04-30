@@ -1,20 +1,15 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
-import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Customer;
-import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.CustomerRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +35,21 @@ class CustomerServiceImplTest {
     private String email = "mockmock@mail.se";
 
     private Customer customer = new Customer(id,name,ssn,email, new ArrayList<>());
+    private CustomerDTO customerDTO = new CustomerDTO().builder()
+            .id(customer.getId()).name(customer.getName())
+            .ssn(customer.getSsn()).email(customer.getEmail())
+            .bookings(new ArrayList<>()).build();
+    private CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
+            .id(customer.getId()).name(customer.getName())
+            .ssn(customer.getSsn()).email(customer.getEmail()).build();
 
     @Test
     void convertDtoToCustomer() {
+        Customer actual = service.convertDtoToCustomer(customerDTO);
+        assertEquals(actual.getId(), customer.getId());
+        assertEquals(actual.getName(), customer.getName());
+        assertEquals(actual.getSsn(), customer.getSsn());
+        assertEquals(actual.getEmail(), customer.getEmail());
     }
 
     @Test
@@ -67,7 +74,11 @@ class CustomerServiceImplTest {
 
     @Test
     void convertLiteDtoToCustomer() {
-
+        Customer actual = service.convertLiteDtoToCustomer(customerLiteDTO);
+        assertEquals(actual.getId(), customer.getId());
+        assertEquals(actual.getName(), customer.getName());
+        assertEquals(actual.getSsn(), customer.getSsn());
+        assertEquals(actual.getEmail(), customer.getEmail());
     }
 
     @Test
@@ -101,5 +112,12 @@ class CustomerServiceImplTest {
 
     @Test
     void deleteCustomerById() {
+        when(repo.findById(customer.getId())).thenReturn(Optional.of(customer));
+        CustomerServiceImpl serv = new CustomerServiceImpl(repo);
+        serv.deleteCustomerById(customer.getId());
+        verify(repo, times(1)).findById(id);
+//        verify(repo, times(1)).deleteById(id);
+
     }
+
 }
