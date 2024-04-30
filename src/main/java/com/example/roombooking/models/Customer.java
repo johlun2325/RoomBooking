@@ -19,6 +19,14 @@ import java.util.List;
 @Builder
 public class Customer {
 
+    //För att test ska funka
+    public Customer(Long id, String name, String ssn, String email) {
+        this.id = id;
+        this.name = name;
+        this.ssn = ssn;
+        this.email = email;
+    }
+
     @Id
     @GeneratedValue
     private Long id;
