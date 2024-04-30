@@ -47,7 +47,7 @@ public class RoomController {
         var availableRooms = roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
         model.addAttribute("availableRooms", availableRooms);
 
-        return "listSite";
+        return "searchForm";
     }
 
 

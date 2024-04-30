@@ -20,15 +20,15 @@
     <input type="submit" value="Book">
 </form>
 
-<!--<div class="availableRooms" th:unless="${#lists.isEmpty(availableRooms)}">-->
-<!--    <table>-->
-<!--        <tbody>-->
-<!--        <tr th:each="room : ${availableRooms}">-->
-<!--            <td th:text="${room.roomType}"></td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--</div>-->
+<div class="availableRooms" th:unless="${#lists.isEmpty(availableRooms)}">
+    <table>
+        <tbody>
+        <tr th:each="room : ${availableRooms}">
+            <td th:text="${room.roomType}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

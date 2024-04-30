@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.findAll()
                 .stream()
                 .map(this::convertToCustomerDto)
-                .peek(customer -> LOGGER.info("Customer data listed: ID %S".formatted(customer.getId())))
+                .peek(customer -> LOGGER.info("Customer data listed: ID %{}", customer.getId()))
                 .toList();
     }
 
@@ -102,11 +102,11 @@ public class CustomerServiceImpl implements CustomerService {
     // Add new customer - DTO in, Msg out
     @Override
     public void addCustomer(CustomerDTO customer) {
-        customerRepo.findById(customer.getId())
-                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with ID: {} exists", customer.getId()),
+        customerRepo.findCustomerBySsn(customer.getSsn())
+                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
                         () -> {
                     customerRepo.save(convertDtoToCustomer(customer));
-                    LOGGER.info("Customer with ID: {} added", customer.getId());
+                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
                 });
     }
 

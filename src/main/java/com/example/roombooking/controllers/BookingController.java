@@ -63,7 +63,7 @@ class BookingController {
     }
 
     @RequestMapping("/search")
-    public String searchBooking() {
+    public String openAvailableSearchPage() {
         return "searchForm";
     }
 

@@ -1,6 +1,5 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.List;
 import java.util.Map;
-import java.util.function.ToDoubleBiFunction;
 
 @Controller
 @RequestMapping("/customer")
@@ -41,8 +38,21 @@ public class CustomerController {
         return customerService.findCustomerById(id);
     }
 
+    @GetMapping("/new")
+    public String openNewCustomerPage() {
+        return "new-customer";
+    }
+
+    @PostMapping("/add")
+    public String addCustomer(@RequestParam String name,
+                              @RequestParam String ssn,
+                              @RequestParam String email) {
+        customerService.addCustomer(new CustomerDTO(name, ssn, email));
+        return "redirect:/customer/all";
+    }
+
     //thymeleaf update
-    @RequestMapping("/updateForm/{id}")
+    @GetMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable Long id, Model model) {
         CustomerDTO customer = customerService.findCustomerById(id);
         model.addAttribute("customer", customer);
@@ -54,6 +64,7 @@ public class CustomerController {
         customerService.updateCustomer(customer);
         return "redirect:/customer/all";
     }
+
 
     // TODO: Add error message on the frontend for trying to remove customer with bookings
     // Delete with thymeleaf
