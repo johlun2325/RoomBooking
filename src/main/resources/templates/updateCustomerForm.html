@@ -9,9 +9,9 @@
 <form action="#" th:action="@{/customer/update}" th:object="${customer}" method="post">
     <label for="name">Name</label><br>
     <input type="text" id="name" th:field="*{name}"><br>
-    <label for="ssn">Name</label><br>
+    <label for="ssn">Personnummer</label><br>
     <input type="text" id="ssn" th:field="*{ssn}"><br>
-    <label for="email">Name</label><br>
+    <label for="email">Email</label><br>
     <input type="text" id="email" th:field="*{email}"><br>
     <input type="hidden" id="id" th:field="*{id}"><br>
     <input type="submit" value="Submit">

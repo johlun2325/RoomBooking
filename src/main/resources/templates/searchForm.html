@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sök lediga rum</title>
+</head>
+<body>
+<form action="#" th:action="@{/booking/search}">
+    <label for="ppl">Antal personer</label><br>
+    <input type="text" id="ppl" th:field="*{ppl}"><br>
+
+    <label for="startDate">Start datum</label><br>
+    <input type="text" id="startDate" th:field="*{start}"><br>
+
+    <label for="endDate">Name</label><br>
+    <input type="text" id="endDate" th:field="*{end}"><br>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
