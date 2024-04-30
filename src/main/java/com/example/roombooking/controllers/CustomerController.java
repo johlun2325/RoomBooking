@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.Map;
 import java.util.function.ToDoubleBiFunction;
 
 @Controller
@@ -19,18 +20,19 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-
-    //get all with thymeleaf
-    @GetMapping("all")
+    // Get all with thymeleaf
+    @GetMapping("/all")
     public String getAllCustomers(Model model) {
         List<CustomerDTO> all = customerService.findAllCustomers();
-        model.addAttribute("allCustomers", all);
-        model.addAttribute("header", "Alla kunder");
-        model.addAttribute("id", "Id");
-        model.addAttribute("name", "Namn");
-        model.addAttribute("delete", "Delete");
-        model.addAttribute("update", "Update");
-        model.addAttribute("hem", "Hem");
+        model.addAllAttributes(Map.of(
+                "allCustomers", all,
+                "header", "Alla kunder",
+                "id", "Id",
+                "name", "Namn",
+                "delete", "Delete",
+                "update", "Update",
+                "hem", "Hem"));
+
         return "allCustomers";
     }
 
@@ -39,44 +41,26 @@ public class CustomerController {
         return customerService.findCustomerById(id);
     }
 
-    @PostMapping("/add")
-    public String addCustomer(@RequestBody CustomerDTO customer) {
-        return customerService.addCustomer(customer);
-    }
-
-//    @PutMapping("/update")
-//    public String updateCustomer(@RequestBody CustomerDTO customer) {
-//        return customerService.updateCustomer(customer);
-//    }
-
-
-
     //thymeleaf update
     @RequestMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable Long id, Model model) {
-        CustomerDTO c = customerService.findCustomerById(id);
-        model.addAttribute("customer", c);
+        CustomerDTO customer = customerService.findCustomerById(id);
+        model.addAttribute("customer", customer);
         return "updateCustomerForm";
     }
 
     @PostMapping("/update")
-    public String addCustomer(Model model, CustomerDTO c){
-        customerService.addCustomer(c);
+    public String addCustomer(CustomerDTO customer){
+        customerService.updateCustomer(customer);
         return "redirect:/customer/all";
     }
 
-
-    //delete with thymeleaf - lägg till kolla om bokning finns, då ej ta bort. I service ist?
+    // TODO: Add error message on the frontend for trying to remove customer with bookings
+    // Delete with thymeleaf
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id) {
-        CustomerDTO c = customerService.findCustomerById(id);
-        List<BookingLiteDTO> b =  c.getBookings();
         customerService.deleteCustomerById(id);
         return "redirect:/customer/all";
     }
-//    @DeleteMapping("/delete")
-//    public String deleteCustomer(@RequestBody CustomerDTO customer) {
-//        return customerService.deleteCustomer(customer);
-//    }
 
 }

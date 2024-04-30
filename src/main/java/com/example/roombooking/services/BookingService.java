@@ -10,19 +10,19 @@ public interface BookingService {
 
     BookingLiteDTO convertToBookingLiteDto(Booking booking);
 
-    BookingDTO convertDtoToBooking(Booking booking);
+    BookingDTO convertToDto(Booking booking);
 
     Booking convertDtoToBooking(BookingDTO booking);
 
-    Booking bookingDTOToBooking(BookingDTO booking);
+    BookingDTO findBookingById(Long id);
 
     List<BookingDTO> findAllBookings();
 
-    //delete by id with thymeleaf
-    String deleteBookingById(Long id);
-    BookingDTO findBookingById(Long id);
-
     String addBooking(BookingDTO booking);
 
+    //delete by id with thymeleaf
+    void deleteBookingById(Long id);
+
+    void updateBooking(BookingDTO booking);
 
 }

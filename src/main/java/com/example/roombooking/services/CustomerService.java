@@ -21,12 +21,10 @@ public interface CustomerService {
 
     CustomerDTO findCustomerById(Long id);
 
-    String addCustomer(CustomerDTO customer);
-
-    String deleteCustomer(CustomerDTO customer);
+    void addCustomer(CustomerDTO customer);
 
     //thymeleaf delete
-    String deleteCustomerById(Long id);
+    void deleteCustomerById(Long id);
 
     String updateCustomer(CustomerDTO customer);
 

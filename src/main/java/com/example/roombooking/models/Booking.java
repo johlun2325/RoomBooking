@@ -1,6 +1,9 @@
 package com.example.roombooking.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +22,7 @@ public class Booking {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn
     private Customer customer;
 
@@ -27,7 +30,10 @@ public class Booking {
     @JoinColumn
     private Room room;
 
+    @Min(value = 1, message = "Amount of people must be at least 1")
+    @Max(value = 6, message = "Amount of people must be no more than 6")
     private int numberOfPeople;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -39,3 +45,6 @@ public class Booking {
         this.endDate = endDate;
     }
 }
+
+
+// @NotBlank krockar med UpdateForm sidan, då formen enbart skickar numberOfPeople
