@@ -21,12 +21,20 @@ public class RoomType {
     @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Room type can only contain Swedish letters and spaces")
     private String type;
 
+    @Min(value = 1, message = "Capacity must be at least 1")
+    private int capacity;
+
     @Min(value = 0, message = "Number of extra beds must be at least 0")
     @Max(value = 4, message = "Number of extra beds must be no more than 4")
     private int extraBeds;
 
-    public RoomType(String type, int extraBeds) {
+    public RoomType(String type, int capacity, int extraBeds) {
         this.type = type;
+        this.capacity = capacity;
         this.extraBeds = extraBeds;
     }
+
+
+
+
 }
