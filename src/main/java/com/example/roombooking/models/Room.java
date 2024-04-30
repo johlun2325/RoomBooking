@@ -24,7 +24,7 @@ public class Room {
     @GeneratedValue
     private Long id;
 
-//    @Min(value = 1, message = "Price must be at least 1")
+    @Min(value = 1, message = "Price must be at least 1")
     private double price;
 
     @ManyToOne

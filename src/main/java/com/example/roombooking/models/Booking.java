@@ -30,8 +30,8 @@ public class Booking {
     @JoinColumn
     private Room room;
 
-//    @Min(value = 1, message = "Amount of people must be at least 1")
-//    @Max(value = 6, message = "Amount of people must be no more than 6")
+    @Min(value = 1, message = "Amount of people must be at least 1")
+    @Max(value = 6, message = "Amount of people must be no more than 6")
     private int numberOfPeople;
 
     private LocalDate startDate;

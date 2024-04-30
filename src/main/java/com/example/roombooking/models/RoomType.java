@@ -17,12 +17,12 @@ public class RoomType {
     @GeneratedValue
     private Long id;
 
-//    @Size(min = 1, max = 50, message = "Room type must be between 1 and 50 characters")
-//    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Room type can only contain Swedish letters and spaces")
+    @Size(min = 1, max = 50, message = "Room type must be between 1 and 50 characters")
+    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Room type can only contain Swedish letters and spaces")
     private String type;
 
-//    @Min(value = 0, message = "Number of extra beds must be at least 0")
-//    @Max(value = 4, message = "Number of extra beds must be no more than 4")
+    @Min(value = 0, message = "Number of extra beds must be at least 0")
+    @Max(value = 4, message = "Number of extra beds must be no more than 4")
     private int extraBeds;
 
     public RoomType(String type, int extraBeds) {

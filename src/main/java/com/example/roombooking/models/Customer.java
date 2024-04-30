@@ -23,16 +23,16 @@ public class Customer {
     @GeneratedValue
     private Long id;
 
-//    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
-//    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Name can only contain Swedish letters and spaces")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Name can only contain Swedish letters and spaces")
     private String name;
 
     @Column(unique = true)
-//    @Pattern(regexp = "\\d{6}-\\d{4}",
-//             message = "Personal number must be in the format XXXXXX-XXXX")
+    @Pattern(regexp = "\\d{6}-\\d{4}",
+             message = "Personal number must be in the format XXXXXX-XXXX")
     private String ssn;
 
-//    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     // TODO: Regex pattern for email
     private String email;
 
