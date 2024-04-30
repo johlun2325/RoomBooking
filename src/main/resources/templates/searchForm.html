@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Sök lediga rum</title>
 </head>
 <body>
+<h1>Sök rum</h1>
 <form action="#" th:action="@{/booking/search}">
     <label for="ppl">Antal personer</label><br>
     <input type="text" id="ppl" th:field="*{ppl}"><br>
