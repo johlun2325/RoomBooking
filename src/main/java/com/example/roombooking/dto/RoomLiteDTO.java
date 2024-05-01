@@ -16,4 +16,7 @@ public class RoomLiteDTO {
     private double price;
     private RoomType roomType;
 
+    public RoomLiteDTO(Long id) {
+        this.id = id;
+    }
 }

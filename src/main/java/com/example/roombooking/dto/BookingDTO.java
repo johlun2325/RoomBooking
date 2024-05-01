@@ -20,4 +20,11 @@ public class BookingDTO {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public BookingDTO(CustomerLiteDTO customer, RoomLiteDTO room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
+        this.customer = customer;
+        this.room = room;
+        this.numberOfPeople = numberOfPeople;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
