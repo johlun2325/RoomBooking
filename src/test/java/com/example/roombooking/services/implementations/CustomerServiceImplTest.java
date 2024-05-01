@@ -2,7 +2,6 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
-import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Customer;
 import com.example.roombooking.repos.CustomerRepo;
 import org.junit.jupiter.api.Test;
@@ -104,6 +103,12 @@ class CustomerServiceImplTest {
 
     @Test
     void addCustomer() {
+        CustomerServiceImpl serv = new CustomerServiceImpl(repo);
+        when(repo.save(any(Customer.class))).thenReturn(customer);
+
+        serv.addCustomer(customerDTO);
+        verify(repo, times(1)).save(any(Customer.class));
+
     }
 
     @Test
