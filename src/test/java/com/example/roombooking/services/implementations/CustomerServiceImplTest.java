@@ -119,6 +119,12 @@ class CustomerServiceImplTest {
 
     @Test
     void updateCustomer() {
+
+        when(repo.save(any(Customer.class))).thenReturn(customer);
+        CustomerServiceImpl serv = new CustomerServiceImpl(repo);
+        serv.updateCustomer(customerDTO);
+        verify(repo, times(1)).save(any(Customer.class));
+
     }
 
     @Test
