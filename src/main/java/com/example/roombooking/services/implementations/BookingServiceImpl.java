@@ -102,8 +102,8 @@ public class BookingServiceImpl implements BookingService {
     // TODO: Fungerar bara med befintliga kunder
     @Override
     public void addBooking(String ssn, String startDate, String endDate, int numberOfPeople, Long roomId) {
-        var customer = customerRepo.findCustomerBySsn(ssn).orElseThrow(NoSuchElementException::new);
-        var room = roomRepo.findById(roomId).orElseThrow(NoSuchElementException::new);
+        Customer customer = customerRepo.findCustomerBySsn(ssn).orElseThrow(NoSuchElementException::new);
+        Room room = roomRepo.findById(roomId).orElseThrow(NoSuchElementException::new);
 
         bookingRepo.save(new Booking(
                 customer,
