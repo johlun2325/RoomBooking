@@ -8,10 +8,14 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.repos.TypeRepo;
-import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
@@ -58,9 +62,9 @@ public class RoomBookingApplication {
 //            Booking booking1 = new Booking(customer1, room1, 1, LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15));
 //            Booking booking2 = new Booking(customer2, room2, 2, LocalDate.of(2024, 2, 20), LocalDate.of(2024, 2, 25));
 //            Booking booking3 = new Booking(customer3, room3, 3, LocalDate.of(2024, 2, 15), LocalDate.of(2024, 2, 20));
-//            Booking booking4 = new Booking(customer1, room1, 2, LocalDate.of(2024, 2, 5), LocalDate.of(2024, 2, 7));
+////            Booking booking4 = new Booking(customer4, room1, 2, LocalDate.of(2024, 2, 5), LocalDate.of(2024, 2, 7));
 //
-//            bookingRepo.saveAll(List.of(booking1, booking2, booking3, booking4));
+//            bookingRepo.saveAll(List.of(booking1, booking2, booking3));
 //        };
 //    }
 
