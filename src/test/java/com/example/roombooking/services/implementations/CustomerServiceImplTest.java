@@ -34,10 +34,12 @@ class CustomerServiceImplTest {
     private String email = "mockmock@mail.se";
 
     private Customer customer = new Customer(id,name,ssn,email, new ArrayList<>());
+
     private CustomerDTO customerDTO = new CustomerDTO().builder()
             .id(customer.getId()).name(customer.getName())
             .ssn(customer.getSsn()).email(customer.getEmail())
             .bookings(new ArrayList<>()).build();
+
     private CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
             .id(customer.getId()).name(customer.getName())
             .ssn(customer.getSsn()).email(customer.getEmail()).build();
