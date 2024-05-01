@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.findAll()
                 .stream()
                 .map(this::convertToCustomerDto)
-                .peek(customer -> LOGGER.info("Customer data listed: ID %{}", customer.getId()))
+                .peek(customer -> LOGGER.info("Customer data listed: ID {}", customer.getId()))
                 .toList();
     }
 
