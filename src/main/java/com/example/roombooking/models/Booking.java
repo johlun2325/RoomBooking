@@ -45,6 +45,3 @@ public class Booking {
         this.endDate = endDate;
     }
 }
-
-
-// @NotBlank krockar med UpdateForm sidan, då formen enbart skickar numberOfPeople

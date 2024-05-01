@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -100,14 +98,14 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    // Add new customer - DTO in, Msg out
+
 //    @Override
 //    public void addCustomer(CustomerDTO customer) {
-//        customerRepo.findById(customer.getId())
-//                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with ID: {} exists", customer.getId()),
+//        customerRepo.findCustomerBySsn(customer.getSsn())
+//                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
 //                        () -> {
 //                    customerRepo.save(convertDtoToCustomer(customer));
-//                    LOGGER.info("Customer with ID: {} added", customer.getId());
+//                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
 //                });
 //    }
 
@@ -115,14 +113,17 @@ public class CustomerServiceImpl implements CustomerService {
     public void addCustomer(CustomerDTO customer) {
         Customer c = convertDtoToCustomer(customer);
         Long id = c.getId();
-        Long idIsPresent = findAllCustomers().stream().filter(cust -> cust.getId() == id).map(cu -> cu.getId()).findFirst().orElse(-1L);
+        Long idIsPresent = findAllCustomers().stream()
+                .filter(cust -> cust.getId() == id).map(cu -> cu.getId())
+                .findFirst()
+                .orElse(-1L);
+
         if (idIsPresent == -1L){
             customerRepo.save(c);
-            LOGGER.info("Customer with ID: {} added", customer.getId());
-
+            LOGGER.info("Customer with ID: {} added", c.getId());
         }
         else {
-            LOGGER.warn("Customer with ID: {} exists", customer.getId());
+            LOGGER.warn("Customer with ID: {} exists", c.getId());
         }
     }
 

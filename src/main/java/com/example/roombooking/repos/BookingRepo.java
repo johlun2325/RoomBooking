@@ -7,6 +7,4 @@ public interface BookingRepo extends JpaRepository<Booking, Long> {
 
     // boolean existsByCustomer(Customer customer);
 
-
-
 }

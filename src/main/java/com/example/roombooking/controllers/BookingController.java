@@ -3,7 +3,6 @@ package com.example.roombooking.controllers;
 import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
-import com.example.roombooking.models.Customer;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;

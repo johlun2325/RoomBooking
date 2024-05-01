@@ -121,7 +121,18 @@ public class BookingServiceImpl implements BookingService {
                 return;
             }
 
+            var bookings = bookingRepo.findAll();
+            boolean areBookingDatesOverlapping = bookings.stream()
+                    .anyMatch(b -> dateUtility.areDatesOverlapping(foundBooking.getStartDate(), foundBooking.getEndDate(), booking.getStartDate(), booking.getEndDate()));
+
+            if (areBookingDatesOverlapping) {
+                LOGGER.warn("The chosen dates are overlapping with the existing dates");
+                return;
+            }
+
             foundBooking.setNumberOfPeople(numberOfPeople);
+            foundBooking.setStartDate(booking.getStartDate());
+            foundBooking.setEndDate(booking.getEndDate());
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
 

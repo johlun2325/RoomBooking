@@ -7,8 +7,10 @@
 <body>
 <form action="#" th:action="@{/booking/update}" th:object="${booking}" method="post">
     <label for="ppl">Antal Personer</label><br>
-    <input type="text" id="ppl" th:field="*{numberOfPeople}"><br>
     <input type="hidden" id="id" th:field="*{id}"><br>
+    <input type="date" id="startDate" th:field="*{startDate}"><br>
+    <input type="date" id="endDate" th:field="*{endDate}"><br>
+    <input type="text" id="ppl" th:field="*{numberOfPeople}"><br>
     <input type="submit" value="Submit">
 
 <!--    private Long id;-->

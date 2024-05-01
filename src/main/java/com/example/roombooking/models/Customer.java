@@ -1,10 +1,8 @@
 package com.example.roombooking.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,22 +17,6 @@ import java.util.List;
 @Builder
 public class Customer {
 
-    //För att test ska funka
-    public Customer(Long id, String name, String ssn, String email) {
-        this.id = id;
-        this.name = name;
-        this.ssn = ssn;
-        this.email = email;
-    }
-
-
-    public Customer(Long id, String name, String ssn, String email, List<Booking> bookings) {
-        this.id = id;
-        this.name = name;
-        this.ssn = ssn;
-        this.email = email;
-        this.bookings = bookings;
-    }
 
     @Id
     @GeneratedValue
@@ -61,6 +43,22 @@ public class Customer {
         this.ssn = ssn;
         this.email = email;
         this.bookings = new ArrayList<>();
+    }
+
+    //För att test ska funka
+    public Customer(Long id, String name, String ssn, String email) {
+        this.id = id;
+        this.name = name;
+        this.ssn = ssn;
+        this.email = email;
+    }
+
+    public Customer(Long id, String name, String ssn, String email, List<Booking> bookings) {
+        this.id = id;
+        this.name = name;
+        this.ssn = ssn;
+        this.email = email;
+        this.bookings = bookings;
     }
 
     public void addBooking(Booking booking) {
