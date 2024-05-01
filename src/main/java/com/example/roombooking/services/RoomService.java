@@ -3,6 +3,7 @@ package com.example.roombooking.services;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomService {
@@ -18,4 +19,7 @@ public interface RoomService {
 
     List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople);
 
+    LocalDate convertToLocalDate(String date);
+
+    boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2);
 }

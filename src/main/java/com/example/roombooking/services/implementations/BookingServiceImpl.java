@@ -11,14 +11,17 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.services.CustomerService;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
+    private final RoomServiceImpl roomService;
+    private final CustomerService customerService;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -67,8 +72,12 @@ public class BookingServiceImpl implements BookingService {
     //BookingDTO till booking - kolla om funkar
     @Override
     public Booking convertDtoToBooking(BookingDTO booking) {
-        Customer customer = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
-        Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
+        Customer customer = customerService.convertLiteDtoToCustomer(booking.getCustomer());
+        LOGGER.debug(customer.getName());
+        Room room = roomService.convertLiteDtoToRoom(booking.getRoom());
+
+//        Customer customer = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
+//        Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
         return Booking.builder()
                 .id(booking.getId())
@@ -97,13 +106,13 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-/*
-        this.customer = customer;
-        this.room = room;
-        this.numberOfPeople = numberOfPeople;
-        this.startDate = startDate;
-        this.endDate = endDate;
- */
+    /*
+            this.customer = customer;
+            this.room = room;
+            this.numberOfPeople = numberOfPeople;
+            this.startDate = startDate;
+            this.endDate = endDate;
+     */
     @Override
     public void addBooking(BookingDTO booking) {
         bookingRepo.save(new Booking());
@@ -112,25 +121,50 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void updateBooking(BookingDTO booking) {
-        bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
-            int capacity = booking.getRoom().getRoomType().getCapacity();
-            int numberOfPeople = booking.getNumberOfPeople();
+        Booking b = convertDtoToBooking(booking);
+        LocalDate newStart = booking.getStartDate();
+        LocalDate newEnd = booking.getEndDate();
+        Long roomId = booking.getRoom().getId();
 
-            if (numberOfPeople <= capacity) {
-                LOGGER.warn("The number of people exceeds the capacity.");
-                return;
-            }
+        List<Booking> bookings = bookingRepo.findAll();
 
-            if (false) {
+        Booking overlappedBooking = bookings.stream().filter(book -> book.getRoom().getId() == roomId)
+                .filter(bk -> roomService.areDatesOverlapping(newStart, newEnd, bk.getStartDate(), bk.getEndDate())).findAny().orElse(null);
 
-                // TODO: Kolla så att datumen inte överlappar/är lediga.
-            }
+        int capacity = booking.getRoom().getRoomType().getCapacity(); //totalt för rummet
+        int numberOfPeople = booking.getNumberOfPeople(); //önskat antal
 
-            foundBooking.setNumberOfPeople(numberOfPeople);
-            bookingRepo.save(foundBooking);
-            LOGGER.info("Booking with ID: {} updated", booking.getId());
-        }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
+        if (overlappedBooking == null && capacity >= numberOfPeople) {
+            bookingRepo.save(b);
+            LOGGER.info("Booking with id " + booking.getId() + " updated");
+        } else {
+            LOGGER.warn("The number of people exceeds the capacity.");
+        }
+
+
     }
+
+//    @Override
+//    public void updateBooking(BookingDTO booking) {
+//        bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
+//            int capacity = booking.getRoom().getRoomType().getCapacity();
+//            int numberOfPeople = booking.getNumberOfPeople();
+//
+//            if (numberOfPeople <= capacity) {
+//                LOGGER.warn("The number of people exceeds the capacity.");
+//                return;
+//            }
+//
+//            if (false) {
+//
+//                // TODO: Kolla så att datumen inte överlappar/är lediga.
+//            }
+//
+//            foundBooking.setNumberOfPeople(numberOfPeople);
+//            bookingRepo.save(foundBooking);
+//            LOGGER.info("Booking with ID: {} updated", booking.getId());
+//        }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
+//    }
 
     //delete by id with thymeleaf
     @Override

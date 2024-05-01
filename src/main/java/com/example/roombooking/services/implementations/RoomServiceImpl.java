@@ -59,14 +59,17 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+    //borde ligga i bookingService
+    @Override
+    public boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         long overlap = Math.min(end1.toEpochDay(), end2.toEpochDay()) -
                 Math.max(start1.toEpochDay(), start2.toEpochDay());
 
         return overlap >= 0;
     }
 
-    private LocalDate convertToLocalDate(String date) {
+    @Override
+    public LocalDate convertToLocalDate(String date) {
         Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
 
         Matcher matcher = datePattern.matcher(date);
