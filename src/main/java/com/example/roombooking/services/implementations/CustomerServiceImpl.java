@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -86,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.findAll()
                 .stream()
                 .map(this::convertToCustomerDto)
-                .peek(customer -> LOGGER.info("Customer data listed: ID %{}", customer.getId()))
+                .peek(customer -> LOGGER.info("Customer data listed: ID %S".formatted(customer.getId())))
                 .toList();
     }
 
@@ -100,35 +101,68 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // Add new customer - DTO in, Msg out
+//    @Override
+//    public void addCustomer(CustomerDTO customer) {
+//        customerRepo.findById(customer.getId())
+//                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with ID: {} exists", customer.getId()),
+//                        () -> {
+//                    customerRepo.save(convertDtoToCustomer(customer));
+//                    LOGGER.info("Customer with ID: {} added", customer.getId());
+//                });
+//    }
+
     @Override
     public void addCustomer(CustomerDTO customer) {
-        customerRepo.findCustomerBySsn(customer.getSsn())
-                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
-                        () -> {
-                    customerRepo.save(convertDtoToCustomer(customer));
-                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
-                });
+        Customer c = convertDtoToCustomer(customer);
+        Long id = c.getId();
+        Long idIsPresent = findAllCustomers().stream().filter(cust -> cust.getId() == id).map(cu -> cu.getId()).findFirst().orElse(-1L);
+        if (idIsPresent == -1L){
+            customerRepo.save(c);
+            LOGGER.info("Customer with ID: {} added", customer.getId());
+
+        }
+        else {
+            LOGGER.warn("Customer with ID: {} exists", customer.getId());
+        }
     }
 
     @Override
     public String updateCustomer(CustomerDTO customer) {
-        var message = new AtomicReference<String>();
-        return customerRepo.findById(customer.getId())
-                .map(foundCustomer -> {
-                    foundCustomer.setName(customer.getName());
-                    foundCustomer.setSsn(customer.getSsn());
-                    foundCustomer.setEmail(customer.getEmail());
-                    customerRepo.save(foundCustomer);
-                    message.set("Customer with ID: %s updated".formatted(customer.getId()));
-                    LOGGER.info(message.get());
-                    return message.get();
-                })
-                .orElseGet(() -> {
-                    message.set("Customer with ID: %s not found".formatted(customer.getId()));
-                    LOGGER.warn(message.get());
-                    return message.get();
-                });
+        Customer c = convertDtoToCustomer(customer);
+
+        Long id = c.getId();
+        Long idIsPresent = findAllCustomers().stream().filter(cust -> cust.getId() == id).map(cu -> cu.getId()).findFirst().orElse(-1L);
+
+        if (idIsPresent == -1L){
+            customerRepo.save(c);
+            LOGGER.info("Customer with ID: {} does not exist, customer added", customer.getId());
+            return "Customer did not exist, customer added";
+        }
+        customerRepo.save(c);
+        LOGGER.info("Customer with ID: {} updated", customer.getId());
+        return "Customer updated";
     }
+
+//    @Override
+//    public String updateCustomer(CustomerDTO customer) {
+//        var message = new AtomicReference<String>();
+//
+//        return customerRepo.findById(customer.getId())
+//                .map(foundCustomer -> {
+//                    foundCustomer.setName(customer.getName());
+//                    foundCustomer.setSsn(customer.getSsn());
+//                    foundCustomer.setEmail(customer.getEmail());
+//                    customerRepo.save(foundCustomer);
+//                    message.set("Customer with ID: %s updated".formatted(customer.getId()));
+//                    LOGGER.info(message.get());
+//                    return message.get();
+//                })
+//                .orElseGet(() -> {
+//                    message.set("Customer with ID: %s not found".formatted(customer.getId()));
+//                    LOGGER.warn(message.get());
+//                    return message.get();
+//                });
+//    }
 
     // Thymeleaf Delete: Delete customer by ID
     @Override
