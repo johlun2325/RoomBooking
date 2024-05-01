@@ -6,6 +6,7 @@ import com.example.roombooking.models.Customer;
 import com.example.roombooking.repos.CustomerRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,7 @@ class CustomerServiceImplTest {
     @Mock
     private CustomerRepo repo;
 
+    @InjectMocks
     private CustomerServiceImpl service = new CustomerServiceImpl(repo);
 
 

@@ -7,6 +7,7 @@ import com.example.roombooking.models.RoomType;
 import com.example.roombooking.repos.RoomRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ class RoomServiceImplTest {
     @Mock
     private RoomRepo repo;
 
+    @InjectMocks
     private RoomServiceImpl service = new RoomServiceImpl(repo);
 
     private Long id = 1L;
