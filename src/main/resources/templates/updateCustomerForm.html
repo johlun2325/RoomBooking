@@ -14,29 +14,30 @@
     <label for="email">Email</label><br>
     <input type="email" id="email" th:field="*{email}"><br>
     <input type="hidden" id="id" th:field="*{id}"><br>
-    <input type="submit" value="Submit" onclick="handleSubmit()">
+    <input type="submit" value="Submit" onclick="handleSubmit(event)">
 </form>
 
+
 <script>
-    var originalName = document.getElementById("name").value;
-    var originalSsn = document.getElementById("ssn").value;
-    var originalEmail = document.getElementById("email").value;
+    const originalName = document.getElementById("name").value;
+    const originalSsn = document.getElementById("ssn").value;
+    const originalEmail = document.getElementById("email").value;
 
     function handleSubmit(event) {
         event.preventDefault();
 
-        var updatedName = document.getElementById("name").value;
-        var updatedSsn = document.getElementById("ssn").value;
-        var updatedEmail = document.getElementById("email").value;
+        const updatedName = document.getElementById("name").value;
+        const updatedSsn = document.getElementById("ssn").value;
+        const updatedEmail = document.getElementById("email").value;
 
         if (updatedName !== originalName) {
-            alert("Kunden har nu ändrats: " + updatedName);
+            alert("Namn har nu ändrats: " + updatedName);
         }
         if (updatedSsn !== originalSsn) {
-            alert("Kunden har nu ändrats: " + updatedSsn);
+            alert("Personnummer har nu ändrats: " + updatedSsn);
         }
         if (updatedEmail !== originalEmail) {
-            alert("Kunden har nu ändrats: " + updatedEmail);
+            alert("Email har nu ändrats: " + updatedEmail);
         }
 
         document.getElementById("updateForm").submit();
