@@ -1,6 +1,5 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Room;
@@ -13,9 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -61,10 +63,26 @@ class RoomServiceImplTest {
 
     @Test
     void findAllRooms() {
+
+        when(repo.findAll()).thenReturn(Arrays.asList(room));
+        RoomServiceImpl serv = new RoomServiceImpl(repo);
+
+        List<RoomLiteDTO> allRooms = serv.findAllRooms();
+        assertTrue(allRooms.size() == 1);
+
     }
 
     @Test
     void findRoomById() {
+
+        when(repo.findById(room.getId())).thenReturn(Optional.of(room));
+        RoomServiceImpl serv = new RoomServiceImpl(repo);
+        RoomLiteDTO foundRoom = serv.findRoomById(room.getId());
+
+        assertEquals(room.getId(), foundRoom.getId());
+        assertEquals(room.getPrice(), foundRoom.getPrice());
+        assertEquals(room.getRoomType(), foundRoom.getRoomType());
+
     }
 
     @Test
