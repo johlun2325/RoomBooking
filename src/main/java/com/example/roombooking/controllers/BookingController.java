@@ -1,7 +1,12 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.BookingDTO;
+import com.example.roombooking.dto.CustomerLiteDTO;
+import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.models.Customer;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.DateUtility;
+import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import java.util.Map;
 class BookingController {
 
     private final BookingService bookingService;
+    private final Utility dateUtility = new DateUtility();
 
     @GetMapping("/all")
     String getAllBookings(Model model) {
@@ -45,7 +51,16 @@ class BookingController {
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
                              @RequestParam Long roomId) {
-        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, roomId);
+
+        var customer = new CustomerLiteDTO(ssn);
+        var room = new RoomLiteDTO(roomId);
+        BookingDTO bookingDTO = new BookingDTO(customer,
+                room,
+                numberOfPeople,
+                dateUtility.convertToLocalDate(startDate),
+                dateUtility.convertToLocalDate(endDate));
+
+        bookingService.addBooking(bookingDTO);
         return "redirect:/booking/all";
     }
 

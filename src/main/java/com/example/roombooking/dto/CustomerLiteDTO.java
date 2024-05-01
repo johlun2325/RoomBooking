@@ -16,4 +16,7 @@ public class CustomerLiteDTO {
     private String ssn;
     private String email;
 
+    public CustomerLiteDTO(String ssn) {
+        this.ssn = ssn;
+    }
 }

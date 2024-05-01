@@ -26,13 +26,14 @@
         <tbody>
         <tr th:each="room : ${availableRooms}">
             <td>
-                <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}">Boka </a>
+                <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}">Boka</a></td>
+            <td th:text="${room.roomType.type}">
             </td>
-            <td th:text="${room.roomType.type}"></td>
         </tr>
         </tbody>
     </table>
 </div>
+
 <script>
     function dateValidator() {
         const startDateElement = document.getElementById("startDate");
