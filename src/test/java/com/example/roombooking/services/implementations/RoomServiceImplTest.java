@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Room;
@@ -40,12 +41,22 @@ class RoomServiceImplTest {
 
     @Test
     void convertToRoomLiteDto() {
+        RoomLiteDTO actual = service.convertToRoomLiteDto(room);
 
+        assertEquals(actual.getId(), room.getId());
+        assertEquals(actual.getPrice(), room.getPrice());
+        assertEquals(actual.getRoomType(), room.getRoomType());
 
     }
 
+
     @Test
     void convertLiteDtoToRoom() {
+        Room actual = service.convertLiteDtoToRoom(liteRoom);
+
+        assertEquals(actual.getId(), room.getId());
+        assertEquals(actual.getPrice(), room.getPrice());
+        assertEquals(actual.getRoomType(), room.getRoomType());
     }
 
     @Test

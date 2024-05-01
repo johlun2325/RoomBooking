@@ -51,6 +51,8 @@ class CustomerServiceImplTest {
         assertEquals(actual.getName(), customer.getName());
         assertEquals(actual.getSsn(), customer.getSsn());
         assertEquals(actual.getEmail(), customer.getEmail());
+
+        assertEquals(actual.getId(), customerDTO.getId());
     }
 
     @Test
