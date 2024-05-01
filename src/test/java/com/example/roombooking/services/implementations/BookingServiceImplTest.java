@@ -1,5 +1,7 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.BookingDTO;
+import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
@@ -19,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -65,19 +69,53 @@ class BookingServiceImplTest {
     LocalDate endDate = LocalDate.of(2024, 1, 4);
     Booking booking = new Booking(customer, room, 2, startDate, endDate);
 
+    private BookingDTO bookingDTO = new BookingDTO().builder()
+            .id(booking.getId())
+            .numberOfPeople(booking.getNumberOfPeople())
+            .startDate(booking.getStartDate())
+            .endDate(booking.getEndDate())
+            .customer(customerLiteDTO)
+            .room(liteRoom).build();
 
     @Test
     void convertToBookingLiteDto() {
+        BookingLiteDTO actual = service.convertToBookingLiteDto(booking);
 
+        assertEquals(actual.getId(), booking.getId());
+        assertEquals(actual.getNumberOfPeople(), booking.getNumberOfPeople());
+        assertEquals(actual.getStartDate(), booking.getStartDate());
+        assertEquals(actual.getEndDate(), booking.getEndDate());
+        assertEquals(actual.getRoom().getId(), booking.getRoom().getId());
 
     }
 
     @Test
     void convertToDto() {
+
+        BookingDTO actual = service.convertToDto(booking);
+
+        assertEquals(actual.getId(), booking.getId());
+        assertEquals(actual.getNumberOfPeople(), booking.getNumberOfPeople());
+        assertEquals(actual.getStartDate(), booking.getStartDate());
+        assertEquals(actual.getEndDate(), booking.getEndDate());
+        assertEquals(actual.getCustomer().getId(), booking.getCustomer().getId());
+        assertEquals(actual.getRoom().getId(), booking.getRoom().getId());
+
     }
 
+
+    //funkar ej än
     @Test
     void convertDtoToBooking() {
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+
+        Booking actual = serv.convertDtoToBooking(bookingDTO); ///err
+
+        assertEquals(actual.getId(), booking.getId());
+        assertEquals(actual.getNumberOfPeople(), booking.getNumberOfPeople());
+        assertEquals(actual.getStartDate(), booking.getStartDate());
+        assertEquals(actual.getEndDate(), booking.getEndDate());
+        assertEquals(actual.getRoom().getId(), booking.getRoom().getId());
     }
 
     @Test
