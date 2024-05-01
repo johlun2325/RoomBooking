@@ -15,9 +15,9 @@
     <input type="date" id="endDate" name="endDate" required><br>
 
     <label for="numberOfPeople">Antal personer</label><br>
-    <input type="number" id="numberOfPeople" name="numberOfPeople" required><br>
+    <input type="number" id="numberOfPeople" name="numberOfPeople" min="1" max="6" required><br>
 
-    <input type="submit" value="Sök">
+    <input type="submit" value="Sök" onclick="return dateValidator()">
 
 </form>
 
@@ -34,9 +34,21 @@
 </div>
 
 <script>
+    function dateValidator() {
+        const startDateElement = document.getElementById("startDate");
+        const endDateElement = document.getElementById("endDate");
 
+        const startDate = new Date(startDateElement.value);
+        const endDate = new Date(endDateElement.value);
 
-
+        if (startDate > endDate) {
+            alert("Inchecknings datumet kan inte vara större än utcheckningsdatumet!");
+            startDateElement.value = "";
+            endDateElement.value = "";
+            return false;
+        }
+        return true;
+    }
 </script>
 
 </body>
