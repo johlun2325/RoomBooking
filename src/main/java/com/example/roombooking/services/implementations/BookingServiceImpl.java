@@ -12,6 +12,8 @@ import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.RoomService;
+import com.example.roombooking.utilities.Converter;
+import com.example.roombooking.utilities.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
+    private final Converter dateConverter = new DateConverter();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -97,17 +100,20 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-/*
-        this.customer = customer;
-        this.room = room;
-        this.numberOfPeople = numberOfPeople;
-        this.startDate = startDate;
-        this.endDate = endDate;
- */
+    // TODO: Fungerar bara med befintliga kunder
     @Override
-    public void addBooking(BookingDTO booking) {
-        bookingRepo.save(new Booking());
-        LOGGER.info("Booking with ID: {} added", booking.getId());
+    public void addBooking(String ssn, String startDate, String endDate, int numberOfPeople, long roomId) {
+        var customer = customerRepo.findCustomerBySsn(ssn).orElseThrow(NoSuchElementException::new);
+        var room = roomRepo.findById(roomId).orElseThrow(NoSuchElementException::new);
+
+        bookingRepo.save(new Booking(
+                customer,
+                room,
+                numberOfPeople,
+                dateConverter.convertToLocalDate(startDate),
+                dateConverter.convertToLocalDate(endDate)));
+
+        LOGGER.info("Booking add");
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.utilities.Converter;
+import com.example.roombooking.utilities.DateConverter;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,16 +13,19 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepo roomRepo;
+    private final Converter dateConverter;
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
+
+    public RoomServiceImpl(RoomRepo roomRepo) {
+        this.roomRepo = roomRepo;
+        this.dateConverter = new DateConverter();
+    }
 
     @Override
     public RoomLiteDTO convertToRoomLiteDto(Room room) {
@@ -66,19 +70,6 @@ public class RoomServiceImpl implements RoomService {
         return overlap >= 0;
     }
 
-    private LocalDate convertToLocalDate(String date) {
-        Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-
-        Matcher matcher = datePattern.matcher(date);
-        if (!matcher.find()) throw new RuntimeException("Illegal date format");
-
-        int yyyy = Integer.parseInt(matcher.group(1));
-        int mm = Integer.parseInt(matcher.group(2));
-        int dd = Integer.parseInt(matcher.group(3));
-
-        return LocalDate.of(yyyy, mm, dd);
-    }
-
     @Override
     public List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople) {
         return roomRepo.findAll().stream()
@@ -86,8 +77,8 @@ public class RoomServiceImpl implements RoomService {
                         .noneMatch(booking -> areDatesOverlapping(
                                 booking.getStartDate(),
                                 booking.getEndDate(),
-                                convertToLocalDate(startDate),
-                                convertToLocalDate(endDate)))
+                                dateConverter.convertToLocalDate(startDate),
+                                dateConverter.convertToLocalDate(endDate)))
                         && numberOfPeople <= room.getRoomType().getCapacity())
                 .map(this::convertToRoomLiteDto)
                 .collect(Collectors.toList());
