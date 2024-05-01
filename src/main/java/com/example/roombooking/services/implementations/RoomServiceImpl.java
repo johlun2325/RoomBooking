@@ -6,6 +6,7 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,12 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepo roomRepo;
-    private final Utility dateUtility;
+    private final Utility dateUtility = new DateUtility();
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
-
-    public RoomServiceImpl(RoomRepo roomRepo) {
-        this.roomRepo = roomRepo;
-        this.dateUtility = new DateUtility();
-    }
 
     @Override
     public RoomLiteDTO convertToRoomLiteDto(Room room) {
