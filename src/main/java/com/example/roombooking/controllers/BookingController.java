@@ -39,22 +39,13 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
-    // Alla lediga rum (datum och antal personer är redan av-checkade)
-    /*
-        this.customer = customer;
-        this.room = room;
-        this.numberOfPeople = numberOfPeople;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        String ssn, long roomId, int numberOfPeople, String startDate, String endDate) {
- */
     @PostMapping("/add")
     public String addBooking(@RequestParam String ssn,
                              @RequestParam String startDate,
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
-                             @RequestParam int roomId) {
-        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, (long) roomId);
+                             @RequestParam Long roomId) {
+        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, roomId);
         return "redirect:/booking/all";
     }
 

@@ -2,7 +2,6 @@ package com.example.roombooking.services;
 
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
-import com.example.roombooking.utilities.Converter;
 
 import java.util.List;
 

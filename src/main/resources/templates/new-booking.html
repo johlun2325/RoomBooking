@@ -10,7 +10,7 @@
 </head>
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
 
-<form action="#" th:action="@{/booking/add}" th:object="${room}" method="post" >
+<form action="#" th:action="@{/booking/add}" method="post" >
 
     <!--Hidden until checking for existing customer-->
 <!--    <div class="mb-3">-->
@@ -46,7 +46,7 @@
 
     <div class="mb-3">
         <label for="roomId" class="form-label">Room ID</label>
-        <input type="text" class="form-control" id="roomId" name="roomId" th:value="*{id}" readonly>
+        <input type="text" class="form-control" id="roomId" name="roomId" th:value="*{room.id}" readonly>
     </div>
 
     <button type="submit" class="btn btn-primary">Boka</button>

@@ -11,9 +11,8 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.services.RoomService;
-import com.example.roombooking.utilities.Converter;
-import com.example.roombooking.utilities.DateConverter;
+import com.example.roombooking.utilities.Utility;
+import com.example.roombooking.utilities.DateUtility;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
-    private final Converter dateConverter = new DateConverter();
+    private final Utility dateUtility = new DateUtility();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -110,8 +109,8 @@ public class BookingServiceImpl implements BookingService {
                 customer,
                 room,
                 numberOfPeople,
-                dateConverter.convertToLocalDate(startDate),
-                dateConverter.convertToLocalDate(endDate)));
+                dateUtility.convertToLocalDate(startDate),
+                dateUtility.convertToLocalDate(endDate)));
 
         LOGGER.info("Booking add");
     }

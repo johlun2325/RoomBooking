@@ -42,14 +42,6 @@ public class RoomController {
         return "new-booking";
     }
 
-    // http://localhost:8080/room/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
-//    @GetMapping("/search")
-//    public List<RoomLiteDTO> searchRooms(@RequestParam String startDate,
-//                                          @RequestParam String endDate,
-//                                          @RequestParam int numberOfPeople) {
-//        return roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
-//    }
-
 
     @RequestMapping("/search")
     public String list(@RequestParam String startDate,
