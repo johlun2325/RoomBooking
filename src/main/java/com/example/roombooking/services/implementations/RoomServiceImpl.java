@@ -79,7 +79,6 @@ public class RoomServiceImpl implements RoomService {
         return LocalDate.of(yyyy, mm, dd);
     }
 
-    // TODO: Bestämma hur vi ska söka på antal personer och jämföra i logiken
     @Override
     public List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople) {
         return roomRepo.findAll().stream()
@@ -88,8 +87,8 @@ public class RoomServiceImpl implements RoomService {
                                 booking.getStartDate(),
                                 booking.getEndDate(),
                                 convertToLocalDate(startDate),
-                                convertToLocalDate(endDate))))
-//                        && room.getRoomType().getExtraBeds() <= numberOfPeople)
+                                convertToLocalDate(endDate)))
+                        && numberOfPeople <= room.getRoomType().getCapacity())
                 .map(this::convertToRoomLiteDto)
                 .collect(Collectors.toList());
     }

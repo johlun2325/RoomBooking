@@ -3,13 +3,17 @@ package com.example.roombooking.controllers;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/room")
 @RequiredArgsConstructor
 public class RoomController {
@@ -21,9 +25,21 @@ public class RoomController {
         return roomService.findAllRooms();
     }
 
-    @GetMapping({"/{id}"})
-    RoomLiteDTO getRoom(@PathVariable Long id) {
-        return roomService.findRoomById(id);
+    @GetMapping({"/book/{id}"})
+    String bookRoom(@PathVariable Long id,
+                    @RequestParam String startDate,
+                    @RequestParam String endDate,
+                    @RequestParam int numberOfPeople,
+                    Model model) {
+
+        RoomLiteDTO room = roomService.findRoomById(id);
+        model.addAllAttributes(Map.of(
+                "room", room,
+                "numberOfPeople", numberOfPeople,
+                "startDate", startDate,
+                "endDate", endDate));
+
+        return "new-booking";
     }
 
     // http://localhost:8080/room/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
@@ -34,18 +50,23 @@ public class RoomController {
 //        return roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
 //    }
 
-    // http://localhost:8080/room/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1
-    @GetMapping("/search")
-    public String searchRooms(@RequestParam String startDate,
-                              @RequestParam String endDate,
-                              @RequestParam int numberOfPeople,
-                              Model model) {
+
+    @RequestMapping("/search")
+    public String list(@RequestParam String startDate,
+                       @RequestParam String endDate,
+                       @RequestParam int numberOfPeople,
+                       Model model) {
+
+        var availableRooms = roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
         model.addAllAttributes(Map.of(
+                "availableRooms", availableRooms,
+                "numberOfPeople", numberOfPeople,
                 "startDate", startDate,
-                "endDate", endDate,
-                "numberOfPeople", numberOfPeople));
+                "endDate", endDate));
 
         return "searchForm";
     }
+
+
 
 }

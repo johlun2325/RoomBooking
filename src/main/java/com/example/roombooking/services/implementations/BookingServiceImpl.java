@@ -11,6 +11,7 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,20 +97,36 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-
+/*
+        this.customer = customer;
+        this.room = room;
+        this.numberOfPeople = numberOfPeople;
+        this.startDate = startDate;
+        this.endDate = endDate;
+ */
     @Override
-    public String addBooking(BookingDTO booking) {
-
-        // TODO: Define addBooking method
-
-
-        return null;
+    public void addBooking(BookingDTO booking) {
+        bookingRepo.save(new Booking());
+        LOGGER.info("Booking with ID: {} added", booking.getId());
     }
 
     @Override
     public void updateBooking(BookingDTO booking) {
         bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
-            foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
+            int capacity = booking.getRoom().getRoomType().getCapacity();
+            int numberOfPeople = booking.getNumberOfPeople();
+
+            if (numberOfPeople <= capacity) {
+                LOGGER.warn("The number of people exceeds the capacity.");
+                return;
+            }
+
+            if (false) {
+
+                // TODO: Kolla så att datumen inte överlappar/är lediga.
+            }
+
+            foundBooking.setNumberOfPeople(numberOfPeople);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", booking.getId());
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
