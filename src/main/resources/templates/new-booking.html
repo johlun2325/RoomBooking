@@ -10,13 +10,13 @@
 </head>
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
 
-<form action="#" th:action="@{/booking/add}"  th:object="${room}" method="post" >
+<form action="#" th:action="@{/booking/add}" method="post" >
 
     <!--Hidden until checking for existing customer-->
-    <div class="mb-3">
-        <label for="name" class="form-label" hidden="until-found">Fullständigt namn</label>
-        <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." hidden="until-found" required>
-    </div>
+<!--    <div class="mb-3">-->
+<!--        <label for="name" class="form-label" hidden="until-found">Fullständigt namn</label>-->
+<!--        <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." hidden="until-found" required>-->
+<!--    </div>-->
 
     <div class="mb-3">
         <label for="ssn" class="form-label">Personnummer</label>
@@ -24,10 +24,10 @@
     </div>
 
     <!--Hidden until checking for existing customer-->
-    <div class="mb-3">
-        <label for="email" class="form-label" hidden="until-found">E-postadress</label>
-        <input type="email" class="form-control" id="email" name="email" hidden="until-found" required>
-    </div>
+<!--    <div class="mb-3">-->
+<!--        <label for="email" class="form-label" hidden="until-found">E-postadress</label>-->
+<!--        <input type="email" class="form-control" id="email" name="email" hidden="until-found" required>-->
+<!--    </div>-->
 
     <div class="mb-3">
         <label for="startDate" class="form-label">Start datum</label>
@@ -46,9 +46,8 @@
 
     <div class="mb-3">
         <label for="roomId" class="form-label">Room ID</label>
-        <input type="text" class="form-control" id="roomId" name="roomId" th:field="*{id}" readonly>
+        <input type="text" class="form-control" id="roomId" name="roomId" th:value="*{room.id}" readonly>
     </div>
-
 
     <button type="submit" class="btn btn-primary">Boka</button>
 </form>

@@ -11,7 +11,8 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.services.RoomService;
+import com.example.roombooking.utilities.Utility;
+import com.example.roombooking.utilities.DateUtility;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
+    private final Utility dateUtility = new DateUtility();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -97,38 +99,38 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-/*
-        this.customer = customer;
-        this.room = room;
-        this.numberOfPeople = numberOfPeople;
-        this.startDate = startDate;
-        this.endDate = endDate;
- */
+    // TODO: Fungerar bara med befintliga kunder
     @Override
-    public void addBooking(BookingDTO booking) {
-        bookingRepo.save(new Booking());
-        LOGGER.info("Booking with ID: {} added", booking.getId());
+    public void addBooking(String ssn, String startDate, String endDate, int numberOfPeople, Long roomId) {
+        Customer customer = customerRepo.findCustomerBySsn(ssn).orElseThrow(NoSuchElementException::new);
+        Room room = roomRepo.findById(roomId).orElseThrow(NoSuchElementException::new);
+
+        bookingRepo.save(new Booking(
+                customer,
+                room,
+                numberOfPeople,
+                dateUtility.convertToLocalDate(startDate),
+                dateUtility.convertToLocalDate(endDate)));
+
+        LOGGER.info("Booking add");
     }
 
     @Override
     public void updateBooking(BookingDTO booking) {
         bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
-            int capacity = booking.getRoom().getRoomType().getCapacity();
+
+            int capacity = foundBooking.getRoom().getRoomType().getCapacity();
             int numberOfPeople = booking.getNumberOfPeople();
 
-            if (numberOfPeople <= capacity) {
+            if (numberOfPeople > capacity) {
                 LOGGER.warn("The number of people exceeds the capacity.");
                 return;
             }
 
-            if (false) {
-
-                // TODO: Kolla så att datumen inte överlappar/är lediga.
-            }
-
             foundBooking.setNumberOfPeople(numberOfPeople);
             bookingRepo.save(foundBooking);
-            LOGGER.info("Booking with ID: {} updated", booking.getId());
+            LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
+
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
     }
 

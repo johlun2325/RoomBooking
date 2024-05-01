@@ -5,10 +5,7 @@ import com.example.roombooking.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -42,11 +39,14 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
-    // Alla lediga rum (datum och antal personer är redan av-checkade)
     @PostMapping("/add")
-    public String addBooking() {
-        bookingService.addBooking(null);
-        return null;
+    public String addBooking(@RequestParam String ssn,
+                             @RequestParam String startDate,
+                             @RequestParam String endDate,
+                             @RequestParam int numberOfPeople,
+                             @RequestParam Long roomId) {
+        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, roomId);
+        return "redirect:/booking/all";
     }
 
 

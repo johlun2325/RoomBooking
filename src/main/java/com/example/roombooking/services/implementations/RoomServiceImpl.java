@@ -4,16 +4,15 @@ import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
+import com.example.roombooking.utilities.DateUtility;
+import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +20,7 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepo roomRepo;
+    private final Utility dateUtility = new DateUtility();
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     @Override
@@ -59,38 +59,17 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-        long overlap = Math.min(end1.toEpochDay(), end2.toEpochDay()) -
-                Math.max(start1.toEpochDay(), start2.toEpochDay());
-
-        return overlap >= 0;
-    }
-
-    private LocalDate convertToLocalDate(String date) {
-        Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-
-        Matcher matcher = datePattern.matcher(date);
-        if (!matcher.find()) throw new RuntimeException("Illegal date format");
-
-        int yyyy = Integer.parseInt(matcher.group(1));
-        int mm = Integer.parseInt(matcher.group(2));
-        int dd = Integer.parseInt(matcher.group(3));
-
-        return LocalDate.of(yyyy, mm, dd);
-    }
-
     @Override
     public List<RoomLiteDTO> searchAvailableRooms(String startDate, String endDate, int numberOfPeople) {
         return roomRepo.findAll().stream()
                 .filter(room -> room.getBookings().stream()
-                        .noneMatch(booking -> areDatesOverlapping(
+                        .noneMatch(booking -> dateUtility.areDatesOverlapping(
                                 booking.getStartDate(),
                                 booking.getEndDate(),
-                                convertToLocalDate(startDate),
-                                convertToLocalDate(endDate)))
+                                dateUtility.convertToLocalDate(startDate),
+                                dateUtility.convertToLocalDate(endDate)))
                         && numberOfPeople <= room.getRoomType().getCapacity())
                 .map(this::convertToRoomLiteDto)
                 .collect(Collectors.toList());
     }
-
 }

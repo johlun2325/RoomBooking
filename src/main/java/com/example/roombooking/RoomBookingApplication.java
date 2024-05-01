@@ -16,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.context.annotation.Bean;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 public class RoomBookingApplication {
