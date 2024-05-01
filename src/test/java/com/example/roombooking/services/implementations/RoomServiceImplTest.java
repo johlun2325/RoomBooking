@@ -89,5 +89,6 @@ class RoomServiceImplTest {
 
     @Test
     void searchAvailableRooms() {
+
     }
 }

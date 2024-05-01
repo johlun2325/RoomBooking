@@ -1,9 +1,6 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.BookingDTO;
-import com.example.roombooking.dto.BookingLiteDTO;
-import com.example.roombooking.dto.CustomerLiteDTO;
-import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.dto.*;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.Customer;
 import com.example.roombooking.models.Room;
@@ -20,9 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -120,6 +120,13 @@ class BookingServiceImplTest {
 
     @Test
     void findAllBookings() {
+
+        when(bookingRepo.findAll()).thenReturn(Arrays.asList(booking));
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+
+        List<BookingDTO> allCustomers = serv.findAllBookings();
+        assertEquals(1, allCustomers.size());
+
     }
 
     @Test
