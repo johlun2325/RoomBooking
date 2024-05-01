@@ -46,7 +46,7 @@
 
     <div class="mb-3">
         <label for="roomId" class="form-label">Room ID</label>
-        <input type="text" class="form-control" id="roomId" name="roomId" th:field="*{id}" readonly>
+        <input type="text" class="form-control" id="roomId" name="roomId" th:value="*{id}" readonly>
     </div>
 
     <button type="submit" class="btn btn-primary">Boka</button>

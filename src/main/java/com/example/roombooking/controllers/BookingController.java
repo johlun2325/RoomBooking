@@ -53,8 +53,8 @@ class BookingController {
                              @RequestParam String startDate,
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
-                             @RequestParam Long roomId) {
-        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, roomId);
+                             @RequestParam int roomId) {
+        bookingService.addBooking(ssn, startDate, endDate, numberOfPeople, (long) roomId);
         return "redirect:/booking/all";
     }
 
