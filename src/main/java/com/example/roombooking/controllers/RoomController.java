@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/room")
@@ -24,10 +25,20 @@ public class RoomController {
         return roomService.findAllRooms();
     }
 
-    @GetMapping({"/{id}"})
-    String bookRoom(@PathVariable Long id, Model model) {
+    @GetMapping({"/book/{id}"})
+    String bookRoom(@PathVariable Long id,
+                    @RequestParam String startDate,
+                    @RequestParam String endDate,
+                    @RequestParam int numberOfPeople,
+                    Model model) {
+
         RoomLiteDTO room = roomService.findRoomById(id);
-        model.addAttribute("room", room);
+        model.addAllAttributes(Map.of(
+                "room", room,
+                "numberOfPeople", numberOfPeople,
+                "startDate", startDate,
+                "endDate", endDate));
+
         return "new-booking";
     }
 
@@ -47,7 +58,11 @@ public class RoomController {
                        Model model) {
 
         var availableRooms = roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
-        model.addAttribute("availableRooms", availableRooms);
+        model.addAllAttributes(Map.of(
+                "availableRooms", availableRooms,
+                "numberOfPeople", numberOfPeople,
+                "startDate", startDate,
+                "endDate", endDate));
 
         return "searchForm";
     }

@@ -42,6 +42,12 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
+    @PostMapping("/add")
+    public String addBooking() {
+        //bookingService.addBooking();
+        return null;
+    }
+
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {
         bookingService.deleteBookingById(id);

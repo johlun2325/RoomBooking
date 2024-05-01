@@ -17,7 +17,7 @@
     <label for="numberOfPeople">Antal personer</label><br>
     <input type="number" id="numberOfPeople" name="numberOfPeople" required><br>
 
-    <input type="submit" value="Book">
+    <input type="submit" value="Sök">
 </form>
 
 <div class="availableRooms" th:unless="${#lists.isEmpty(availableRooms)}">
@@ -25,7 +25,7 @@
         <tbody>
         <tr th:each="room : ${availableRooms}">
             <td>
-                <a th:href="@{/room/{id}(id=${room.id})}" th:value="${room}">Room</a>
+                <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}" th:value="${room}">Room</a>
             </td>
         </tr>
         </tbody>
@@ -35,4 +35,3 @@
 </body>
 </html>
 
-<!--DO not use-->

@@ -117,6 +117,11 @@ public class BookingServiceImpl implements BookingService {
                 return;
             }
 
+            if (false) {
+
+                // TODO: Kolla så att datumen inte överlappar/är lediga.
+            }
+
             foundBooking.setNumberOfPeople(numberOfPeople);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", booking.getId());
