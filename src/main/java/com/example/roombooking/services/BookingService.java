@@ -18,7 +18,7 @@ public interface BookingService {
 
     List<BookingDTO> findAllBookings();
 
-    String addBooking(BookingDTO booking);
+    void addBooking(BookingDTO booking);
 
     //delete by id with thymeleaf
     void deleteBookingById(Long id);

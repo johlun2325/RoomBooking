@@ -42,11 +42,13 @@ class BookingController {
         return bookingService.findBookingById(id);
     }
 
+    // Alla lediga rum (datum och antal personer är redan av-checkade)
     @PostMapping("/add")
     public String addBooking() {
-        //bookingService.addBooking();
+        bookingService.addBooking(null);
         return null;
     }
+
 
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {

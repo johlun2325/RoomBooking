@@ -11,6 +11,7 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,14 +97,17 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-
+/*
+        this.customer = customer;
+        this.room = room;
+        this.numberOfPeople = numberOfPeople;
+        this.startDate = startDate;
+        this.endDate = endDate;
+ */
     @Override
-    public String addBooking(BookingDTO booking) {
-
-        // TODO: Define addBooking method
-
-
-        return null;
+    public void addBooking(BookingDTO booking) {
+        bookingRepo.save(new Booking());
+        LOGGER.info("Booking with ID: {} added", booking.getId());
     }
 
     @Override
