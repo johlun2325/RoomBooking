@@ -10,25 +10,30 @@
 </head>
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
 
-<form action="#" th:action="@{/customer/add}" method="post" >
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form action="#" th:action="@{/customer/add}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Fullständigt namn</label>
+                    <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." required>
+                </div>
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Fullständigt namn</label>
-        <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." required>
+                <div class="mb-3">
+                    <label for="ssn" class="form-label">Personnummer</label>
+                    <input type="text" class="form-control" id="ssn" name="ssn" pattern="\d{6}-\d{4}" title="Please enter a number in the format YYMMDD-XXXX." required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-postadress</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Lägg till</button>
+            </form>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label for="ssn" class="form-label">Personnummer</label>
-        <input type="text" class="form-control" id="ssn" name="ssn" pattern="\d{6}-\d{4}" title="Please enter a number in the format YYMMDD-XXXX." required>
-    </div>
-
-    <div class="mb-3">
-        <label for="email" class="form-label">E-postadress</label>
-        <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Lägg till</button>
-</form>
+</div>
 
 </body>
 </html>
