@@ -25,8 +25,10 @@ public class RoomController {
     }
 
     @GetMapping({"/{id}"})
-    RoomLiteDTO getRoom(@PathVariable Long id) {
-        return roomService.findRoomById(id);
+    String bookRoom(@PathVariable Long id, Model model) {
+        RoomLiteDTO room = roomService.findRoomById(id);
+        model.addAttribute("room", room);
+        return "new-booking";
     }
 
     // http://localhost:8080/room/search?startDate=2024-01-10&endDate=2024-01-15&numberOfPeople=1

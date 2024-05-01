@@ -24,7 +24,9 @@
     <table>
         <tbody>
         <tr th:each="room : ${availableRooms}">
-            <td th:text="${room.roomType}"></td>
+            <td>
+                <a th:href="@{/room/{id}(id=${room.id})}" th:value="${room}">Room</a>
+            </td>
         </tr>
         </tbody>
     </table>

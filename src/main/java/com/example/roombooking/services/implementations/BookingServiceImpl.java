@@ -109,7 +109,15 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void updateBooking(BookingDTO booking) {
         bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
-            foundBooking.setNumberOfPeople(booking.getNumberOfPeople());
+            int capacity = booking.getRoom().getRoomType().getCapacity();
+            int numberOfPeople = booking.getNumberOfPeople();
+
+            if (numberOfPeople <= capacity) {
+                LOGGER.warn("The number of people exceeds the capacity.");
+                return;
+            }
+
+            foundBooking.setNumberOfPeople(numberOfPeople);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", booking.getId());
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
