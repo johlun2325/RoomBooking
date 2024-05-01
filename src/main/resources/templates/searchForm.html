@@ -26,7 +26,8 @@
         <tbody>
         <tr th:each="room : ${availableRooms}">
             <td>
-                <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}" th:value="${room}">Room</a>
+                <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}">Boka</a></td>
+            <td th:text="${room.roomType.type}">
             </td>
         </tr>
         </tbody>
