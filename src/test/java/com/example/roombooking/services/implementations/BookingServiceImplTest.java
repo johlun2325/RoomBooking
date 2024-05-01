@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -131,6 +132,15 @@ class BookingServiceImplTest {
 
     @Test
     void findBookingById() {
+
+        when(bookingRepo.findById(booking.getId())).thenReturn(Optional.of(booking));
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingDTO foundBooking = serv.findBookingById(booking.getId());
+
+        assertEquals(booking.getId(), foundBooking.getId());
+        assertEquals(booking.getStartDate(), foundBooking.getStartDate());
+        assertEquals(booking.getEndDate(), foundBooking.getEndDate());
+
     }
 
     @Test
