@@ -5,17 +5,42 @@
     <title>Update Customer</title>
 </head>
 <body>
-<!--skickar till update-metod, skickar helt objekt-->
-<form action="#" th:action="@{/customer/update}" th:object="${customer}" method="post">
+<!-- skickar till update-metod, skickar helt objekt -->
+<form id="updateForm" action="#" th:action="@{/customer/update}" th:object="${customer}" method="post">
     <label for="name">Name</label><br>
-    <input type="text" id="name" th:field="*{name}"><br>
+    <input type="text" id="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." th:field="*{name}"><br>
     <label for="ssn">Personnummer</label><br>
-    <input type="text" id="ssn" th:field="*{ssn}"><br>
+    <input type="text" id="ssn" pattern="\d{6}-\d{4}" title="Please enter a number in the format YYMMDD-XXXX." th:field="*{ssn}"><br>
     <label for="email">Email</label><br>
-    <input type="text" id="email" th:field="*{email}"><br>
+    <input type="email" id="email" th:field="*{email}"><br>
     <input type="hidden" id="id" th:field="*{id}"><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" onclick="handleSubmit()">
 </form>
 
+<script>
+    var originalName = document.getElementById("name").value;
+    var originalSsn = document.getElementById("ssn").value;
+    var originalEmail = document.getElementById("email").value;
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        var updatedName = document.getElementById("name").value;
+        var updatedSsn = document.getElementById("ssn").value;
+        var updatedEmail = document.getElementById("email").value;
+
+        if (updatedName !== originalName) {
+            alert("Kunden har nu ändrats: " + updatedName);
+        }
+        if (updatedSsn !== originalSsn) {
+            alert("Kunden har nu ändrats: " + updatedSsn);
+        }
+        if (updatedEmail !== originalEmail) {
+            alert("Kunden har nu ändrats: " + updatedEmail);
+        }
+
+        document.getElementById("updateForm").submit();
+    }
+</script>
 </body>
 </html>
