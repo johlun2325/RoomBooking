@@ -1,76 +1,102 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.BookingDTO;
-import com.example.roombooking.models.Booking;
-import com.example.roombooking.models.Customer;
-import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.dto.CustomerLiteDTO;
+import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.DateUtility;
+import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-@RestController
+@Controller
 @RequestMapping("/booking")
 @RequiredArgsConstructor
 class BookingController {
 
-
     private final BookingService bookingService;
+    private final Utility dateUtility = new DateUtility();
 
-    @GetMapping()
-    List<BookingDTO> getAllBookings() {
-        return bookingService.getAllBookingDTOs();
+    @GetMapping("/all")
+    String getAllBookings(Model model) {
+        List<BookingDTO> all = bookingService.findAllBookings();
+        model.addAttribute("allBookings", all);
+        model.addAttribute("pageHeader", "Bokningar");
+        model.addAttribute("header", "Alla bokningar");
+        model.addAttribute("bookingId", "Boknings-ID");
+        model.addAttribute("customerId", "Kund-ID");
+        model.addAttribute("roomId", "Rums-ID");
+        model.addAttribute("roomType", "Rums-typ");
+        model.addAttribute("totalPrice", "Totalpris");
+        model.addAttribute("startDate", "Incheckning");
+        model.addAttribute("endDate", "Utcheckning");
+        model.addAttribute("numberOfPeople", "Antal personer");
+        model.addAttribute("update", "Uppdatera");
+        model.addAttribute("delete", "Ta bort");
+        model.addAttribute("hem", "Hem");
+
+        return "allBookings";
     }
 
     @GetMapping({"/{id}"})
     BookingDTO getAllBookings(@PathVariable Long id) {
-        return bookingService.getBookingDTO(id);
+        return bookingService.findBookingById(id);
     }
 
-//    @GetMapping()
-//    CollectionModel<EntityModel<Booking>> all() {
-//
-//        List<EntityModel<Booking>> bookings = bookingRepo.findAll().stream()
-//                .map(booking -> EntityModel.of(booking,
-//                        linkTo(methodOn(BookingController.class).one(booking.getId())).withSelfRel(),
-//                        linkTo(methodOn(BookingController.class).all()).withRel("bookings")))
-//                .toList();
-//
-//        return CollectionModel.of(bookings, linkTo(methodOn(BookingController.class).all()).withSelfRel());
-//    }
-//
-//    @GetMapping("/{id}")
-//    EntityModel<Booking> one(@PathVariable Long id) {
-//
-//        Booking booking = bookingRepo.findById(id)
-//                .orElseThrow(() -> {
-//                    final String WARNING_MESSAGE = "No bookings with ID: %s was found".formatted(id);
-//                    logger.warn(WARNING_MESSAGE);
-//                    return new NoSuchElementException(WARNING_MESSAGE);
-//                });
-//
-//        return EntityModel.of(booking,
-//                linkTo(methodOn(BookingController.class).one(id)).withSelfRel(),
-//                linkTo(methodOn(BookingController.class).all()).withRel("bookings"));
-//    }
+    @PostMapping("/add")
+    public String addBooking(@RequestParam String ssn,
+                             @RequestParam String startDate,
+                             @RequestParam String endDate,
+                             @RequestParam int numberOfPeople,
+                             @RequestParam Long roomId) {
 
-    // Todo:
-    //  Define and implement the behaviour of the booking functionality:
-    //  - NEW BOOKING: A room can be booked by a customer for one or more nights.
-    //  - RULE: A customer should not be able to book a specific room on a date where a booking already exists.
-    //  - REMOVE/UPDATE: It should be possible to cancel a room or change a booking.
+        var customer = new CustomerLiteDTO(ssn);
+        var room = new RoomLiteDTO(roomId);
+        BookingDTO bookingDTO = new BookingDTO(customer,
+                room,
+                numberOfPeople,
+                dateUtility.convertToLocalDate(startDate),
+                dateUtility.convertToLocalDate(endDate));
 
+        bookingService.addBooking(bookingDTO);
+        return "redirect:/booking/all";
+    }
+
+
+    @RequestMapping("/delete/{id}")
+    public String deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBookingById(id);
+        return "redirect:/booking/all";
+    }
+
+    // /updateForm/{id}
+    @RequestMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable Long id, Model model){
+        BookingDTO booking = bookingService.findBookingById(id);
+        model.addAttribute("booking", booking);
+        model.addAttribute("pageTitle", "Bokning");
+        model.addAttribute("header", "Uppdatera Bokning");
+        model.addAttribute("startDateText", "Start Datum");
+        model.addAttribute("endDateText", "Slut Datum");
+        model.addAttribute("numberOfPeopleText", "Antal personer");
+        model.addAttribute("buttonText", "Uppdatera");
+
+        return "updateBookingForm";
+    }
+
+    @PostMapping("/update")
+    public String updateBooking(BookingDTO booking) {
+        bookingService.updateBooking(booking);
+        return "redirect:/booking/all";
+    }
+
+    @RequestMapping("/search")
+    public String openAvailableSearchPage() {
+        return "searchForm";
+    }
 
 }

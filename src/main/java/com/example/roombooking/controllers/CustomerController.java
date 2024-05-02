@@ -1,115 +1,94 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.CustomerDTO;
-import com.example.roombooking.models.Customer;
-import com.example.roombooking.repos.BookingRepo;
-import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
-@RestController
+@Controller
 @RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController {
 
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
     private final CustomerService customerService;
 
-    @GetMapping()
-    List<CustomerDTO> getAllCustomers() {
-        return customerService.getAllCustomersDTO();
+    // Get all with thymeleaf
+    @GetMapping("/all")
+    public String getAllCustomers(Model model) {
+        List<CustomerDTO> all = customerService.findAllCustomers();
+        model.addAttribute("allCustomers", all);
+        model.addAttribute("pageHeader", "Kunder");
+        model.addAttribute("header", "Alla kunder");
+        model.addAttribute("idTh", "ID");
+        model.addAttribute("nameTh", "Fullständigt namn");
+        model.addAttribute("ssnTh", "Personnummer");
+        model.addAttribute("emailTh", "E-postadress");
+        model.addAttribute("delete", "Ta bort");
+        model.addAttribute("update", "Uppdatera");
+
+        return "allCustomers";
     }
 
     @GetMapping({"/{id}"})
-    CustomerDTO getCustomer(@PathVariable Long id) {
-        return customerService.getCustomerDTO(id);
+    public CustomerDTO getCustomer(@PathVariable Long id) {
+        return customerService.findCustomerById(id);
     }
 
-//    @GetMapping()
-//    CollectionModel<EntityModel<Customer>> all() {
-//
-//        List<EntityModel<Customer>> customers = customerRepo.findAll().stream()
-//                .map(customer -> EntityModel.of(customer,
-//                        linkTo(methodOn(CustomerController.class).one(customer.getId())).withSelfRel(),
-//                        linkTo(methodOn(CustomerController.class).all()).withRel("customers")))
-//                .toList();
-//
-//        return CollectionModel.of(customers, linkTo(methodOn(CustomerController.class).all()).withSelfRel());
-//    }
-//
-//    @GetMapping("/{id}")
-//    EntityModel<Customer> one(@PathVariable Long id) {
-//
-//        Customer customer = customerRepo.findById(id)
-//                .orElseThrow(() -> {
-//                    final String WARNING_MESSAGE = "No customer with ID: %s was found".formatted(id);
-//                    logger.warn(WARNING_MESSAGE);
-//                    return new NoSuchElementException(WARNING_MESSAGE);
-//                });
-//
-//        return EntityModel.of(customer,
-//                linkTo(methodOn(CustomerController.class).one(id)).withSelfRel(),
-//                linkTo(methodOn(CustomerController.class).all()).withRel("customers"));
-//    }
-//
-//    @PostMapping("/add")
-//    public CollectionModel<EntityModel<Customer>> addCustomer(@RequestBody NewCustomerRequest request) {
-//
-//        var newCustomer = customerRepo.findCustomerBySsn(request.getSsn());
-//
-//        if (newCustomer.isEmpty()) {
-//            customerRepo.save(new Customer(request.getName(), request.getSsn(), request.getEmail()));
-//            logger.info("New customer was added");
-//            return all();
-//        }
-//
-//        logger.warn("Customer is already present: ID {}", newCustomer.get().getId());
-//        return all();
-//    }
-//
-//    @PutMapping("/updateEmail")
-//    public CollectionModel<EntityModel<Customer>> updateCustomer(@RequestBody CustomerUpdateEmailRequest request) {
-//        return customerRepo.findById(request.getId())
-//                .map(customer -> {
-//                    customer.setEmail(request.getEmail());
-//                    customerRepo.save(customer);
-//                    logger.info("Customer with ID: {} updated", customer.getId());
-//                    return all();
-//                })
-//                .orElseGet(() -> {
-//                    logger.warn("Customer with ID: {} not found", request.getId());
-//                    return all();
-//                });
-//    }
-//
-//    @DeleteMapping("/delete")
-//    public CollectionModel<EntityModel<Customer>> deleteCustomer(@RequestBody DeleteCustomerRequest request) {
-//        var customerOptional = customerRepo.findCustomerBySsn(request.getSsn());
-//
-//        if (customerOptional.isEmpty()) {
-//            logger.warn("Customer with SSN: {} not found", request.getSsn());
-//            return all();
-//        }
-//
-//        Customer customer = customerOptional.get();
-//        boolean hasBookings = bookingRepo.existsByCustomer(customer);
-//        if (hasBookings) {
-//            logger.warn("Customer with SSN: {} has booking history and thereby not deleted", customer.getSsn());
-//            return all();
-//        }
-//
-//        customerRepo.delete(customer);
-//        logger.info("Customer with SNN: {} deleted", customer.getSsn());
-//        return all();
-//    }
+    @GetMapping("/new")
+    public String openNewCustomerPage(Model model) {
+        model.addAllAttributes(Map.of(
+                "pageTitle", "Ny Kund",
+                "fullNameText", "Fullständigt namn",
+                "nameTitle", "Please enter only Swedish letters and spaces.",
+                "ssnText", "Personnummer",
+                "ssnTitle", "Please enter a number in the format YYMMDD-XXXX.",
+                "emailText", "E-postadress",
+                "buttonText", "Lägg till"));
+
+        return "new-customer";
+    }
+
+    @PostMapping("/add")
+    public String addCustomer(@RequestParam String name,
+                              @RequestParam String ssn,
+                              @RequestParam String email) {
+        customerService.addCustomer(new CustomerDTO(name, ssn, email));
+        return "redirect:/customer/all";
+    }
+
+    //thymeleaf update
+    @GetMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable Long id, Model model) {
+        CustomerDTO customer = customerService.findCustomerById(id);
+        model.addAttribute("customer", customer);
+        model.addAttribute("pageTitle", "Kund");
+        model.addAttribute("header", "Uppdatera kund");
+        model.addAttribute("nameText", "Ändra fullständigt namn");
+        model.addAttribute("ssnText", "Ändra personnummer");
+        model.addAttribute("emailText", "Ändra e-postadress");
+        model.addAttribute("buttonText", "Uppdatera");
+
+        return "updateCustomerForm";
+    }
+
+    @PostMapping("/update")
+    public String addCustomer(CustomerDTO customer){
+        customerService.updateCustomer(customer);
+        return "redirect:/customer/all";
+    }
+
+
+    // TODO: Add error message on the frontend for trying to remove customer with bookings
+    // Delete with thymeleaf
+    @RequestMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomerById(id);
+        return "redirect:/customer/all";
+    }
 
 }

@@ -1,68 +1,75 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.RoomUpdatePriceRequest;
-import com.example.roombooking.models.Room;
-import com.example.roombooking.repos.RoomRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.*;
+import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.services.RoomService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-@RestController
-@RequestMapping("/rooms")
+@Controller
+@RequestMapping("/room")
+@RequiredArgsConstructor
 public class RoomController {
 
-    private final RoomRepo roomRepo;
-    private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
-
-    public RoomController(RoomRepo roomRepo) {
-        this.roomRepo = roomRepo;
-    }
-
-    private Room findRoom(Long id) {
-        return roomRepo.findById(id).orElseThrow(() -> {
-            final String WARNING_MESSAGE = "No room with ID: %s was found".formatted(id);
-            logger.warn(WARNING_MESSAGE);
-            return new NoSuchElementException(WARNING_MESSAGE);
-        });
-    }
+    private final RoomService roomService;
 
     @GetMapping()
-    CollectionModel<EntityModel<Room>> all() {
-
-        List<EntityModel<Room>> rooms = roomRepo.findAll().stream()
-                .map(room -> EntityModel.of(room,
-                        linkTo(methodOn(RoomController.class).one(room.getId())).withSelfRel(),
-                        linkTo(methodOn(RoomController.class).all()).withRel("rooms")))
-                .toList();
-
-        return CollectionModel.of(rooms, linkTo(methodOn(RoomController.class).all()).withSelfRel());
+    List<RoomLiteDTO> getAllRooms() {
+        return roomService.findAllRooms();
     }
 
-    @GetMapping("/{id}")
-    EntityModel<Room> one(@PathVariable Long id) {
+    @GetMapping({"/book/{id}"})
+    String bookRoom(@PathVariable Long id,
+                    @RequestParam String startDate,
+                    @RequestParam String endDate,
+                    @RequestParam int numberOfPeople,
+                    Model model) {
 
-        return EntityModel.of(findRoom(id),
-                linkTo(methodOn(RoomController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(RoomController.class).all()).withRel("rooms"));
+        RoomLiteDTO room = roomService.findRoomById(id);
+        model.addAllAttributes(Map.of(
+                "room", room,
+                "numberOfPeople", numberOfPeople,
+                "startDate", startDate,
+                "endDate", endDate));
+
+        return "new-booking";
     }
 
-    @PutMapping("/updatePrice")
-    CollectionModel<EntityModel<Room>> updatePrice(@RequestBody RoomUpdatePriceRequest roomUpdatePriceRequest) {
 
-        Room room = findRoom(roomUpdatePriceRequest.getId());
-        room.setPrice(roomUpdatePriceRequest.getPrice());
-        roomRepo.save(room);
-        logger.info("Room with ID {} price updated: {}", room.getId(), room.getPrice());
+    @RequestMapping("/search")
+    public String list(@RequestParam String startDate,
+                       @RequestParam String endDate,
+                       @RequestParam int numberOfPeople,
+                       Model model) {
 
-        return all();
+        var availableRooms = roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
+        model.addAttribute("availableRooms", availableRooms);
+        model.addAttribute("numberOfPeople", numberOfPeople);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("pageTitle", "Sök Lediga Rum");
+        model.addAttribute("header", "Sök rum");
+        model.addAttribute("startDateText", "Start Datum");
+        model.addAttribute("endDateText", "Slut Datum");
+        model.addAttribute("numberOfPeopleText", "Antal personer");
+        model.addAttribute("submitText", "Sök");
+        model.addAttribute("idTh", "ID");
+        model.addAttribute("roomTypeTh", "Rum Type");
+        model.addAttribute("priceTh", "Pris");
+        model.addAttribute("bookTh", "Boka");
+        model.addAttribute("buttonBookText", "Boka nu");
+        model.addAttribute("roomTypeTh", "Rum Type");
+
+        return "searchForm";
     }
+
+
 
 }

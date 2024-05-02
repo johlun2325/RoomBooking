@@ -1,20 +1,28 @@
 package com.example.roombooking.services;
 
 import com.example.roombooking.dto.BookingDTO;
-import com.example.roombooking.dto.MiniBookingDTO;
+import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.models.Booking;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public interface BookingService {
 
-    Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
+    BookingLiteDTO convertToBookingLiteDto(Booking booking);
 
-    MiniBookingDTO bookingToMiniBookingDTO(Booking booking);
-    BookingDTO bookingToBookingDTO(Booking booking);
+    BookingDTO convertToDto(Booking booking);
 
-    List<BookingDTO> getAllBookingDTOs();
-    BookingDTO getBookingDTO(Long id);
+    Booking convertDtoToBooking(BookingDTO booking);
+
+    BookingDTO findBookingById(Long id);
+
+    List<BookingDTO> findAllBookings();
+
+    void addBooking(BookingDTO booking);
+
+    //delete by id with thymeleaf
+    void deleteBookingById(Long id);
+
+    void updateBooking(BookingDTO booking);
+
 }

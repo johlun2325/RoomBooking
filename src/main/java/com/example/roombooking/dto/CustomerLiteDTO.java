@@ -5,17 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MiniCustomerDTO {
+public class CustomerLiteDTO {
 
     private Long id;
     private String name;
     private String ssn;
     private String email;
 
+    public CustomerLiteDTO(String ssn) {
+        this.ssn = ssn;
+    }
 }
