@@ -50,11 +50,16 @@ public class RoomController {
                        Model model) {
 
         var availableRooms = roomService.searchAvailableRooms(startDate, endDate, numberOfPeople);
-        model.addAllAttributes(Map.of(
-                "availableRooms", availableRooms,
-                "numberOfPeople", numberOfPeople,
-                "startDate", startDate,
-                "endDate", endDate));
+        model.addAttribute("availableRooms", availableRooms);
+        model.addAttribute("numberOfPeople", numberOfPeople);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("idTh", "ID");
+        model.addAttribute("roomTypeTh", "Rum Type");
+        model.addAttribute("priceTh", "Pris");
+        model.addAttribute("bookTh", "Boka");
+        model.addAttribute("buttonBookText", "Boka nu");
+        model.addAttribute("roomTypeTh", "Rum Type");
 
         return "searchForm";
     }
