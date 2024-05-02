@@ -21,14 +21,15 @@ public class CustomerController {
     @GetMapping("/all")
     public String getAllCustomers(Model model) {
         List<CustomerDTO> all = customerService.findAllCustomers();
-        model.addAllAttributes(Map.of(
-                "allCustomers", all,
-                "header", "Alla kunder",
-                "id", "Id",
-                "name", "Namn",
-                "delete", "Delete",
-                "update", "Update",
-                "hem", "Hem"));
+        model.addAttribute("allCustomers", all);
+        model.addAttribute("pageHeader", "Kunder");
+        model.addAttribute("header", "Alla kunder");
+        model.addAttribute("idTh", "ID");
+        model.addAttribute("nameTh", "Fullständigt namn");
+        model.addAttribute("ssnTh", "Personnummer");
+        model.addAttribute("emailTh", "E-postadress");
+        model.addAttribute("delete", "Ta bort");
+        model.addAttribute("update", "Uppdatera");
 
         return "allCustomers";
     }
@@ -65,6 +66,13 @@ public class CustomerController {
     public String updateByForm(@PathVariable Long id, Model model) {
         CustomerDTO customer = customerService.findCustomerById(id);
         model.addAttribute("customer", customer);
+        model.addAttribute("pageTitle", "Kund");
+        model.addAttribute("header", "Uppdatera kund");
+        model.addAttribute("nameText", "Ändra fullständigt namn");
+        model.addAttribute("ssnText", "Ändra personnummer");
+        model.addAttribute("emailText", "Ändra e-postadress");
+        model.addAttribute("buttonText", "Uppdatera");
+
         return "updateCustomerForm";
     }
 
