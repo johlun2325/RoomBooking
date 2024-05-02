@@ -18,8 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -121,9 +123,19 @@ public class BookingServiceImpl implements BookingService {
                 return;
             }
 
+            // Use updated dates from the DTO
+            LocalDate updatedStartDate = booking.getStartDate();
+            LocalDate updatedEndDate = booking.getEndDate();
+
             var bookings = bookingRepo.findAll();
             boolean areBookingDatesOverlapping = bookings.stream()
-                    .anyMatch(b -> dateUtility.areDatesOverlapping(foundBooking.getStartDate(), foundBooking.getEndDate(), booking.getStartDate(), booking.getEndDate()));
+                    .filter(b -> !b.getId().equals(foundBooking.getId()))
+                    .filter(b -> b.getRoom().getId().equals(foundBooking.getRoom().getId()))
+                    .anyMatch(b -> dateUtility.areDatesOverlapping(
+                            updatedStartDate,
+                            updatedEndDate,
+                            b.getStartDate(),
+                            b.getEndDate()));
 
             if (areBookingDatesOverlapping) {
                 LOGGER.warn("The chosen dates are overlapping with the existing dates");
@@ -131,13 +143,14 @@ public class BookingServiceImpl implements BookingService {
             }
 
             foundBooking.setNumberOfPeople(numberOfPeople);
-            foundBooking.setStartDate(booking.getStartDate());
-            foundBooking.setEndDate(booking.getEndDate());
+            foundBooking.setStartDate(updatedStartDate);
+            foundBooking.setEndDate(updatedEndDate);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
 
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
     }
+
 
     //delete by id with thymeleaf
     @Override

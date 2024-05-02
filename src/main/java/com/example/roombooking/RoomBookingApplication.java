@@ -25,11 +25,19 @@ import java.util.List;
 public class RoomBookingApplication {
 
 
+/*
+    Web server failed to start. Port 8080 was already in use:
+    netstat -aon | findstr :8080
+    taskkill /PID some_number_here /F
+*/
+
     public static void main(String[] args) {
 
         SpringApplication.run(RoomBookingApplication.class, args);
 
     }
+
+
 
 //    @Bean
 //    @Transactional

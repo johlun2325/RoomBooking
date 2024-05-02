@@ -39,7 +39,16 @@ public class CustomerController {
     }
 
     @GetMapping("/new")
-    public String openNewCustomerPage() {
+    public String openNewCustomerPage(Model model) {
+        model.addAllAttributes(Map.of(
+                "pageTitle", "Ny Kund",
+                "fullNameText", "Fullständigt namn",
+                "nameTitle", "Please enter only Swedish letters and spaces.",
+                "ssnText", "Personnummer",
+                "ssnTitle", "Please enter a number in the format YYMMDD-XXXX.",
+                "emailText", "E-postadress",
+                "buttonText", "Lägg till"));
+
         return "new-customer";
     }
 
