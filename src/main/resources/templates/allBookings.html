@@ -25,7 +25,7 @@
                     <th scope="col" th:text="${customerId}"></th>
                     <th scope="col" th:text="${roomId}"></th>
                     <th scope="col" th:text="${roomType}"></th>
-                    <th scope="col" th:text="${price}"></th>
+                    <th scope="col" th:text="${totalPrice}"></th>
                     <th scope="col" th:text="${numberOfPeople}"></th>
                     <th scope="col" th:text="${startDate}"></th>
                     <th scope="col" th:text="${endDate}"></th>
@@ -39,7 +39,7 @@
                     <td th:text="${book.customer.id}"></td>
                     <td th:text="${book.room.id}"></td>
                     <td th:text="${book.room.roomType.type}"></td>
-                    <td th:text="${book.room.price}"></td>
+                    <td th:text="${book.getTotalPrice()}"></td>
                     <td th:text="${book.numberOfPeople}"></td>
                     <td th:text="${book.startDate}"></td>
                     <td th:text="${book.endDate}"></td>

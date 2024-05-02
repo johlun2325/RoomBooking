@@ -31,7 +31,7 @@ class BookingController {
         model.addAttribute("customerId", "Kund-ID");
         model.addAttribute("roomId", "Rums-ID");
         model.addAttribute("roomType", "Rums-typ");
-        model.addAttribute("price", "Pris");
+        model.addAttribute("totalPrice", "Totalpris");
         model.addAttribute("startDate", "Incheckning");
         model.addAttribute("endDate", "Utcheckning");
         model.addAttribute("numberOfPeople", "Antal personer");

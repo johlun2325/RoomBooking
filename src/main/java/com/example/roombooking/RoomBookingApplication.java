@@ -54,9 +54,9 @@ public class RoomBookingApplication {
 //            typeRepo.saveAll(List.of(singleRoom, largeSingleRoom, doubleRoom, largeDoubleRoom));
 //
 //            Room room1 = new Room(995.95, singleRoom);
-//            Room room2 = new Room(995.95, largeSingleRoom);
-//            Room room3 = new Room(1995.95, doubleRoom);
-//            Room room4 = new Room(2995.95, largeDoubleRoom);
+//            Room room2 = new Room(1995.95, largeSingleRoom);
+//            Room room3 = new Room(2995.95, doubleRoom);
+//            Room room4 = new Room(3995.95, largeDoubleRoom);
 //
 //            roomRepo.saveAll(List.of(room1, room2, room3, room4));
 //

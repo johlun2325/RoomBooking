@@ -54,6 +54,12 @@ public class RoomController {
         model.addAttribute("numberOfPeople", numberOfPeople);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
+        model.addAttribute("pageTitle", "Sök Lediga Rum");
+        model.addAttribute("header", "Sök rum");
+        model.addAttribute("startDateText", "Start Datum");
+        model.addAttribute("endDateText", "Slut Datum");
+        model.addAttribute("numberOfPeopleText", "Antal personer");
+        model.addAttribute("submitText", "Sök");
         model.addAttribute("idTh", "ID");
         model.addAttribute("roomTypeTh", "Rum Type");
         model.addAttribute("priceTh", "Pris");
