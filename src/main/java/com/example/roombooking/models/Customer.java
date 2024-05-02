@@ -1,27 +1,38 @@
 package com.example.roombooking.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 @Entity
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Customer {
+
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Name can only contain Swedish letters and spaces")
     private String name;
 
-    @Column(unique = true) //kvar?
+    @Column(unique = true)
+    @Pattern(regexp = "\\d{6}-\\d{4}",
+             message = "Personal number must be in the format XXXXXX-XXXX")
     private String ssn;
+
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
+    // TODO: Regex pattern for email
     private String email;
 
     @OneToMany(mappedBy = "customer")
@@ -32,6 +43,22 @@ public class Customer {
         this.ssn = ssn;
         this.email = email;
         this.bookings = new ArrayList<>();
+    }
+
+    //För att test ska funka
+    public Customer(Long id, String name, String ssn, String email) {
+        this.id = id;
+        this.name = name;
+        this.ssn = ssn;
+        this.email = email;
+    }
+
+    public Customer(Long id, String name, String ssn, String email, List<Booking> bookings) {
+        this.id = id;
+        this.name = name;
+        this.ssn = ssn;
+        this.email = email;
+        this.bookings = bookings;
     }
 
     public void addBooking(Booking booking) {

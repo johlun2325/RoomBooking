@@ -1,14 +1,13 @@
 package com.example.roombooking.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@EqualsAndHashCode(callSuper = false)
 @Entity
-@Data()
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,27 +16,25 @@ public class RoomType {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Size(min = 1, max = 50, message = "Room type must be between 1 and 50 characters")
+    @Pattern(regexp = "^[A-Öa-ö ]+$", message = "Room type can only contain Swedish letters and spaces")
     private String type;
+
+    @Min(value = 1, message = "Capacity must be at least 1")
+    private int capacity;
+
+    @Min(value = 0, message = "Number of extra beds must be at least 0")
+    @Max(value = 4, message = "Number of extra beds must be no more than 4")
     private int extraBeds;
 
-//    @OneToMany(mappedBy = "roomType")
-//    private List<Room> rooms;
-
-    public RoomType(String type, int extraBeds) {
+    public RoomType(String type, int capacity, int extraBeds) {
         this.type = type;
+        this.capacity = capacity;
         this.extraBeds = extraBeds;
-//        this.rooms = new ArrayList<>();
     }
 
-//    public void addRoom(Room room) {
-//        boolean notFound = rooms.stream().noneMatch(it -> it.equals(room));
-//        if (notFound) {
-//            rooms.add(room);
-//        }
-//    }
-//
-//    public void removeRoom(Room booking) {
-//        rooms.removeIf(it -> it.equals(booking));
-//    }
+
+
 
 }

@@ -11,10 +11,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MiniBookingDTO {
+public class BookingLiteDTO {
 
     private Long id;
-    private MiniRoomDTO room;
+    private RoomLiteDTO room;
+    private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
 
