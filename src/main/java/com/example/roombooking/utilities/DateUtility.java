@@ -22,6 +22,11 @@ public class DateUtility implements Utility {
 
     @Override
     public boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+
+        if (start1.isAfter(end1) || start2.isAfter(end2)) {
+            throw new IllegalArgumentException("Start date must not be after end date");
+        }
+
         long overlap = Math.min(end1.toEpochDay(), end2.toEpochDay()) -
                 Math.max(start1.toEpochDay(), start2.toEpochDay());
 
