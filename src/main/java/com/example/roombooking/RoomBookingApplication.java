@@ -8,8 +8,10 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.repos.TypeRepo;
+import com.example.roombooking.utilities.LoadShippers;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootApplication
 public class RoomBookingApplication {
@@ -34,6 +37,14 @@ public class RoomBookingApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(RoomBookingApplication.class, args);
+
+        if (args.length == 0) {
+            SpringApplication.run(RoomBookingApplication.class, args);
+        } else if (Objects.equals(args[0], "LoadShippers")) {
+            SpringApplication application = new SpringApplication(LoadShippers.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        }
 
     }
 
