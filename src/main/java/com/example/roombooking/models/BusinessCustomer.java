@@ -1,6 +1,8 @@
 package com.example.roombooking.models;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -14,38 +16,37 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Builder
-public class ContractCustomer {
+public class BusinessCustomer {
 
         @Id
-        @GeneratedValue
         @JacksonXmlProperty(localName = "id")
-        public Long id;
+        private Long id;
 
         @JacksonXmlProperty(localName = "companyName")
-        public String companyName;
+        private String companyName;
 
         @JacksonXmlProperty(localName = "contactName")
-        public String contactName;
+        private String contactName;
 
         @JacksonXmlProperty(localName = "contactTitle")
-        public String contactTitle;
+        private String contactTitle;
 
         @JacksonXmlProperty(localName = "streetAddress")
-        public String streetAddress;
+        private String streetAddress;
 
         @JacksonXmlProperty(localName = "city")
-        public String city;
+        private String city;
 
         @JacksonXmlProperty(localName = "postalCode")
-        public int postalCode;
+        private int postalCode;
 
         @JacksonXmlProperty(localName = "country")
-        public String country;
+        private String country;
 
         @JacksonXmlProperty(localName = "phone")
-        public String phone;
+        private String phone;
 
         @JacksonXmlProperty(localName = "fax")
-        public String fax;
+        private String fax;
 
 }

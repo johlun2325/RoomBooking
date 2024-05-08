@@ -7,12 +7,12 @@ import lombok.Data;
 
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "allcustomers")
 @Data
-public class ContractCustomers {
+@JacksonXmlRootElement(localName = "allcustomers")
+public class BusinessCustomers {
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "customers")
-    private List<ContractCustomer> contractCustomers;
+    private List<BusinessCustomer> businessCustomers;
 
 }
