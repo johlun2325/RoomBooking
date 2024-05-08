@@ -95,7 +95,14 @@ class BookingController {
     }
 
     @RequestMapping("/search")
-    public String openAvailableSearchPage() {
+    public String openAvailableSearchPage(Model model) {
+        model.addAttribute("pageTitle", "Sök Lediga Rum");
+        model.addAttribute("header", "Sök rum");
+        model.addAttribute("startDateText", "Start Datum");
+        model.addAttribute("endDateText", "Slut Datum");
+        model.addAttribute("numberOfPeopleText", "Antal personer");
+        model.addAttribute("submitText", "Sök");
+
         return "searchForm";
     }
 

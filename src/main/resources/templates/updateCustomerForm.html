@@ -47,29 +47,37 @@
 
 
 <script>
-    const originalName = document.getElementById("name").value;
-    const originalSsn = document.getElementById("ssn").value;
-    const originalEmail = document.getElementById("email").value;
-
     function handleSubmit(event) {
-        event.preventDefault();
+        const form = document.getElementById("updateForm");
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
 
         const updatedName = document.getElementById("name").value;
         const updatedSsn = document.getElementById("ssn").value;
         const updatedEmail = document.getElementById("email").value;
 
+        let isChanged = false;
         if (updatedName !== originalName) {
             alert("Namn har nu ändrats: " + updatedName);
+            isChanged = true;
         }
         if (updatedSsn !== originalSsn) {
             alert("Personnummer har nu ändrats: " + updatedSsn);
+            isChanged = true;
         }
         if (updatedEmail !== originalEmail) {
             alert("Email har nu ändrats: " + updatedEmail);
+            isChanged = true;
         }
 
-        document.getElementById("updateForm").submit();
+        if (isChanged) {
+            form.submit();
+        }
     }
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

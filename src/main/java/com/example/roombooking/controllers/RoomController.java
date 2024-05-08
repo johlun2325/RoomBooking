@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/room")
@@ -33,11 +32,18 @@ public class RoomController {
                     Model model) {
 
         RoomLiteDTO room = roomService.findRoomById(id);
-        model.addAllAttributes(Map.of(
-                "room", room,
-                "numberOfPeople", numberOfPeople,
-                "startDate", startDate,
-                "endDate", endDate));
+        model.addAttribute("room", room);
+        model.addAttribute("numberOfPeople", numberOfPeople);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("pageTitle", "Ny Bokning");
+        model.addAttribute("header", "Skapa ny bokning");
+        model.addAttribute("ssnText", "Personnummer");
+        model.addAttribute("startDateText", "Start datum");
+        model.addAttribute("endDateText", "Slut datum");
+        model.addAttribute("numberOfPeopleText", "Antal personer");
+        model.addAttribute("roomIdText", "Room ID");
+        model.addAttribute("buttonText", "Boka");
 
         return "new-booking";
     }
