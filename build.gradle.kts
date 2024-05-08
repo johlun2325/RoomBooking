@@ -4,6 +4,12 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.5") // Replace x.y.z with the version of Spring Boot you're using
+    }
+}
+
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 
@@ -27,6 +33,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.2.5")
     implementation("org.springframework.boot:spring-boot-starter-hateoas:3.2.5")
+
+    implementation("com.fasterxml.jackson.core:jackson-core")
+    implementation("com.fasterxml.jackson.core:jackson-annotations")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")

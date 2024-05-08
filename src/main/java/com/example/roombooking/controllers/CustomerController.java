@@ -72,7 +72,6 @@ public class CustomerController {
         model.addAttribute("ssnText", "Ändra personnummer");
         model.addAttribute("emailText", "Ändra e-postadress");
         model.addAttribute("buttonText", "Uppdatera");
-
         return "updateCustomerForm";
     }
 
