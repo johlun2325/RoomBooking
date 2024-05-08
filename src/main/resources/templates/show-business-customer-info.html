@@ -7,6 +7,14 @@
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" rel="stylesheet">
     <title th:text="${pageHeader}"></title>
+
+    <style>
+        tr[data-url] {
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
 <nav>
@@ -21,26 +29,18 @@
             <table class="table table-striped table-hover">
                 <thead class="table-light">
                 <tr>
-                    <th scope="col" th:text="${idTh}"></th>
-                    <th scope="col" th:text="${nameTh}"></th>
-                    <th scope="col" th:text="${ssnTh}"></th>
-                    <th scope="col" th:text="${emailTh}"></th>
-                    <th scope="col" th:text="${update}"></th>
-                    <th scope="col" th:text="${delete}"></th>
+                    <th scope="col" th:text="${businessCustomerId}"></th>
+                    <th scope="col" th:text="${companyName}"></th>
+                    <th scope="col" th:text="${customerName}"></th>
+                    <th scope="col" th:text="${country}"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="cust : ${allCustomers}">
-                    <td th:text="${cust.id}"></td>
-                    <td th:text="${cust.name}"></td>
-                    <td th:text="${cust.ssn}"></td>
-                    <td th:text="${cust.email}"></td>
-                    <td>
-                        <a th:text="${update}" th:href="@{/customer/updateForm/{id}(id=${cust.id})}" class="btn btn-primary btn-sm" style="width: 85px"></a>
-                    </td>
-                    <td>
-                        <a th:text="${delete}" th:href="@{/customer/delete/{id}(id=${cust.id})}" onclick="return confirmDelete()" class="btn btn-danger btn-sm" style="width: 85px"></a>
-                    </td>
+                <tr>
+                    <td th:text="${businessCustomer.id}"></td>
+                    <td th:text="${businessCustomer.companyName}"></td>
+                    <td th:text="${businessCustomer.customerName}"></td>
+                    <td th:text="${businessCustomer.country}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -48,10 +48,6 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete() {
-        return confirm("Är du säker på att du vill radera kunden?");
-    }
-</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>
