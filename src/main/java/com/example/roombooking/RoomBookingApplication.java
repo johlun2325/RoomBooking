@@ -29,7 +29,7 @@ public class RoomBookingApplication {
     }
 
 
-//
+
 //    @Bean
 //    @Transactional
 //    public CommandLineRunner loadData(CustomerRepo customerRepo,

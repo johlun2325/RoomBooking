@@ -2,7 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.BusinessCustomerDTO;
 import com.example.roombooking.models.BusinessCustomer;
-import com.example.roombooking.repos.ContractCustomerRepo;
+import com.example.roombooking.repos.BusinessCustomerRepo;
 import com.example.roombooking.services.BusinessCustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class BusinessCustomerImpl implements BusinessCustomerService {
 
-    private final ContractCustomerRepo contractCustomerRepo;
+    private final BusinessCustomerRepo businessCustomerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(BusinessCustomerImpl.class);
 
     @Override
@@ -31,19 +31,19 @@ public class BusinessCustomerImpl implements BusinessCustomerService {
 
     @Override
     public BusinessCustomer convertDtoToBusinessCustomer(BusinessCustomerDTO businessCustomer) {
-        return contractCustomerRepo.findById(businessCustomer.getId()).orElseThrow(NoSuchElementException::new);
+        return businessCustomerRepo.findById(businessCustomer.getId()).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     public BusinessCustomerDTO findContractCustomerById(Long id) {
-        return contractCustomerRepo.findById(id)
+        return businessCustomerRepo.findById(id)
                 .map(this::convertToBusinessCustomerDto)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     public List<BusinessCustomerDTO> findAllContractCustomers() {
-        return contractCustomerRepo.findAll()
+        return businessCustomerRepo.findAll()
                 .stream()
                 .map(this::convertToBusinessCustomerDto)
                 .toList();
