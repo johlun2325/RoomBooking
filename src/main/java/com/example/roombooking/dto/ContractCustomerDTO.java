@@ -13,7 +13,13 @@ public class ContractCustomerDTO {
 
     private Long id; //vårat id för att kunna hämta 1 kund från listan
     private String companyName;
-    private String customerName;
+    private String contactName;
+    private String contactTitle;
+    private String streetAddress;
+    private String city;
+    private int postalCode;
     private String country;
+    private String phone;
+    private String fax;
 
 }

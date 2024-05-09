@@ -24,8 +24,14 @@ public class ContractCustomerImpl implements ContractCustomerService {
         return ContractCustomerDTO.builder()
                 .id(contractCustomer.getInternalId())
                 .companyName(contractCustomer.getCompanyName())
-                .customerName(contractCustomer.getContactName())
+                .contactName(contractCustomer.getContactName())
+                .contactTitle(contractCustomer.getContactTitle())
+                .streetAddress(contractCustomer.getStreetAddress())
+                .city(contractCustomer.getCity())
+                .postalCode(contractCustomer.getPostalCode())
                 .country(contractCustomer.getCountry())
+                .phone(contractCustomer.getPhone())
+                .fax(contractCustomer.getFax())
                 .build();
     }
 

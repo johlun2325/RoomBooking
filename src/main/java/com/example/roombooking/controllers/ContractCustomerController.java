@@ -25,9 +25,8 @@ public class ContractCustomerController {
         model.addAttribute("allContractCustomers", all);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
-        model.addAttribute("contractCustomerId", "Företagskund-ID");
-        model.addAttribute("companyName", "Företagsnamn");
-        model.addAttribute("customerName", "Kundnamn");
+        model.addAttribute("companyName", "Företag");
+        model.addAttribute("contactName", "Namn");
         model.addAttribute("country", "Land");
 
         return "all-contract-customers";
@@ -39,10 +38,15 @@ public class ContractCustomerController {
         model.addAttribute("contractCustomer", businessCustomer);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Företagskund");
-        model.addAttribute("contractCustomerId", "Företagskund-ID");
-        model.addAttribute("companyName", "Företagsnamn");
-        model.addAttribute("customerName", "Kundnamn");
+        model.addAttribute("companyName", "Företag");
+        model.addAttribute("contactName", "Namn");
+        model.addAttribute("contactTitle", "Titel");
+        model.addAttribute("streetAddress", "Adress");
+        model.addAttribute("city", "Stad");
+        model.addAttribute("postalCode", "Postnummer");
         model.addAttribute("country", "Land");
+        model.addAttribute("phone", "Mobilnummer");
+        model.addAttribute("fax", "Fax");
 
         return "show-contract-customer-info";
     }
