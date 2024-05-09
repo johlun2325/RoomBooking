@@ -1,5 +1,7 @@
 package com.example.roombooking;
 
+import com.example.roombooking.repos.ShipperRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,16 +11,7 @@ import java.util.Objects;
 @SpringBootApplication
 public class RoomBookingApplication {
 
-
-/*
-    Web server failed to start. Port 8080 was already in use:
-    netstat -aon | findstr :8080
-    taskkill /PID some_number_here /F
-*/
-
     public static void main(String[] args) {
-
-//        SpringApplication.run(RoomBookingApplication.class, args);
 
         if (args.length == 0) {
             SpringApplication.run(RoomBookingApplication.class, args);
