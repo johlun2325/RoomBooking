@@ -1,6 +1,7 @@
 package com.example.roombooking;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class RoomBookingApplication {
 
         } else if (Objects.equals(args[0], "fetchBusinessCustomerApp")) {
             SpringApplication application = new SpringApplication(FetchContractCustomerApplication.class);
-//            application.setWebApplicationType(WebApplicationType.NONE);
+            application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
 
         }

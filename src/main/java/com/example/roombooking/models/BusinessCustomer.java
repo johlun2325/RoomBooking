@@ -19,6 +19,9 @@ import lombok.NoArgsConstructor;
 public class BusinessCustomer {
 
         @Id
+        @GeneratedValue
+        private Long internalId;
+
         @JacksonXmlProperty(localName = "id")
         private Long id;
 

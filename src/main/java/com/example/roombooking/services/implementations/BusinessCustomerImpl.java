@@ -22,7 +22,7 @@ public class BusinessCustomerImpl implements BusinessCustomerService {
     @Override
     public BusinessCustomerDTO convertToBusinessCustomerDto(BusinessCustomer businessCustomer) {
         return BusinessCustomerDTO.builder()
-                .id(businessCustomer.getId())
+                .id(businessCustomer.getInternalId())
                 .companyName(businessCustomer.getCompanyName())
                 .customerName(businessCustomer.getContactName())
                 .country(businessCustomer.getCountry())

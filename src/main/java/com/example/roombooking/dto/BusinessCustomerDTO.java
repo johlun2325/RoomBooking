@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BusinessCustomerDTO {
 
-    private Long id;
+    private Long id; //vårat id för att kunna hämta 1 kund från listan
     private String companyName;
     private String customerName;
     private String country;

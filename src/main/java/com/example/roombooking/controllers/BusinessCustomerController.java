@@ -22,13 +22,13 @@ public class BusinessCustomerController {
 
     private final BusinessCustomerService businessCustomerService;
 
-    @GetMapping()
+    @GetMapping("/all")
     public String getAllBusinessCustomers(Model model) {
         List<BusinessCustomerDTO> all = businessCustomerService.findAllContractCustomers();
         model.addAttribute("allBusinessCustomers", all);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
-        model.addAttribute("businessCustomerId", "Företagskund-ID");
+//        model.addAttribute("businessCustomerId", "Företagskund-ID");
         model.addAttribute("companyName", "Företagsnamn");
         model.addAttribute("customerName", "Kundnamn");
         model.addAttribute("country", "Land");
