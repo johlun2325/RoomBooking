@@ -30,7 +30,11 @@
                 <tbody>
                 <tr th:each="businessCustomer : ${allBusinessCustomers}">
                     <td th:text="${businessCustomer.id}"></td>
-                    <td th:text="${businessCustomer.companyName}"></td>
+
+<!--                    <td th:text="${businessCustomer.companyName}"></td>-->
+                    <td>
+                        <a th:text="${businessCustomer.companyName}" th:href="@{/businessCustomer/{id}(id=${businessCustomer.id})}"></a>
+                    </td>
                     <td th:text="${businessCustomer.customerName}"></td>
                     <td th:text="${businessCustomer.country}"></td>
                 </tr>

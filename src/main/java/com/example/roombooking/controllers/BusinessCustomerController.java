@@ -28,7 +28,7 @@ public class BusinessCustomerController {
         model.addAttribute("allBusinessCustomers", all);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
-//        model.addAttribute("businessCustomerId", "Företagskund-ID");
+        model.addAttribute("businessCustomerId", "Företagskund-ID");
         model.addAttribute("companyName", "Företagsnamn");
         model.addAttribute("customerName", "Kundnamn");
         model.addAttribute("country", "Land");
@@ -39,7 +39,7 @@ public class BusinessCustomerController {
     @GetMapping({"/{id}"})
     String getBusinessCustomer(@PathVariable Long id, Model model) {
         BusinessCustomerDTO businessCustomer = businessCustomerService.findContractCustomerById(id);
-        model.addAttribute("businessCustomers", businessCustomer);
+        model.addAttribute("businessCustomer", businessCustomer);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Företagskund");
         model.addAttribute("businessCustomerId", "Företagskund-ID");
