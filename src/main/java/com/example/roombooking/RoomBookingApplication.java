@@ -21,9 +21,9 @@ public class RoomBookingApplication {
         if (args.length == 0) {
             SpringApplication.run(RoomBookingApplication.class, args);
 
-        } else if (Objects.equals(args[0], "fetchBusinessCustomerApp")) {
+        } else if (Objects.equals(args[0], "fetchContractCustomerApp")) {
             SpringApplication application = new SpringApplication(FetchContractCustomerApplication.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
+//            application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
 
         }

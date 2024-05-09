@@ -9,10 +9,10 @@ import java.util.List;
 
 @Data
 @JacksonXmlRootElement(localName = "allcustomers")
-public class BusinessCustomers {
+public class ContractCustomers {
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "customers")
-    private List<BusinessCustomer> businessCustomers;
+    private List<ContractCustomer> contractCustomers;
 
 }

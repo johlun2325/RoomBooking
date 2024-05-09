@@ -1,7 +1,7 @@
 package com.example.roombooking;
 
-import com.example.roombooking.models.BusinessCustomers;
-import com.example.roombooking.repos.BusinessCustomerRepo;
+import com.example.roombooking.models.ContractCustomers;
+import com.example.roombooking.repos.ContractCustomerRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,15 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class FetchContractCustomerApplication implements CommandLineRunner {
 
-    private final BusinessCustomerRepo businessCustomerRepo;
+    private final ContractCustomerRepo contractCustomerRepo;
 
     @Override
     public void run(String... args) throws Exception {
         ObjectMapper xmlMapper = new XmlMapper();
 
-        businessCustomerRepo.saveAll(xmlMapper.readValue(
+        contractCustomerRepo.saveAll(xmlMapper.readValue(
                     new URL("https://javaintegration.systementor.se/customers"),
-                    BusinessCustomers.class)
-                .getBusinessCustomers());
+                    ContractCustomers.class)
+                .getContractCustomers());
     }
 }

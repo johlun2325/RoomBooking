@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BusinessCustomerDTO {
+public class ContractCustomerDTO {
 
     private Long id; //vårat id för att kunna hämta 1 kund från listan
     private String companyName;
