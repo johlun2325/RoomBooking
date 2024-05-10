@@ -20,16 +20,32 @@ public class CustomerController {
     // Get all with thymeleaf
     @GetMapping("/all")
     public String getAllCustomers(Model model) {
-        List<CustomerDTO> all = customerService.findAllCustomers();
-        model.addAttribute("allCustomers", all);
-        model.addAttribute("pageHeader", "Kunder");
-        model.addAttribute("header", "Alla kunder");
-        model.addAttribute("idTh", "ID");
-        model.addAttribute("nameTh", "Fullständigt namn");
-        model.addAttribute("ssnTh", "Personnummer");
-        model.addAttribute("emailTh", "E-postadress");
-        model.addAttribute("delete", "Ta bort");
-        model.addAttribute("update", "Uppdatera");
+
+        String message = "";
+
+        try {
+            List<CustomerDTO> all = customerService.findAllCustomers();
+
+            if (all !=null) {
+                model.addAttribute("allCustomers", all);
+                model.addAttribute("pageHeader", "Kunder");
+                model.addAttribute("header", "Alla kunder");
+                model.addAttribute("idTh", "ID");
+                model.addAttribute("nameTh", "Fullständigt namn");
+                model.addAttribute("ssnTh", "Personnummer");
+                model.addAttribute("emailTh", "E-postadress");
+                model.addAttribute("delete", "Ta bort");
+                model.addAttribute("update", "Uppdatera");
+                message = "Det gick bra!";
+                model.addAttribute("message", message);
+            } else {
+                message = "Det gick inte bra!";
+                model.addAttribute("message", message);
+            }
+        } catch (Exception e) {
+            message = "Något gick fel";
+            model.addAttribute("message", message);
+        }
 
         return "allCustomers";
     }
