@@ -12,7 +12,7 @@ import java.net.URL;
 
 @ComponentScan
 @RequiredArgsConstructor
-public class LoadShippers implements CommandLineRunner {
+public class LoadShippersApplication implements CommandLineRunner {
 
     private final ShipperRepo repo;
 

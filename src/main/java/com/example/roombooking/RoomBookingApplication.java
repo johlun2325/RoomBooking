@@ -1,12 +1,8 @@
 package com.example.roombooking;
 
-import com.example.roombooking.repos.ShipperRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -25,11 +21,11 @@ public class RoomBookingApplication {
         if (args.length == 0) {
             SpringApplication.run(RoomBookingApplication.class, args);
         } else if (Objects.equals(args[0], "LoadShippers")) {
-            SpringApplication application = new SpringApplication(LoadShippers.class);
+            SpringApplication application = new SpringApplication(LoadShippersApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         } else if (Objects.equals(args[0], "fetchContractCustomerApp")) {
-            SpringApplication application = new SpringApplication(FetchContractCustomerApplication.class);
+            SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
 

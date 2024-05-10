@@ -2,7 +2,6 @@ package com.example.roombooking;
 
 import com.example.roombooking.models.ContractCustomers;
 import com.example.roombooking.repos.ContractCustomerRepo;
-import com.example.roombooking.services.implementations.ContractCustomerImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -16,10 +15,10 @@ import java.net.URL;
 
 @ComponentScan
 @RequiredArgsConstructor
-public class FetchContractCustomerApplication implements CommandLineRunner {
+public class LoadContractCustomerApplication implements CommandLineRunner {
 
     private final ContractCustomerRepo contractCustomerRepo;
-    private static final Logger LOGGER = LoggerFactory.getLogger(FetchContractCustomerApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
     @Override
     public void run(String... args) {
