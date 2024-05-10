@@ -102,8 +102,15 @@ public class CustomerController {
     // TODO: Add error message on the frontend for trying to remove customer with bookings
     // Delete with thymeleaf
     @RequestMapping("/delete/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomerById(id);
+    public String deleteCustomer(@PathVariable Long id,Model model) {
+        try {
+            customerService.deleteCustomerById(id);
+            model.addAttribute("det gick bra att ta bort kund!");
+        } catch (Exception e) {
+            model.addAttribute("det gick inte bra att ta bort kund!");
+
+            throw new RuntimeException(e);
+        }
         return "redirect:/customer/all";
     }
 

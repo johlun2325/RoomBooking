@@ -169,8 +169,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomerById(Long id) {
         customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
-            if (!foundCustomer.getBookings().isEmpty())
+            if (!foundCustomer.getBookings().isEmpty()) {
                 LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+            }
             else {
                 customerRepo.delete(foundCustomer);
                 LOGGER.info("Customer with ID: {} deleted", id);
