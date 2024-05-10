@@ -41,11 +41,8 @@ public class RoomBookingApplication {
             SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
-
         }
-
     }
-
 
 //    @Bean
 //    @Transactional
@@ -83,5 +80,4 @@ public class RoomBookingApplication {
 //            bookingRepo.saveAll(List.of(booking1, booking2, booking3));
 //        };
 //    }
-
 }
