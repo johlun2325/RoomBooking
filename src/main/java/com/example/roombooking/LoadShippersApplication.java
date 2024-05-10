@@ -12,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 @ComponentScan
 @RequiredArgsConstructor
@@ -28,16 +30,13 @@ public class LoadShippersApplication implements CommandLineRunner {
         try {
             JsonMapper jsonMapper = new JsonMapper();
             jsonMapper.registerModule(new JavaTimeModule()); //vad gör denna
-            Shipper[] shippers = new Shipper[0];
-
+            Shipper[] shippers;
             shippers = jsonMapper.readValue(
                     new URL("https://javaintegration.systementor.se/shippers"),
                     Shipper[].class);
             LOGGER.info("Fetched {} shippers successfully.", shippers.length);
 
-            for (Shipper s : shippers) {
-                shipperRepo.save(s);
-            }
+            shipperRepo.saveAll(Arrays.asList(shippers));
 
             LOGGER.info("Shippers have been saved to the repository successfully.");
 
