@@ -1,9 +1,22 @@
 package com.example.roombooking;
 
+import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.Customer;
+import com.example.roombooking.models.Room;
+import com.example.roombooking.models.RoomType;
+import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.repos.CustomerRepo;
+import com.example.roombooking.repos.RoomRepo;
+import com.example.roombooking.repos.TypeRepo;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -24,7 +37,7 @@ public class RoomBookingApplication {
             SpringApplication application = new SpringApplication(LoadShippersApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
-        } else if (Objects.equals(args[0], "fetchContractCustomerApp")) {
+        } else if (Objects.equals(args[0], "loadContractCustomerApp")) {
             SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
