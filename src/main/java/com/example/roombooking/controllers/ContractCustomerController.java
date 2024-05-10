@@ -59,29 +59,17 @@ public class ContractCustomerController {
         return "show-contract-customer-info";
     }
 
-    @GetMapping({})
+    @GetMapping("/sort")
     public String sort(Model model,
-                       @RequestParam(defaultValue = "1") int pageNo,
-                       @RequestParam(defaultValue = "ID") int pageSize,
-                       @RequestParam(defaultValue = "name") String sortCol,
-                       @RequestParam(defaultValue = "ASC") String sortOrder,
-                       @RequestParam(defaultValue = "") String  q) {
-
-        q = q.trim();
+                       @RequestParam() String sortCol,
+                       @RequestParam() String sortOrder) {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        if (!q.isEmpty()) {
-            model.addAttribute("contractCustomers", contractCustomerRepo.findAllByContactNameContaining(q, sort));
-            model.addAttribute("totalPages", 1);
-            model.addAttribute("pageNo", 1);
-        } else {
-            var list = contractCustomerRepo.findAllBy(sort);
-            model.addAttribute("pageNo", pageNo);
-            model.addAttribute("contractCustomers", list);
-        }
+        var list = contractCustomerRepo.findAll(sort);
 
-        return "redirect:how-contract-customer-info";
+        model.addAttribute("allContractCustomers", list);
+
+        return "all-contract-customers";
     }
 
 }
