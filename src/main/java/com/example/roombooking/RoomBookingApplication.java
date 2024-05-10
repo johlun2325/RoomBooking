@@ -24,15 +24,12 @@ public class RoomBookingApplication {
             SpringApplication application = new SpringApplication(LoadShippersApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
-        } else if (Objects.equals(args[0], "fetchContractCustomerApp")) {
+        } else if (Objects.equals(args[0], "loadContractCustomerApp")) {
             SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
-
         }
-
     }
-
 
 //    @Bean
 //    @Transactional
@@ -70,5 +67,4 @@ public class RoomBookingApplication {
 //            bookingRepo.saveAll(List.of(booking1, booking2, booking3));
 //        };
 //    }
-
 }
