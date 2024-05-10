@@ -21,8 +21,8 @@ public class ContractCustomerController {
 
     @GetMapping("/all")
     public String getAllContractCustomers(Model model) {
-        List<ContractCustomerDTO> all = contractCustomerService.findAllContractCustomers();
-        model.addAttribute("allContractCustomers", all);
+        List<ContractCustomerDTO> allContractCustomer = contractCustomerService.findAllContractCustomers();
+        model.addAttribute("allContractCustomers", allContractCustomer);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
@@ -34,8 +34,8 @@ public class ContractCustomerController {
 
     @GetMapping({"/{id}"})
     String getContractCustomer(@PathVariable Long id, Model model) {
-        ContractCustomerDTO businessCustomer = contractCustomerService.findContractCustomerById(id);
-        model.addAttribute("contractCustomer", businessCustomer);
+        ContractCustomerDTO contractCustomer = contractCustomerService.findContractCustomerById(id);
+        model.addAttribute("contractCustomer", contractCustomer);
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Företagskund");
         model.addAttribute("companyName", "Företag");
