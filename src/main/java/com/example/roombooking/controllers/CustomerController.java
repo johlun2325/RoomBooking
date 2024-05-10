@@ -43,6 +43,7 @@ public class CustomerController {
     public String openNewCustomerPage(Model model) {
         model.addAllAttributes(Map.of(
                 "pageTitle", "Ny Kund",
+                "header","Lägg till ny kund",
                 "fullNameText", "Fullständigt namn",
                 "nameTitle", "Please enter only Swedish letters and spaces.",
                 "ssnText", "Personnummer",

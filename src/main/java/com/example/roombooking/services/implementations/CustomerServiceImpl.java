@@ -1,6 +1,5 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.controllers.CustomerController;
 import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
@@ -22,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepo customerRepo;
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     //customerDTO till customer
     @Override

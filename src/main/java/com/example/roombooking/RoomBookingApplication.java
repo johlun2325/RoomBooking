@@ -5,11 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
 @SpringBootApplication
 public class RoomBookingApplication {
+
+
+/*
+    Web server failed to start. Port 8080 was already in use:
+    netstat -aon | findstr :8080
+    taskkill /PID some_number_here /F
+*/
 
     public static void main(String[] args) {
 
@@ -19,10 +28,14 @@ public class RoomBookingApplication {
             SpringApplication application = new SpringApplication(LoadShippers.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
+        } else if (Objects.equals(args[0], "fetchContractCustomerApp")) {
+            SpringApplication application = new SpringApplication(FetchContractCustomerApplication.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+
         }
 
     }
-
 
 
 //    @Bean
