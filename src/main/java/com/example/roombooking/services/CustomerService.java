@@ -24,7 +24,7 @@ public interface CustomerService {
     void addCustomer(CustomerDTO customer);
 
     //thymeleaf delete
-    void deleteCustomerById(Long id);
+    String deleteCustomerById(Long id);
 
     String updateCustomer(CustomerDTO customer);
 

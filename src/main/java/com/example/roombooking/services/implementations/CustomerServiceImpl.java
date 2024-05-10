@@ -167,15 +167,31 @@ public class CustomerServiceImpl implements CustomerService {
 
     // Thymeleaf Delete: Delete customer by ID
     @Override
-    public void deleteCustomerById(Long id) {
-        customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
-            if (!foundCustomer.getBookings().isEmpty()) {
-                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+    public String deleteCustomerById(Long id) {
+
+        Customer c = customerRepo.findById(id).orElseGet(null);
+        String msg = "";
+
+        if (c != null){
+            if (c.getBookings().isEmpty()) {
+                customerRepo.deleteById(id);
+                msg = "Kunden togs bort";
             }
             else {
-                customerRepo.delete(foundCustomer);
-                LOGGER.info("Customer with ID: {} deleted", id);
+                msg = "Kunden togs inte bort, den har aktiva bokningar";
             }
-        }, () -> LOGGER.warn("Customer with ID: {} not found", id));
+        }
+        return msg;
+
+
+//        customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
+//            if (!foundCustomer.getBookings().isEmpty()) {
+//                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+//            }
+//            else {
+//                customerRepo.delete(foundCustomer);
+//                LOGGER.info("Customer with ID: {} deleted", id);
+//            }
+//        }, () -> LOGGER.warn("Customer with ID: {} not found", id));
     }
 }

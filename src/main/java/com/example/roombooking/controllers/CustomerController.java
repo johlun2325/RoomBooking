@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class CustomerController {
         try {
             List<CustomerDTO> all = customerService.findAllCustomers();
 
-            if (all !=null) {
+            if (all != null) {
                 model.addAttribute("allCustomers", all);
                 model.addAttribute("pageHeader", "Kunder");
                 model.addAttribute("header", "Alla kunder");
@@ -59,7 +60,7 @@ public class CustomerController {
     public String openNewCustomerPage(Model model) {
         model.addAllAttributes(Map.of(
                 "pageTitle", "Ny Kund",
-                "header","Lägg till ny kund",
+                "header", "Lägg till ny kund",
                 "fullNameText", "Fullständigt namn",
                 "nameTitle", "Please enter only Swedish letters and spaces.",
                 "ssnText", "Personnummer",
@@ -93,7 +94,7 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    public String addCustomer(CustomerDTO customer){
+    public String addCustomer(CustomerDTO customer) {
         customerService.updateCustomer(customer);
         return "redirect:/customer/all";
     }
@@ -102,15 +103,10 @@ public class CustomerController {
     // TODO: Add error message on the frontend for trying to remove customer with bookings
     // Delete with thymeleaf
     @RequestMapping("/delete/{id}")
-    public String deleteCustomer(@PathVariable Long id,Model model) {
-        try {
-            customerService.deleteCustomerById(id);
-            model.addAttribute("det gick bra att ta bort kund!");
-        } catch (Exception e) {
-            model.addAttribute("det gick inte bra att ta bort kund!");
+    public String deleteCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        String message = customerService.deleteCustomerById(id);
+        redirectAttributes.addFlashAttribute("deleteMsg", message);
 
-            throw new RuntimeException(e);
-        }
         return "redirect:/customer/all";
     }
 
