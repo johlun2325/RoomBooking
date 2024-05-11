@@ -1,8 +1,10 @@
 package com.example.roombooking.controllers;
 
 
+import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ContractCustomerController {
 
     private final ContractCustomerService contractCustomerService;
+
+
+    private final ContractCustomerRepo contractCustomerRepo;
 
     @GetMapping("/all")
     public String getAllContractCustomers(Model model) {
@@ -50,14 +55,25 @@ public class ContractCustomerController {
     @GetMapping("/all/sort")
     public String sort(Model model,
                        @RequestParam(defaultValue = "companyName") String sortColumn,
-                       @RequestParam(defaultValue = "ASC") String sortOrder) {
+                       @RequestParam(defaultValue = "ASC") String sortOrder,
+                       @RequestParam(defaultValue = "") String q) {
 
-        model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortColumn, sortOrder));
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
         model.addAttribute("contactName", "Namn");
         model.addAttribute("country", "Land");
+
+
+        var sort = Sort.by(Sort.Direction.fromString(sortOrder), sortColumn);
+        if (!q.isEmpty()) {
+            q = q.trim();
+            model.addAttribute("q", q);
+            model.addAttribute("allContractCustomers", contractCustomerRepo.findAllByCompanyNameStartingWith(q, sort));
+        } else {
+            model.addAttribute("q", "");
+            model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
+        }
 
         return "all-contract-customers";
     }

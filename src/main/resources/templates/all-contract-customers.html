@@ -25,8 +25,8 @@
         <div class="col-md-8">
             <h1 th:text="${header}"></h1>
             <div class="input-group">
-                <form method="GET" class="d-flex w-100">
-                    <input class="form-control flex-grow-1 rounded-0" type="search" placeholder="Search" aria-label="Search">
+                <form method="get" class="d-flex w-100" th:action="@{/contractCustomer/all/sort}">
+                    <input class="form-control flex-grow-1 rounded-0" type="search" placeholder="Search" aria-label="Search" name="q" th:value="${q}">
                     <button class="btn btn-outline-success rounded-0" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -37,18 +37,18 @@
                 <tr>
                     <th scope="col">
                         <span th:text="${companyName}"></span>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=companyName&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=companyName&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=companyName&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=companyName&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${contactName}"></span>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=contactName&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=contactName&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=contactName&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=contactName&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${country}"></span>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=country&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{/contractCustomer/all/sort?sortColumn=country&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=country&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?q=${q != null ? q : ''}&sortColumn=country&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                 </tr>
                 </thead>
