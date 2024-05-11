@@ -63,4 +63,12 @@ public class ContractCustomerImpl implements ContractCustomerService {
                 .map(this::convertToContractCustomerDto)
                 .toList();
     }
+
+    @Override
+    public List<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn) {
+        return contractCustomerRepo.findAllByCompanyNameStartingWith(query, Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
+                .stream()
+                .map(this::convertToContractCustomerDto)
+                .toList();
+    }
 }

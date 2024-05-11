@@ -10,11 +10,12 @@ import java.util.List;
 @Repository
 public interface ContractCustomerRepo extends JpaRepository<ContractCustomer, Long> {
 
-    List<ContractCustomer> findAllByCompanyNameStartingWith(String q, Sort sort);
+    List<ContractCustomer> findAllByCompanyNameStartingWith(String query, Sort sort);
 
 //    List<ContractCustomer> findAllByCompanyNameStartingWithOrContactNameStartingWithOrCountryStartingWith(
 //            String companyName,
 //            String contactName,
 //            String country,
 //            Sort sort);
+
 }

@@ -20,8 +20,6 @@ public class ContractCustomerController {
     private final ContractCustomerService contractCustomerService;
 
 
-    private final ContractCustomerRepo contractCustomerRepo;
-
     @GetMapping("/all")
     public String getAllContractCustomers(Model model) {
         model.addAttribute("allContractCustomers", contractCustomerService.findAllContractCustomers());
@@ -30,6 +28,7 @@ public class ContractCustomerController {
         model.addAttribute("companyName", "Företag");
         model.addAttribute("contactName", "Namn");
         model.addAttribute("country", "Land");
+        model.addAttribute("placeholder", "Sök företag...");
 
         return "all-contract-customers";
     }
@@ -56,26 +55,24 @@ public class ContractCustomerController {
     public String sort(Model model,
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
-                       @RequestParam(defaultValue = "") String q) {
+                       @RequestParam(defaultValue = "") String query) {
 
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
         model.addAttribute("contactName", "Namn");
         model.addAttribute("country", "Land");
+        model.addAttribute("placeholder", "Sök företag...");
 
+        query = query.trim();
 
-        var sort = Sort.by(Sort.Direction.fromString(sortOrder), sortColumn);
-        if (!q.isEmpty()) {
-            q = q.trim();
-            model.addAttribute("q", q);
-            model.addAttribute("allContractCustomers", contractCustomerRepo.findAllByCompanyNameStartingWith(q, sort));
-        } else {
-            model.addAttribute("q", "");
+        if (query.isEmpty()) {
             model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
+        } else {
+            model.addAttribute("query", query);
+            model.addAttribute("allContractCustomers", contractCustomerService.findAllByCompanyNameStartingWith(query, sortOrder, sortColumn));
         }
 
         return "all-contract-customers";
     }
-
 }
