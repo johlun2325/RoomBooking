@@ -55,7 +55,7 @@ public class ContractCustomerController {
     public String sort(Model model,
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
-                       @RequestParam(defaultValue = "") String query) {
+                       @RequestParam String query) {
 
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");

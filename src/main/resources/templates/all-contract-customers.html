@@ -26,7 +26,8 @@
             <h1 th:text="${header}"></h1>
             <div class="input-group">
                 <form method="get" class="d-flex w-100" th:action="@{/contractCustomer/all/sort}">
-                    <input class="form-control flex-grow-1 rounded-0" type="search" th:placeholder="${placeholder}" aria-label="Search" name="query" th:value="${query}">
+                    <input class="form-control flex-grow-1 rounded-0" type="search" id="searchInput"
+                           th:placeholder="${placeholder}" aria-label="Search" name="query" th:value="${query}">
                     <button class="btn btn-outline-success rounded-0" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -37,18 +38,24 @@
                 <tr>
                     <th scope="col">
                         <span th:text="${companyName}"></span>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${contactName}"></span>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=contactName&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=contactName&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=contactName&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=contactName&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${country}"></span>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=country&sortOrder=ASC|}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=country&sortOrder=DESC|}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=country&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/contractCustomer/all/sort?query=${query != null ? query : ''}&sortColumn=country&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                 </tr>
                 </thead>
@@ -69,6 +76,13 @@
     function navigateToCustomer(row) {
         window.location.href = row.getAttribute("href");
     }
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function () {
+        if (searchInput.value === "") {
+            window.location.href = "http://localhost:8080/contractCustomer/all";
+        }
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
