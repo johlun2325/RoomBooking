@@ -37,18 +37,18 @@
                 <tr>
                     <th scope="col">
                         <span th:text="${companyName}"></span>
-                        <i class="bi bi-sort-alpha-up"></i>
-                        <i class="bi bi-sort-alpha-down-alt"></i>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=companyName&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=companyName&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${contactName}"></span>
-                        <a th:href="@{/contractCustomer/sort?sortCol=contactName&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
-                        <a th:href="@{/contractCustomer/sort?sortCol=contactName&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=contactName&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=contactName&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                     <th scope="col">
                         <span th:text="${country}"></span>
-                        <i class="bi bi-sort-alpha-up"></i>
-                        <i class="bi bi-sort-alpha-down-alt"></i>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=country&sortOrder=ASC}"><i class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{/contractCustomer/all/sort?sortColumn=country&sortOrder=DESC}"><i class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
                 </tr>
                 </thead>

@@ -15,4 +15,5 @@ public interface ContractCustomerService {
 
     ContractCustomerDTO convertToContractCustomerDto(ContractCustomer contractCustomer);
 
+    List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn);
 }
