@@ -58,7 +58,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
 
     @Override
     public List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn) {
-        return contractCustomerRepo.findAll(Sort.by(Sort.Direction.fromString(sortColumn), sortOrder))
+        return contractCustomerRepo.findAll(Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
                 .stream()
                 .map(this::convertToContractCustomerDto)
                 .toList();

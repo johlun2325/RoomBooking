@@ -52,7 +52,7 @@ public class ContractCustomerController {
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder) {
 
-        model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortColumn, sortOrder));
+        model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
