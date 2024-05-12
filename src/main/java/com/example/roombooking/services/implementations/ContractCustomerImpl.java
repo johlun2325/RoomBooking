@@ -7,7 +7,7 @@ import com.example.roombooking.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,26 +49,39 @@ public class ContractCustomerImpl implements ContractCustomerService {
     }
 
     @Override
-    public List<ContractCustomerDTO> findAllContractCustomers() {
-        return contractCustomerRepo.findAll()
-                .stream()
-                .map(this::convertToContractCustomerDto)
-                .toList();
+    public Page<ContractCustomerDTO> findAllContractCustomers(int pageNumber, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "companyName");
+        Pageable pageable = PageRequest.of(0, 25, sort);
+
+
+            List<ContractCustomerDTO> allCustomers = contractCustomerRepo.findAll().stream().map(this::convertToContractCustomerDto).toList();
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), allCustomers.size());
+
+            List<ContractCustomerDTO> pageContent = allCustomers.subList(start, end);
+            return new PageImpl<>(pageContent, pageable, allCustomers.size());
+
     }
 
     @Override
-    public List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn) {
-        return contractCustomerRepo.findAll(Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
+    public Page<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn, int pageNumber, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortColumn);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+        return new PageImpl<>(contractCustomerRepo.findAll(pageable)
                 .stream()
                 .map(this::convertToContractCustomerDto)
-                .toList();
+                .toList());
     }
 
     @Override
-    public List<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn) {
-        return contractCustomerRepo.findAllByCompanyNameStartingWith(query, Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
+    public Page<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn, int pageNumber, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortColumn);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+        return new PageImpl<>(contractCustomerRepo.findAllByCompanyNameStartingWith(query, pageable)
                 .stream()
                 .map(this::convertToContractCustomerDto)
-                .toList();
+                .toList());
     }
 }

@@ -68,6 +68,16 @@
                 </tr>
                 </tbody>
             </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <li th:if="${pageNumber == i}" class="page-item active" th:text="${i}"></li>
+                        <li th:if="${pageNumber != i}" class="page-item" >
+                            <a class="page-link" th:href="@{|?query=${query}&pageNumber=${i}|}" th:text="${i}"></a>
+                        </li>
+                    </th:block>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

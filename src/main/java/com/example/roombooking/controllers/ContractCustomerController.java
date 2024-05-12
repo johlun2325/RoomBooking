@@ -1,10 +1,10 @@
 package com.example.roombooking.controllers;
 
 
-import com.example.roombooking.repos.ContractCustomerRepo;
+import com.example.roombooking.dto.ContractCustomerDTO;
 import com.example.roombooking.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +19,24 @@ public class ContractCustomerController {
 
     private final ContractCustomerService contractCustomerService;
 
-
     @GetMapping("/all")
-    public String getAllContractCustomers(Model model) {
-        model.addAttribute("allContractCustomers", contractCustomerService.findAllContractCustomers());
+    public String getAllContractCustomers(Model model,
+                                          @RequestParam(defaultValue = "1") int pageNumber,
+                                          @RequestParam(defaultValue = "10") int pageSize) {
+
+        var page = contractCustomerService.findAllContractCustomers(pageNumber, pageSize);
+
+
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
         model.addAttribute("contactName", "Namn");
         model.addAttribute("country", "Land");
         model.addAttribute("placeholder", "Sök företag...");
+
+        model.addAttribute("allContractCustomers", page);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("totalPages",  page.getTotalPages());
 
         return "all-contract-customers";
     }
@@ -53,9 +61,11 @@ public class ContractCustomerController {
 
     @GetMapping("/all/sort")
     public String sort(Model model,
+                       @RequestParam(defaultValue = "1") int pageNumber,
+                       @RequestParam(defaultValue = "10") int pageSize,
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
-                       @RequestParam String query) {
+                       @RequestParam(defaultValue = "") String query) {
 
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
@@ -64,14 +74,19 @@ public class ContractCustomerController {
         model.addAttribute("country", "Land");
         model.addAttribute("placeholder", "Sök företag...");
 
-        query = query.trim();
+
+        model.addAttribute("query", query.trim());
+
+        Page<ContractCustomerDTO> page;
 
         if (query.isEmpty()) {
-            model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
+            page = contractCustomerService.findAllSorted(sortOrder, sortColumn, pageNumber, pageSize);
         } else {
-            model.addAttribute("query", query);
-            model.addAttribute("allContractCustomers", contractCustomerService.findAllByCompanyNameStartingWith(query, sortOrder, sortColumn));
+            page = contractCustomerService.findAllByCompanyNameStartingWith(query.trim(), sortOrder, sortColumn, pageNumber, pageSize);
         }
+        model.addAttribute("allContractCustomers", page);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("totalPages",  page.getTotalPages());
 
         return "all-contract-customers";
     }
