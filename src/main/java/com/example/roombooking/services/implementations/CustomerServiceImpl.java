@@ -100,14 +100,22 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public void addCustomer(CustomerDTO customer) {
-        customerRepo.findCustomerBySsn(customer.getSsn())
-                .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
-                        () -> {
-                    customerRepo.save(convertDtoToCustomer(customer));
-                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
-                });
-    }
+    public String addCustomer(CustomerDTO customer) {
+            var message = new AtomicReference<String>();
+
+            return customerRepo.findCustomerBySsn(customer.getSsn())
+                    .map(foundCustomer -> {
+                        message.set("Customer with SSN: %s exists".formatted(customer.getSsn()));
+                        LOGGER.info(message.get());
+                        return message.get();
+                    })
+                    .orElseGet(() -> {
+                        customerRepo.save(convertDtoToCustomer(customer));
+                        message.set("Customer with SSN: %s added".formatted(customer.getSsn()));
+                        LOGGER.warn(message.get());
+                        return message.get();
+                    });
+        }
 
 //    @Override
 //    public void addCustomer(CustomerDTO customer) {
@@ -146,6 +154,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String updateCustomer(CustomerDTO customer) {
+
         var message = new AtomicReference<String>();
 
         return customerRepo.findById(customer.getId())
@@ -154,6 +163,7 @@ public class CustomerServiceImpl implements CustomerService {
                     foundCustomer.setSsn(customer.getSsn());
                     foundCustomer.setEmail(customer.getEmail());
                     customerRepo.save(foundCustomer);
+
                     message.set("Customer with ID: %s updated".formatted(customer.getId()));
                     LOGGER.info(message.get());
                     return message.get();
@@ -169,16 +179,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String deleteCustomerById(Long id) {
 
-        Customer c = customerRepo.findById(id).orElseGet(null);
+        Customer c = customerRepo.findById(id)
+                .orElseThrow(() -> {
+                    LOGGER.warn("Customer with ID: {} not found", id);
+                    return new RuntimeException("Customer not found");
+                });
         String msg = "";
 
         if (c != null){
             if (c.getBookings().isEmpty()) {
                 customerRepo.deleteById(id);
                 msg = "Kunden togs bort";
+                LOGGER.info("Customer with ID: {} deleted", id);
             }
             else {
                 msg = "Kunden togs inte bort, den har aktiva bokningar";
+                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
             }
         }
         return msg;

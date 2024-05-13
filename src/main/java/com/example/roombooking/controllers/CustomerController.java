@@ -1,6 +1,7 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.models.Customer;
 import com.example.roombooking.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,8 +23,6 @@ public class CustomerController {
     @GetMapping("/all")
     public String getAllCustomers(Model model) {
 
-        String message = "";
-
         try {
             List<CustomerDTO> all = customerService.findAllCustomers();
 
@@ -37,15 +36,12 @@ public class CustomerController {
                 model.addAttribute("emailTh", "E-postadress");
                 model.addAttribute("delete", "Ta bort");
                 model.addAttribute("update", "Uppdatera");
-                message = "Det gick bra!";
-                model.addAttribute("message", message);
+
             } else {
-                message = "Det gick inte bra!";
-                model.addAttribute("message", message);
+                model.addAttribute("message", "Inga kunder kunde hittas");
             }
         } catch (Exception e) {
-            message = "Något gick fel";
-            model.addAttribute("message", message);
+            model.addAttribute("message", "Något gick fel");
         }
 
         return "allCustomers";
@@ -74,8 +70,16 @@ public class CustomerController {
     @PostMapping("/add")
     public String addCustomer(@RequestParam String name,
                               @RequestParam String ssn,
-                              @RequestParam String email) {
-        customerService.addCustomer(new CustomerDTO(name, ssn, email));
+                              @RequestParam String email,
+                              RedirectAttributes redirectAttributes) {
+        /*
+        CustomerDTO customer = new CustomerDTO(name, ssn, email);
+        String message = customerService.addCustomer(customer);
+        redirectAttributes.addFlashAttribute("message", message);
+
+         */
+
+        redirectAttributes.addFlashAttribute("message", customerService.addCustomer(new CustomerDTO(name, ssn, email)));
         return "redirect:/customer/all";
     }
 
@@ -90,12 +94,14 @@ public class CustomerController {
         model.addAttribute("ssnText", "Ändra personnummer");
         model.addAttribute("emailText", "Ändra e-postadress");
         model.addAttribute("buttonText", "Uppdatera");
+
         return "updateCustomerForm";
     }
 
     @PostMapping("/update")
-    public String addCustomer(CustomerDTO customer) {
-        customerService.updateCustomer(customer);
+    public String updateCustomer(CustomerDTO customer, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", customerService.updateCustomer(customer));
+
         return "redirect:/customer/all";
     }
 
@@ -104,8 +110,7 @@ public class CustomerController {
     // Delete with thymeleaf
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        String message = customerService.deleteCustomerById(id);
-        redirectAttributes.addFlashAttribute("deleteMsg", message);
+        redirectAttributes.addFlashAttribute("message", customerService.deleteCustomerById(id));
 
         return "redirect:/customer/all";
     }
