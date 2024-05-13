@@ -22,7 +22,7 @@ public class ContractCustomerController {
     @GetMapping("/all")
     public String getAllContractCustomers(Model model,
                                           @RequestParam(defaultValue = "1") int pageNumber,
-                                          @RequestParam(defaultValue = "10") int pageSize) {
+                                          @RequestParam(defaultValue = "20") int pageSize) {
 
         var page = contractCustomerService.findAllContractCustomers(pageNumber, pageSize);
 
@@ -62,7 +62,7 @@ public class ContractCustomerController {
     @GetMapping("/all/sort")
     public String sort(Model model,
                        @RequestParam(defaultValue = "1") int pageNumber,
-                       @RequestParam(defaultValue = "10") int pageSize,
+                       @RequestParam(defaultValue = "20") int pageSize,
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
                        @RequestParam(defaultValue = "") String query) {

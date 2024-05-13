@@ -51,7 +51,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
     @Override
     public Page<ContractCustomerDTO> findAllContractCustomers(int pageNumber, int pageSize) {
         Sort sort = Sort.by(Sort.Direction.ASC, "companyName");
-        Pageable pageable = PageRequest.of(0, 25, sort);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
 
 
             List<ContractCustomerDTO> allCustomers = contractCustomerRepo.findAll().stream().map(this::convertToContractCustomerDto).toList();
