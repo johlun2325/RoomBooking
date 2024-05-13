@@ -6,7 +6,6 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
@@ -20,7 +19,7 @@ public class Shipper {
     @GeneratedValue
     private Long internalId;
 
-    private int id;
+    private Long id;
     private String email;
     private String companyName;
     private String contactName;
@@ -32,7 +31,7 @@ public class Shipper {
     private String phone;
     private String fax;
 
-    public Shipper(int id, String email, String companyName, String contactName, String contactTitle, String streetAddress, String city, String postalCode, String country, String phone, String fax) {
+    public Shipper(Long id, String email, String companyName, String contactName, String contactTitle, String streetAddress, String city, String postalCode, String country, String phone, String fax) {
         this.id = id;
         this.email = email;
         this.companyName = companyName;
