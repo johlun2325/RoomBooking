@@ -7,6 +7,7 @@ import com.example.roombooking.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +51,22 @@ public class ContractCustomerImpl implements ContractCustomerService {
     @Override
     public List<ContractCustomerDTO> findAllContractCustomers() {
         return contractCustomerRepo.findAll()
+                .stream()
+                .map(this::convertToContractCustomerDto)
+                .toList();
+    }
+
+    @Override
+    public List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn) {
+        return contractCustomerRepo.findAll(Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
+                .stream()
+                .map(this::convertToContractCustomerDto)
+                .toList();
+    }
+
+    @Override
+    public List<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn) {
+        return contractCustomerRepo.findAllByCompanyNameStartingWith(query, Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
                 .stream()
                 .map(this::convertToContractCustomerDto)
                 .toList();
