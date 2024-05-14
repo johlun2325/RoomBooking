@@ -105,11 +105,9 @@ public class BookingServiceImpl implements BookingService {
     public void addBooking(BookingDTO booking) {
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
+        BlacklistStatus status = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail());
 
-        boolean isBlacklisted = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail()).isPresent();
-        BlacklistStatus status = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail()).get();
-
-        if (status.isOk() || !isBlacklisted) {
+        if (status.isOk()) {
             bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
             LOGGER.info("Booking add");
             return;

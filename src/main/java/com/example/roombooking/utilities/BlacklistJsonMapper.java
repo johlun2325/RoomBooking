@@ -2,9 +2,12 @@ package com.example.roombooking.utilities;
 
 import com.example.roombooking.models.BlacklistStatus;
 import com.example.roombooking.models.BlacklistedCustomer;
+import com.example.roombooking.services.implementations.BookingServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ public class BlacklistJsonMapper {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    public Optional<BlacklistStatus> fetchBlacklistedStatusByEmail(String email) {
+    public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
 
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -34,9 +37,8 @@ public class BlacklistJsonMapper {
                     .build();
 
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            BlacklistStatus status = objectMapper.readValue(response.body(), BlacklistStatus.class);
 
-            return (status == null) ? Optional.empty() : Optional.of(status);
+            return objectMapper.readValue(response.body(), BlacklistStatus.class);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
