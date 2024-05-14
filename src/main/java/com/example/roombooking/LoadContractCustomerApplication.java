@@ -22,20 +22,26 @@ public class LoadContractCustomerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
         LOGGER.info("Starting to fetch contract customers from external service.");
+        var xmlModule = new JacksonXmlModule();
+        xmlModule.setDefaultUseWrapper(false);
+        ObjectMapper xmlMapper = new XmlMapper(xmlModule);
+
         try {
-            var module = new JacksonXmlModule();
-            module.setDefaultUseWrapper(false);
-            ObjectMapper xmlMapper = new XmlMapper(module);
             URL url = new URL("https://javaintegration.systementor.se/customers");
-
             ContractCustomers contractCustomers = xmlMapper.readValue(url, ContractCustomers.class);
-            LOGGER.info("Fetched {} contract customers successfully.", contractCustomers.getContractCustomers().size());
+            LOGGER.info("Fetched {} contract customers.", contractCustomers.getContractCustomers().size());
 
-            contractCustomerRepo.saveAll(contractCustomers.getContractCustomers());
-            LOGGER.info("Contract customers have been saved to the repository successfully.");
+            long newCustomersCount = contractCustomers.getContractCustomers()
+                    .stream()
+                    .filter(customer -> contractCustomerRepo.findById(customer.getId()).isEmpty())
+                    .peek(contractCustomerRepo::save)
+                    .count();
+
+            LOGGER.info("Saved {} new contract customers.", newCustomersCount);
         } catch (Exception e) {
-            LOGGER.error("Error fetching or saving contract customers", e);
+            LOGGER.error("An unexpected error occurred when fetching or saving contract customers", e);
         }
     }
 }

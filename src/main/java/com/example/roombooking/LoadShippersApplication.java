@@ -22,20 +22,25 @@ public class LoadShippersApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
         LOGGER.info("Starting to fetch shippers from external service.");
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule()); //vad gör denna
 
         try {
-            JsonMapper jsonMapper = new JsonMapper();
-            jsonMapper.registerModule(new JavaTimeModule()); //vad gör denna
             Shipper[] shippers = jsonMapper.readValue(
                     new URL("https://javaintegration.systementor.se/shippers"),
                     Shipper[].class);
-            LOGGER.info("Fetched {} shippers successfully.", shippers.length);
+            LOGGER.info("Fetched {} shippers.", shippers.length);
 
-            shipperRepo.saveAll(Arrays.asList(shippers));
-            LOGGER.info("Shippers have been saved to the repository successfully.");
+            long newShippersCount = Arrays.stream(shippers)
+                    .filter(shipper -> shipperRepo.findById(shipper.getId()).isEmpty())
+                    .peek(shipperRepo::save)
+                    .count();
+
+            LOGGER.info("Saved {} new shippers.", newShippersCount);
         } catch (Exception e) {
-            LOGGER.error("Error fetching or saving shippers", e);
+            LOGGER.error("An unexpected error occurred when fetching or saving shippers", e);
         }
     }
 }
