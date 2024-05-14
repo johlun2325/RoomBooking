@@ -4,27 +4,19 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
-import com.example.roombooking.models.BlacklistedCustomer;
-import com.example.roombooking.models.Booking;
-import com.example.roombooking.models.Customer;
-import com.example.roombooking.models.Room;
+import com.example.roombooking.models.*;
 import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.BlacklistJsonMapper;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
     private final Utility dateUtility = new DateUtility();
+    private final BlacklistJsonMapper blacklistJsonMapper = new BlacklistJsonMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -113,28 +106,15 @@ public class BookingServiceImpl implements BookingService {
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklist?email=stefa@aaasdadsdsd.com"))
-                .GET()
-                .build();
+        boolean isBlacklisted = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail()).isPresent();
+        BlacklistStatus status = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail()).get();
 
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenAccept(System.out::println)
-                .join();
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-
-        BlacklistedCustomer article1 = mapper.readValue(client, BlacklistedCustomer.class);
-
-
-
-        bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
-        LOGGER.info("Booking add");
+        if (status.isOk() || !isBlacklisted) {
+            bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
+            LOGGER.info("Booking add");
+            return;
+        }
+        LOGGER.error("Customer is blacklisted");
     }
 
     @Override

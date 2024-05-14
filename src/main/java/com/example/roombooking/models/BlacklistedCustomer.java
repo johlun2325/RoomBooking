@@ -1,5 +1,6 @@
 package com.example.roombooking.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,13 +17,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BlacklistedCustomer {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("email")
     private String email;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("group")
     private String group;
+
+    @JsonProperty("created")
     private LocalDateTime created = LocalDateTime.now();
+
+    @JsonProperty("ok")
     private boolean isOk;
 
 }
