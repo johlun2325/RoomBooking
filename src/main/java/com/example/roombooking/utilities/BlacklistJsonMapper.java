@@ -19,8 +19,9 @@ import java.util.concurrent.CompletionException;
 
 public class BlacklistJsonMapper {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+//    https://www.baeldung.com/java-httpclient-map-json-response
 
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public Optional<BlacklistStatus> fetchBlacklistedStatusByEmail(String email) {
 
