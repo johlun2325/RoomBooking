@@ -54,7 +54,9 @@ public class ContractCustomerImpl implements ContractCustomerService {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
 
 
-            List<ContractCustomerDTO> allCustomers = contractCustomerRepo.findAll().stream().map(this::convertToContractCustomerDto).toList();
+            List<ContractCustomerDTO> allCustomers = contractCustomerRepo.findAll()
+                    .stream()
+                    .map(this::convertToContractCustomerDto).toList();
             int start = (int) pageable.getOffset();
             int end = Math.min((start + pageable.getPageSize()), allCustomers.size());
 

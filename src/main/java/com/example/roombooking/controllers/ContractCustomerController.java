@@ -79,11 +79,10 @@ public class ContractCustomerController {
 
         Page<ContractCustomerDTO> page;
 
-        if (query.isEmpty()) {
-            page = contractCustomerService.findAllSorted(sortOrder, sortColumn, pageNumber, pageSize);
-        } else {
-            page = contractCustomerService.findAllByCompanyNameStartingWith(query.trim(), sortOrder, sortColumn, pageNumber, pageSize);
-        }
+        page = (query.isEmpty())
+                ? contractCustomerService.findAllSorted(sortOrder, sortColumn, pageNumber, pageSize)
+                : contractCustomerService.findAllByCompanyNameStartingWith(query.trim(), sortOrder, sortColumn, pageNumber, pageSize);
+
         model.addAttribute("allContractCustomers", page);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("totalPages",  page.getTotalPages());
