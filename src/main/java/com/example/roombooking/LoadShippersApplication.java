@@ -2,6 +2,7 @@ package com.example.roombooking;
 
 import com.example.roombooking.models.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
+import com.example.roombooking.services.ShipperService;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
@@ -18,29 +19,27 @@ import java.util.Arrays;
 public class LoadShippersApplication implements CommandLineRunner {
 
     private final ShipperRepo shipperRepo;
+    private final ShipperService service;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
+    String url = "https://javaintegration.systementor.se/shippers";
 
     @Override
     public void run(String... args) {
 
-        LOGGER.info("Starting to fetch shippers from external service.");
-        JsonMapper jsonMapper = new JsonMapper();
-        jsonMapper.registerModule(new JavaTimeModule()); //vad gör denna
+        Shipper[] shippers = service.fetchShippers(url);
 
-        try {
-            Shipper[] shippers = jsonMapper.readValue(
-                    new URL("https://javaintegration.systementor.se/shippers"),
-                    Shipper[].class);
-            LOGGER.info("Fetched {} shippers.", shippers.length);
+        if (shippers != null) {
 
             long newShippersCount = Arrays.stream(shippers)
                     .filter(shipper -> shipperRepo.findById(shipper.getId()).isEmpty())
                     .peek(shipperRepo::save)
                     .count();
 
-            LOGGER.info("Saved {} new shippers.", newShippersCount);
-        } catch (Exception e) {
-            LOGGER.error("An unexpected error occurred when fetching or saving shippers", e);
+            LOGGER.info("Saved {} new shippers", newShippersCount);
+
+        }
+        else {
+            LOGGER.info("No shippers were found");
         }
     }
 }
