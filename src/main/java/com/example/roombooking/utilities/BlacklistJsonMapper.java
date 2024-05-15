@@ -1,24 +1,14 @@
 package com.example.roombooking.utilities;
 
 import com.example.roombooking.models.BlacklistStatus;
-import com.example.roombooking.models.BlacklistedCustomer;
-import com.example.roombooking.services.implementations.BookingServiceImpl;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionException;
 
 public class BlacklistJsonMapper {
 
@@ -29,15 +19,15 @@ public class BlacklistJsonMapper {
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
 
         HttpResponse<String> response;
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklistcheck/%s".formatted(email))) // group jeri
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklistcheck/%s".formatted(email))) // group jeri
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
 
+        try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             return objectMapper.readValue(response.body(), BlacklistStatus.class);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
