@@ -1,7 +1,9 @@
 package com.example.roombooking;
 
+import com.example.roombooking.models.ContractCustomer;
 import com.example.roombooking.models.ContractCustomers;
 import com.example.roombooking.repos.ContractCustomerRepo;
+import com.example.roombooking.services.ContractCustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -12,36 +14,34 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.net.URL;
+import java.util.List;
 
 @ComponentScan
 @RequiredArgsConstructor
 public class LoadContractCustomerApplication implements CommandLineRunner {
 
-    private final ContractCustomerRepo contractCustomerRepo;
+    private final ContractCustomerRepo repo;
+    private final ContractCustomerService service;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
     @Override
     public void run(String... args) {
 
-        LOGGER.info("Starting to fetch contract customers from external service.");
-        var xmlModule = new JacksonXmlModule();
-        xmlModule.setDefaultUseWrapper(false);
-        ObjectMapper xmlMapper = new XmlMapper(xmlModule);
+        List<ContractCustomer> customers = service.fetchContractCustomers();
 
-        try {
-            URL url = new URL("https://javaintegration.systementor.se/customers");
-            ContractCustomers contractCustomers = xmlMapper.readValue(url, ContractCustomers.class);
-            LOGGER.info("Fetched {} contract customers.", contractCustomers.getContractCustomers().size());
+        if (customers != null) {
 
-            long newCustomersCount = contractCustomers.getContractCustomers()
+            long newCustomersCount = customers
                     .stream()
-                    .filter(customer -> contractCustomerRepo.findById(customer.getId()).isEmpty())
-                    .peek(contractCustomerRepo::save)
+                    .filter(customer -> repo.findById(customer.getId()).isEmpty())
+                    .peek(repo::save)
                     .count();
 
             LOGGER.info("Saved {} new contract customers.", newCustomersCount);
-        } catch (Exception e) {
-            LOGGER.error("An unexpected error occurred when fetching or saving contract customers", e);
+
+        }
+        else {
+            LOGGER.info("No customers were found");
         }
     }
 }

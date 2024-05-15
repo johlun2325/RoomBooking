@@ -2,20 +2,37 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.ContractCustomerDTO;
 import com.example.roombooking.models.ContractCustomer;
+import com.example.roombooking.models.ContractCustomers;
 import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.services.ContractCustomerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.xml.catalog.Catalog;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class ContractCustomerImpl implements ContractCustomerService {
+
+    @Autowired
+    ContractCustomerImpl(XmlStreamProvider xmlStreamProvider, ContractCustomerRepo contractCustomerRepo1) {
+        this.xmlStreamProvider = xmlStreamProvider;
+        this.contractCustomerRepo = contractCustomerRepo1;
+    }
+
+    XmlStreamProvider xmlStreamProvider;
 
     private final ContractCustomerRepo contractCustomerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
@@ -70,5 +87,26 @@ public class ContractCustomerImpl implements ContractCustomerService {
                 .stream()
                 .map(this::convertToContractCustomerDto)
                 .toList();
+    }
+
+    @Override
+    public List<ContractCustomer> fetchContractCustomers() {
+        LOGGER.info("Starting to fetch contract customers from external service.");
+
+        var xmlModule = new JacksonXmlModule();
+        xmlModule.setDefaultUseWrapper(false);
+        ObjectMapper xmlMapper = new XmlMapper(xmlModule);
+
+        try {
+            InputStream stream = xmlStreamProvider.getDataStream();
+            ContractCustomers contractCustomers = xmlMapper.readValue(stream, ContractCustomers.class);
+            LOGGER.info("Fetched {} contract customers.", contractCustomers.getContractCustomers().size());
+
+            return contractCustomers.getContractCustomers();
+
+        } catch (IOException e) {
+            LOGGER.error("An unexpected error occurred when fetching or saving contract customers", e);
+        }
+        return null;
     }
 }

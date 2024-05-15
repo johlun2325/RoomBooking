@@ -19,4 +19,5 @@ public interface ContractCustomerService {
     List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn);
 
     List<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn);
+    List<ContractCustomer> fetchContractCustomers();
 }
