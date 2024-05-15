@@ -33,7 +33,7 @@ public class RoomBookingApplication {
 
         if (args.length == 0) {
             SpringApplication.run(RoomBookingApplication.class, args);
-        } else if (Objects.equals(args[0], "LoadShippers")) {
+        } else if (Objects.equals(args[0], "loadShippersApp")) {
             SpringApplication application = new SpringApplication(LoadShippersApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
@@ -41,7 +41,12 @@ public class RoomBookingApplication {
             SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
+        } else if (Objects.equals(args[0], "loadMessagesApp")) {
+            SpringApplication application = new SpringApplication(LoadMessagesApplication.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
         }
+
     }
 
 //    @Bean
@@ -63,7 +68,16 @@ public class RoomBookingApplication {
 //            Room room3 = new Room(2995.95, doubleRoom);
 //            Room room4 = new Room(3995.95, largeDoubleRoom);
 //
-//            roomRepo.saveAll(List.of(room1, room2, room3, room4));
+//            Room room5 = new Room(995.95, singleRoom);
+//            Room room6 = new Room(995.95, singleRoom);
+//            Room room7 = new Room(2995.95, doubleRoom);
+//            Room room8 = new Room(2995.95, doubleRoom);
+//            Room room9 = new Room(2995.95, doubleRoom);
+//            Room room10 = new Room(3995.95, largeDoubleRoom);
+//
+//            roomRepo.saveAll(
+//                    List.of(room1, room2, room3, room4, room5,
+//                            room6, room7, room8, room9, room10));
 //
 //            Customer customer1 = new Customer("John Doe", "861023-4531", "john.doe@email.com");
 //            Customer customer2 = new Customer("Mary Smith", "920510-5261", "mary.smith@email.com");
