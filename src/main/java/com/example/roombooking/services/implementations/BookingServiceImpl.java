@@ -9,7 +9,6 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.utilities.BlacklistJsonMapper;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
     private final Utility dateUtility = new DateUtility();
-    private final BlacklistJsonMapper blacklistJsonMapper = new BlacklistJsonMapper();
+    private final BlacklistService blacklistService = new BlacklistService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -106,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
-        BlacklistStatus status = blacklistJsonMapper.fetchBlacklistedStatusByEmail(customer.getEmail());
+        BlacklistStatus status = blacklistService.fetchBlacklistedStatusByEmail(customer.getEmail());
 
         if (status.isOk()) {
             bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
