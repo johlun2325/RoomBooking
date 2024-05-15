@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,12 +25,12 @@ import java.util.NoSuchElementException;
 public class ContractCustomerImpl implements ContractCustomerService {
 
     @Autowired
-    ContractCustomerImpl(StreamProvider xmlStreamProvider, ContractCustomerRepo contractCustomerRepo1) {
-        this.xmlStreamProvider = xmlStreamProvider;
+    ContractCustomerImpl(StreamProvider streamProvider, ContractCustomerRepo contractCustomerRepo1) {
+        this.streamProvider = streamProvider;
         this.contractCustomerRepo = contractCustomerRepo1;
     }
 
-    StreamProvider xmlStreamProvider;
+    StreamProvider streamProvider;
 
     private final ContractCustomerRepo contractCustomerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
@@ -98,7 +97,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
         ObjectMapper xmlMapper = new XmlMapper(xmlModule);
 
         try {
-            InputStream stream = xmlStreamProvider.getDataStream(url);
+            InputStream stream = streamProvider.getDataStream(url);
             ContractCustomers contractCustomers = xmlMapper.readValue(stream, ContractCustomers.class);
             LOGGER.info("Fetched {} contract customers.", contractCustomers.getContractCustomers().size());
 
