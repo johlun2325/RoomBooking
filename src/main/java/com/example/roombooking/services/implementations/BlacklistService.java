@@ -31,105 +31,83 @@ public class BlacklistService {
     private final ObjectMapper jsonMapper = new JsonMapper().registerModule(new JavaTimeModule());
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacklistService.class);
 
+    private boolean isBlacklisted(String email) {
+        var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
+        return allBlacklistedCustomers
+                .stream()
+                .anyMatch(customer -> customer.getEmail().equals(email));
+    }
 
-//    private HttpResponse<String> responseHandler(HttpRequest request) {
-//        try {
-//            return HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString()).get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private <T> T readJsonValue(HttpResponse<String> response, TypeReference<T> typeReference) {
-//        try {
-//            return jsonMapper.readValue(response.body(), typeReference);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private HttpResponse<String> responseHandler(HttpRequest request) {
+        try {
+            return HttpClient.newHttpClient()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private <T> T readJsonValue(HttpResponse<String> response, Class<T> clazz) {
+        try {
+            return jsonMapper.readValue(response.body(), clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
-        HttpResponse<String> response;
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklistcheck/%s".formatted(email)))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
 
-        try {
-            response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).get();
-            return jsonMapper.readValue(response.body(), BlacklistStatus.class);
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return readJsonValue(responseHandler(request), BlacklistStatus.class);
     }
 
     public List<BlacklistedCustomer> fetchAllBlacklistedCustomers() {
-        HttpResponse<String> response;
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
 
-        try {
-            response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).get();
-            return Arrays.stream(jsonMapper.readValue(response.body(), BlacklistedCustomer[].class)).toList();
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return Arrays.stream(readJsonValue(responseHandler(request), BlacklistedCustomer[].class)).toList();
     }
 
     public String addCustomerToBlacklist(BlacklistCustomerDTO blacklistCustomerDTO) {
-
-        var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
-        boolean isBlacklisted = allBlacklistedCustomers.stream().anyMatch(customer -> customer.getEmail().equals(blacklistCustomerDTO.getEmail()));
-
-        if (isBlacklisted) return "That customer is already blacklisted";
-
-        HttpResponse<String> response;
-        HttpClient client = HttpClient.newHttpClient();
+        if (isBlacklisted(blacklistCustomerDTO.getEmail()))
+            return "That customer is already blacklisted";
+        
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
                         .formatted(blacklistCustomerDTO.getEmail(), blacklistCustomerDTO.getName(), blacklistCustomerDTO.isOk())))
                 .build();
-        try {
-            response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).get();
-            return (response.statusCode() >= 200 && response.statusCode() < 300)
-                    ? "Successfully added customer to blacklist"
-                    : "Error while adding customer to blacklist";
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+
+        int status = responseHandler(request).statusCode();
+        return (status >= 200 && status < 300)
+                ? "Successfully added customer to blacklist"
+                : "Error while adding customer to blacklist";
     }
 
     public String updateCustomerToBlacklist(String email, String name, boolean isOk) {
+        if (!isBlacklisted(email))
+            return "That customer is not blacklisted";
 
-        var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
-        boolean isBlacklisted = allBlacklistedCustomers.stream().anyMatch(customer -> customer.getEmail().equals(email));
-
-        if (!isBlacklisted) return "That customer is not blacklisted";
-
-        HttpResponse<String> response;
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(email)))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
                         .formatted(email, name, isOk)))
                 .build();
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return (response.statusCode() >= 200 && response.statusCode() < 300)
-                    ? "Successfully updated customer in blacklist"
-                    : "Error while updating customer in blacklist";
-        } catch (InterruptedException | IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        int status = responseHandler(request).statusCode();
+        return (status >= 200 && status < 300)
+                ? "Successfully updated customer in blacklist"
+                : "Error while updating customer in blacklist";
     }
 
 }
