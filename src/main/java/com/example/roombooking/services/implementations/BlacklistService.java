@@ -4,7 +4,6 @@ import com.example.roombooking.dto.BlacklistCustomerDTO;
 import com.example.roombooking.models.BlacklistStatus;
 import com.example.roombooking.models.BlacklistedCustomer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -12,18 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-
-//    https://www.baeldung.com/java-httpclient-map-json-response
 
 @Service
 public class BlacklistService {
@@ -33,13 +27,16 @@ public class BlacklistService {
 
     private boolean isBlacklisted(String email) {
         var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
-        return allBlacklistedCustomers
+        boolean isBlacklisted = allBlacklistedCustomers
                 .stream()
                 .anyMatch(customer -> customer.getEmail().equals(email));
+        LOGGER.info("Checking blacklist status for email {}: {}", email, (isBlacklisted ? "Blacklisted" : "Not blacklisted"));
+        return isBlacklisted;
     }
 
     private HttpResponse<String> responseHandler(HttpRequest request) {
         try {
+            LOGGER.info("Sending HTTP request to: {}", request.uri());
             return HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .get();
@@ -50,10 +47,23 @@ public class BlacklistService {
 
     private <T> T readJsonValue(HttpResponse<String> response, Class<T> clazz) {
         try {
+            LOGGER.info("Reading JSON response");
             return jsonMapper.readValue(response.body(), clazz);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String message(int status, String successMessage) {
+        String message = switch (status / 100) {
+            case 2 -> successMessage;
+            case 4 -> "Client error. Please check your request.";
+            case 5 -> "Server error. Please try again later.";
+            default -> "Unexpected status: " + status;
+        };
+        LOGGER.info("Received response status: {}", status);
+        LOGGER.info("Response message: {}", message);
+        return message;
     }
 
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
@@ -63,6 +73,7 @@ public class BlacklistService {
                 .GET()
                 .build();
 
+        LOGGER.info("Fetching blacklist status for email: {}", email);
         return readJsonValue(responseHandler(request), BlacklistStatus.class);
     }
 
@@ -73,13 +84,17 @@ public class BlacklistService {
                 .GET()
                 .build();
 
+        LOGGER.info("Fetching all blacklisted customers");
         return Arrays.stream(readJsonValue(responseHandler(request), BlacklistedCustomer[].class)).toList();
     }
 
     public String addCustomerToBlacklist(BlacklistCustomerDTO blacklistCustomerDTO) {
-        if (isBlacklisted(blacklistCustomerDTO.getEmail()))
-            return "That customer is already blacklisted";
-        
+        String message;
+        if (isBlacklisted(blacklistCustomerDTO.getEmail())) {
+            message = "Customer with email %s, already blacklisted".formatted(blacklistCustomerDTO.getEmail());
+            return message;
+        }
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
                 .header("Content-Type", "application/json")
@@ -87,27 +102,24 @@ public class BlacklistService {
                         .formatted(blacklistCustomerDTO.getEmail(), blacklistCustomerDTO.getName(), blacklistCustomerDTO.isOk())))
                 .build();
 
-        int status = responseHandler(request).statusCode();
-        return (status >= 200 && status < 300)
-                ? "Successfully added customer to blacklist"
-                : "Error while adding customer to blacklist";
+        message = "Customer with email %s, successfully added in Blacklist".formatted(blacklistCustomerDTO.getEmail());
+        return message(responseHandler(request).statusCode(), message);
     }
 
     public String updateCustomerToBlacklist(String email, String name, boolean isOk) {
-        if (!isBlacklisted(email))
-            return "That customer is not blacklisted";
+        String message;
+        if (!isBlacklisted(email)) {
+            message = "Customer with email %s is not blacklisted".formatted(email);
+            return message;
+        }
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(email)))
                 .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
-                        .formatted(email, name, isOk)))
+                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}".formatted(email, name, isOk)))
                 .build();
 
-        int status = responseHandler(request).statusCode();
-        return (status >= 200 && status < 300)
-                ? "Successfully updated customer in blacklist"
-                : "Error while updating customer in blacklist";
+        message = "Customer with email %s, successfully updated in Blacklist".formatted(email);
+        return message(responseHandler(request).statusCode(), message);
     }
-
 }
