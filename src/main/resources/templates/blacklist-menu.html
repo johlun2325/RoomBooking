@@ -19,6 +19,9 @@
             width: 400px;
         }
 
+        a {
+            all: unset;
+        }
     </style>
 </head>
 <body>
@@ -31,30 +34,40 @@
     <div class="row h-100 justify-content-center align-items-center" style="margin-top: -150px">
         <div class="col-md-8 text-center adjusted-position">
             <h1 class="text-center mb-5" style="font-size: 7em" th:text="${header}"></h1>
+
             <a href="/blacklist/addToBlacklist">
                 <button class="btn btn-danger large-button me-3 rounded-5" id="ban-button">
                     <i class="bi bi-ban"></i>
+                    <span th:text="${banButtonText}"></span>
                 </button>
             </a>
-            <a>
-                <button class="btn btn-secondary large-button rounded-5" th:text="${updateButtonText}"
-                        id="update-button">
+            <a href="/blacklist/updateToBlacklist">
+                <button class="btn btn-secondary large-button rounded-5" id="update-button">
                     <i class="bi bi-person-fill-slash"></i>
+                    <span th:text="${updateButtonText}"></span>
                 </button>
             </a>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-<!--<script>-->
-<!--    document.getElementById('ban-button').addEventListener('click', function () {-->
-<!--        window.location.href = 'blacklist-ban.html';-->
-<!--    });-->
+<div class="position-fixed bottom-0 end-0 p-3">
+    <div id="alertMessage">
+        <div>
+            <span th:text="${message}" style="font-size: 2em"></span>
+        </div>
+    </div>
+</div>
 
-<!--    document.getElementById('update-button').addEventListener('click', function () {-->
-<!--        window.location.href = 'blacklist-update.html';-->
-<!--    });-->
-<!--</script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const alertDiv = document.getElementById("alertMessage");
+
+    function hideAlert() {
+        alertDiv.style.display = "none";
+    }
+
+    setTimeout(hideAlert, 5000);
+</script>
 </body>
 </html>
