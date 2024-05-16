@@ -75,7 +75,7 @@ public class BlacklistController {
                              @RequestParam String name,
                              @RequestParam(defaultValue = "false") boolean isOk) {
 
-        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(email, name, isOk));
+        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(new BlacklistCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");

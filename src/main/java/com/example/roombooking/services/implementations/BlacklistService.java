@@ -106,20 +106,21 @@ public class BlacklistService {
         return message(responseHandler(request).statusCode(), message);
     }
 
-    public String updateCustomerToBlacklist(String email, String name, boolean isOk) {
+    public String updateCustomerToBlacklist(BlacklistCustomerDTO blacklistCustomerDTO) {
         String message;
-        if (!isBlacklisted(email)) {
-            message = "Customer with email %s is not blacklisted".formatted(email);
+        if (!isBlacklisted(blacklistCustomerDTO.getEmail())) {
+            message = "Customer with email %s is not blacklisted".formatted(blacklistCustomerDTO.getEmail());
             return message;
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(email)))
+                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(blacklistCustomerDTO.getEmail())))
                 .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}".formatted(email, name, isOk)))
+                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
+                        .formatted(blacklistCustomerDTO.getEmail(), blacklistCustomerDTO.getName(), blacklistCustomerDTO.isOk())))
                 .build();
 
-        message = "Customer with email %s, successfully updated in Blacklist".formatted(email);
+        message = "Customer with email %s, successfully updated in Blacklist".formatted(blacklistCustomerDTO.getEmail());
         return message(responseHandler(request).statusCode(), message);
     }
 }
