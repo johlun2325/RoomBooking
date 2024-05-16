@@ -32,8 +32,6 @@ public class BlacklistController {
         model.addAttribute("header", "Spärra kund");
         model.addAttribute("actionUrl", "ban");
         model.addAttribute("emailText", "Fyll i kundens e-postadress");
-        model.addAttribute("showNameField", true);
-        model.addAttribute("nameRequired", true);
         model.addAttribute("nameText", "Fyll i kundens fullständiga namn");
         model.addAttribute("isOkText", "OK");
         model.addAttribute("submitButtonText", "Skicka");
@@ -63,8 +61,7 @@ public class BlacklistController {
         model.addAttribute("header", "Uppdatera kund");
         model.addAttribute("actionUrl", "update");
         model.addAttribute("emailText", "Fyll i kundens e-postadress");
-        model.addAttribute("showNameField", false);
-        model.addAttribute("nameRequired", false);
+        model.addAttribute("nameText", "Fyll i kundens fullständiga namn");
         model.addAttribute("isOkText", "OK");
         model.addAttribute("submitButtonText", "Uppdatera");
 
@@ -75,9 +72,10 @@ public class BlacklistController {
     @RequestMapping("/update")
     String updateToBlacklist(Model model,
                              @RequestParam String email,
+                             @RequestParam String name,
                              @RequestParam(defaultValue = "false") boolean isOk) {
 
-        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(email, isOk));
+        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(email, name, isOk));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");

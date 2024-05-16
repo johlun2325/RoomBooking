@@ -107,7 +107,7 @@ public class BlacklistService {
         }
     }
 
-    public String updateCustomerToBlacklist(String email, boolean isOk) {
+    public String updateCustomerToBlacklist(String email, String name, boolean isOk) {
 
         var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
         boolean isBlacklisted = allBlacklistedCustomers.stream().anyMatch(customer -> customer.getEmail().equals(email));
@@ -119,8 +119,8 @@ public class BlacklistService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(email)))
                 .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"isOk\":\"%s\"}"
-                        .formatted(email, isOk)))
+                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
+                        .formatted(email, name, isOk)))
                 .build();
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());

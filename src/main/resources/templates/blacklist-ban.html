@@ -26,9 +26,9 @@
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
 
-                <div class="mb-3"  th:if="${showNameField}">
+                <div class="mb-3">
                     <label for="name" class="form-label" th:text="${nameText}"></label>
-                    <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." th:required="${nameRequired}">
+                    <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces.">
                 </div>
 
                 <div class="mb-3">
