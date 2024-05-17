@@ -33,7 +33,7 @@ public class BlacklistController {
         model.addAttribute("actionUrl", "ban");
         model.addAttribute("emailText", "Fyll i kundens e-postadress");
         model.addAttribute("nameText", "Fyll i kundens fullständiga namn");
-        model.addAttribute("isOkText", "OK");
+        model.addAttribute("updatingStatus", false);
         model.addAttribute("submitButtonText", "Skicka");
 
         return "blacklist-ban";
@@ -63,6 +63,7 @@ public class BlacklistController {
         model.addAttribute("emailText", "Fyll i kundens e-postadress");
         model.addAttribute("nameText", "Fyll i kundens fullständiga namn");
         model.addAttribute("isOkText", "OK");
+        model.addAttribute("updatingStatus", true);
         model.addAttribute("submitButtonText", "Uppdatera");
 
         return "blacklist-ban";
