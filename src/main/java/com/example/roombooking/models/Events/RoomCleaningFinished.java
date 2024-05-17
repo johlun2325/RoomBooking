@@ -19,7 +19,7 @@ public class RoomCleaningFinished extends Message{
     @Column(name = "cleaning_by_user", nullable = true)
     public String cleaningByUser;
     @Override
-    public void getMessage() {
-
+    public String getMessage() {
+        return "Städning avslutat av " +  getCleaningByUser() + " " + getTimeStamp();
     }
 }

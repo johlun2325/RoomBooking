@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+//@Component
 @ComponentScan
 @RequiredArgsConstructor
 public class LoadMessagesApplication implements CommandLineRunner {

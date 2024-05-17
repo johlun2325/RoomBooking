@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @DiscriminatorValue("RoomClosed")
 public class RoomClosed extends Message{
     @Override
-    public void getMessage() {
-
+    public String getMessage() {
+        return "Dörren stängd " + getTimeStamp();
     }
 }

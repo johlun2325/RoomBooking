@@ -45,6 +45,6 @@ public abstract class Message {
     @Column(name = "room_no", nullable = false)
     public String roomNo;
 
-    public abstract void getMessage();
+    public abstract String getMessage();
 
 }

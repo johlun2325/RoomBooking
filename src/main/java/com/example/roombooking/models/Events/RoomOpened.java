@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class RoomOpened extends Message{
 
     @Override
-    public void getMessage() {
-
+    public String getMessage() {
+        return "Dörren öppnad " + getTimeStamp();
     }
 }
