@@ -1,9 +1,7 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.LoadContractCustomerApplication;
-import com.example.roombooking.models.ContractCustomers;
-import com.example.roombooking.models.Shipper;
-import com.example.roombooking.repos.ContractCustomerRepo;
+import com.example.roombooking.models.External.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
 import com.example.roombooking.services.ShipperService;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 @Service
 public class ShipperServiceImpl implements ShipperService {

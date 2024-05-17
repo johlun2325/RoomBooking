@@ -63,7 +63,7 @@ public class EventServiceImpl implements EventService {
 
             });
 
-            Thread.sleep(5000); // Adjust this time as needed
+            Thread.sleep(5000);
             return messages;
 
         } catch (IOException | TimeoutException e) {
@@ -71,7 +71,6 @@ public class EventServiceImpl implements EventService {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
 
         return null;
     }

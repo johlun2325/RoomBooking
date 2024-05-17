@@ -1,19 +1,14 @@
 package com.example.roombooking;
 
-import com.example.roombooking.models.ContractCustomer;
-import com.example.roombooking.models.ContractCustomers;
+import com.example.roombooking.models.External.ContractCustomer;
 import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.services.ContractCustomerService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.net.URL;
 import java.util.List;
 
 @ComponentScan

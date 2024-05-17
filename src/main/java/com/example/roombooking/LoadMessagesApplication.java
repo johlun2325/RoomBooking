@@ -25,9 +25,9 @@ public class LoadMessagesApplication implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd";
 
         try {
-            String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd";
             List<Message> messages = service.fetchEventsFromQueue(queueName);
             messageRepo.saveAll(messages);
             LOGGER.info("Saved " + messages.size() + " messages to database");

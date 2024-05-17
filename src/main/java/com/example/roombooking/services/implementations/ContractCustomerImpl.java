@@ -1,8 +1,8 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.ContractCustomerDTO;
-import com.example.roombooking.models.ContractCustomer;
-import com.example.roombooking.models.ContractCustomers;
+import com.example.roombooking.models.External.ContractCustomer;
+import com.example.roombooking.models.External.ContractCustomers;
 import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.services.ContractCustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
