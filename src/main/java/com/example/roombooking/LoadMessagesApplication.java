@@ -1,7 +1,9 @@
 package com.example.roombooking;
 
-import com.example.roombooking.models.Messages.*;
-import com.example.roombooking.repos.MessageRepo;
+import com.example.roombooking.models.Events.*;
+import com.example.roombooking.repos.EventRepo;
+import com.example.roombooking.services.EventService;
+import com.example.roombooking.services.implementations.ContractCustomerImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -10,58 +12,47 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @ComponentScan
 @RequiredArgsConstructor
 public class LoadMessagesApplication implements CommandLineRunner {
 
-    private String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd"; //vårt kö-id
-    private final MessageRepo messageRepo;
+//    private String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd"; //vårt kö-id
+    private final EventRepo messageRepo;
+    private final EventService service;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
+
+    String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd"; //vårt kö-id
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
 
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
-
             try {
-                Message msg = mapper.readValue(message, Message.class);
-                messageRepo.save(msg);
-                System.out.println(" [x] Saved message to database");
+                List<Message> messages = service.fetchEventsFromQueue(queueName);
+                messageRepo.saveAll(messages);
+                LOGGER.info("Saved " + messages.size() + " messages to database");
+
             } catch (Exception e) {
-                System.err.println(" [!] Failed to save message: " + e.getMessage());
+                LOGGER.warn("Failed to save messages to database");
                 e.printStackTrace();
             }
 
-        };
-
-        channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
-
-        });
 
     }
 
 
     /*
-    Messages looks like
+    Events looks like
  [x] Received '{"type":"RoomClosed","TimeStamp":"2024-05-14T16:16:45.510946154","RoomNo":"10"}'
  [x] Received '{"type":"RoomCleaningFinished","TimeStamp":"2024-05-14T15:28:45.5233706","RoomNo":"5","CleaningByUser":"Devona Larkin PhD"}'
  [x] Received '{"type":"RoomCleaningFinished","TimeStamp":"2024-05-14T14:56:45.541275605","RoomNo":"4","CleaningByUser":"Tia Barton"}'

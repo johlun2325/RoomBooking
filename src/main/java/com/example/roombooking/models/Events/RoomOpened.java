@@ -1,4 +1,4 @@
-package com.example.roombooking.models.Messages;
+package com.example.roombooking.models.Events;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

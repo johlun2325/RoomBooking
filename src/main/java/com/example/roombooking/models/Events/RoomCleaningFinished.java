@@ -1,4 +1,4 @@
-package com.example.roombooking.models.Messages;
+package com.example.roombooking.models.Events;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
