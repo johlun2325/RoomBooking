@@ -5,6 +5,7 @@ import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.*;
+import com.example.roombooking.models.External.BlacklistStatus;
 import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;

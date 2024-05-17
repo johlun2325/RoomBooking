@@ -1,4 +1,4 @@
-package com.example.roombooking.models;
+package com.example.roombooking.models.External;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlacklistedCustomer {
+public class Blacklisted {
 
     @JsonProperty("id")
     private Long id;

@@ -1,8 +1,8 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.BlacklistCustomerDTO;
-import com.example.roombooking.models.BlacklistStatus;
-import com.example.roombooking.models.BlacklistedCustomer;
+import com.example.roombooking.dto.BlacklistedDTO;
+import com.example.roombooking.models.External.BlacklistStatus;
+import com.example.roombooking.models.External.Blacklisted;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -77,7 +77,7 @@ public class BlacklistService {
         return readJsonValue(responseHandler(request), BlacklistStatus.class);
     }
 
-    public List<BlacklistedCustomer> fetchAllBlacklistedCustomers() {
+    public List<Blacklisted> fetchAllBlacklistedCustomers() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
                 .header("Content-Type", "application/json")
@@ -85,13 +85,13 @@ public class BlacklistService {
                 .build();
 
         LOGGER.info("Fetching all blacklisted customers");
-        return Arrays.stream(readJsonValue(responseHandler(request), BlacklistedCustomer[].class)).toList();
+        return Arrays.stream(readJsonValue(responseHandler(request), Blacklisted[].class)).toList();
     }
 
-    public String addCustomerToBlacklist(BlacklistCustomerDTO blacklistCustomerDTO) {
+    public String addCustomerToBlacklist(BlacklistedDTO blacklistedDTO) {
         String message;
-        if (isBlacklisted(blacklistCustomerDTO.getEmail())) {
-            message = "Customer with email %s, already blacklisted".formatted(blacklistCustomerDTO.getEmail());
+        if (isBlacklisted(blacklistedDTO.getEmail())) {
+            message = "Customer with email %s, already blacklisted".formatted(blacklistedDTO.getEmail());
             return message;
         }
 
@@ -99,28 +99,28 @@ public class BlacklistService {
                 .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
-                        .formatted(blacklistCustomerDTO.getEmail(), blacklistCustomerDTO.getName(), blacklistCustomerDTO.isOk())))
+                        .formatted(blacklistedDTO.getEmail(), blacklistedDTO.getName(), blacklistedDTO.isOk())))
                 .build();
 
-        message = "Customer with email %s, successfully added in Blacklist".formatted(blacklistCustomerDTO.getEmail());
+        message = "Customer with email %s, successfully added in Blacklist".formatted(blacklistedDTO.getEmail());
         return message(responseHandler(request).statusCode(), message);
     }
 
-    public String updateCustomerToBlacklist(BlacklistCustomerDTO blacklistCustomerDTO) {
+    public String updateCustomerToBlacklist(BlacklistedDTO blacklistedDTO) {
         String message;
-        if (!isBlacklisted(blacklistCustomerDTO.getEmail())) {
-            message = "Customer with email %s is not blacklisted".formatted(blacklistCustomerDTO.getEmail());
+        if (!isBlacklisted(blacklistedDTO.getEmail())) {
+            message = "Customer with email %s is not blacklisted".formatted(blacklistedDTO.getEmail());
             return message;
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(blacklistCustomerDTO.getEmail())))
+                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(blacklistedDTO.getEmail())))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
-                        .formatted(blacklistCustomerDTO.getEmail(), blacklistCustomerDTO.getName(), blacklistCustomerDTO.isOk())))
+                        .formatted(blacklistedDTO.getEmail(), blacklistedDTO.getName(), blacklistedDTO.isOk())))
                 .build();
 
-        message = "Customer with email %s, successfully updated in Blacklist".formatted(blacklistCustomerDTO.getEmail());
+        message = "Customer with email %s, successfully updated in Blacklist".formatted(blacklistedDTO.getEmail());
         return message(responseHandler(request).statusCode(), message);
     }
 }

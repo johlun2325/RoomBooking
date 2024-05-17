@@ -1,6 +1,5 @@
 package com.example.roombooking.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BlacklistCustomerDTO {
+public class BlacklistedDTO {
 
     private String email;
     private String name;
