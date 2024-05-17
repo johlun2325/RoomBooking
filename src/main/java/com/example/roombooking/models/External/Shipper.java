@@ -1,4 +1,4 @@
-package com.example.roombooking.models;
+package com.example.roombooking.models.External;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

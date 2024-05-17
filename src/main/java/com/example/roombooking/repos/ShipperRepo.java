@@ -1,7 +1,6 @@
 package com.example.roombooking.repos;
 
-import com.example.roombooking.models.Shipper;
-import org.springframework.context.annotation.ComponentScan;
+import com.example.roombooking.models.External.Shipper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.example.roombooking;
 
-import com.example.roombooking.models.Shipper;
+import com.example.roombooking.models.External.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -1,4 +1,4 @@
-package com.example.roombooking.models;
+package com.example.roombooking.models.External;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;

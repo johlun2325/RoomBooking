@@ -47,8 +47,11 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    //testImpl h2 - se backend3start
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+//backend3start integration test config

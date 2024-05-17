@@ -1,5 +1,7 @@
 package com.example.roombooking;
 
+import com.example.roombooking.models.Messages.*;
+import com.example.roombooking.repos.MessageRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -10,12 +12,15 @@ import com.rabbitmq.client.DeliverCallback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
+@Component
 @ComponentScan
 @RequiredArgsConstructor
 public class LoadMessagesApplication implements CommandLineRunner {
 
     private String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd"; //vårt kö-id
+    private final MessageRepo messageRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -36,9 +41,20 @@ public class LoadMessagesApplication implements CommandLineRunner {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
-            // https://www.baeldung.com/jackson-annotations#bd-jackson-polymorphic-type-handling-annotations
+
+            try {
+                Message msg = mapper.readValue(message, Message.class);
+                messageRepo.save(msg);
+                System.out.println(" [x] Saved message to database");
+            } catch (Exception e) {
+                System.err.println(" [!] Failed to save message: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         };
+
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+
         });
 
     }
@@ -58,4 +74,6 @@ public class LoadMessagesApplication implements CommandLineRunner {
  [x] Received '{"type":"RoomCleaningFinished","TimeStamp":"2024-05-15T00:57:45.671829536","RoomNo":"3","CleaningByUser":"Erin McDermott"}'
  [x] Received '{"type":"RoomOpened","TimeStamp":"2024-05-15T11:32:45.689579392","RoomNo":"8"}'
     * */
+
+
 }

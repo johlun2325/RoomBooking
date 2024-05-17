@@ -1,6 +1,6 @@
 package com.example.roombooking;
 
-import com.example.roombooking.models.ContractCustomers;
+import com.example.roombooking.models.External.ContractCustomers;
 import com.example.roombooking.repos.ContractCustomerRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;

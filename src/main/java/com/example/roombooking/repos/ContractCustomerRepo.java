@@ -1,6 +1,6 @@
 package com.example.roombooking.repos;
 
-import com.example.roombooking.models.ContractCustomer;
+import com.example.roombooking.models.External.ContractCustomer;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
