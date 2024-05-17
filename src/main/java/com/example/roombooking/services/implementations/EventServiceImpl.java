@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.MessageDTO;
 import com.example.roombooking.models.Events.Message;
 import com.example.roombooking.repos.EventRepo;
 import com.example.roombooking.services.EventService;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -49,7 +51,7 @@ public class EventServiceImpl implements EventService {
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), "UTF-8");
+                String message = new String(delivery.getBody(), StandardCharsets.UTF_8); // "UTF-8"
                 System.out.println(" [x] Received '" + message + "'");
 
                 Message msg = mapper.readValue(message, Message.class);
@@ -71,6 +73,16 @@ public class EventServiceImpl implements EventService {
         }
 
 
+        return null;
+    }
+
+    @Override
+    public List<MessageDTO> convertMessagesToDTO(Message message) {
+        return null;
+    }
+
+    @Override
+    public List<Message> getAllMessages() {
         return null;
     }
 }
