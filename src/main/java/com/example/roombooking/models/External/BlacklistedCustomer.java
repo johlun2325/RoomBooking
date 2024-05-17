@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Blacklisted {
+public class BlacklistedCustomer {
 
     @JsonProperty("id")
     private Long id;

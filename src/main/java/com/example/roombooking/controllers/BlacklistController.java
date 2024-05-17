@@ -1,6 +1,6 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.BlacklistedDTO;
+import com.example.roombooking.dto.BlacklistedCustomerDTO;
 import com.example.roombooking.services.implementations.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -45,7 +45,7 @@ public class BlacklistController {
                           @RequestParam String name,
                           @RequestParam(defaultValue = "false") boolean isOk) {
 
-        model.addAttribute("message", blacklistService.addCustomerToBlacklist(new BlacklistedDTO(email, name, isOk)));
+        model.addAttribute("message", blacklistService.addCustomerToBlacklist(new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
@@ -75,7 +75,7 @@ public class BlacklistController {
                              @RequestParam String name,
                              @RequestParam(defaultValue = "false") boolean isOk) {
 
-        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(new BlacklistedDTO(email, name, isOk)));
+        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");

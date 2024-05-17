@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BlacklistedDTO {
+public class BlacklistedCustomerDTO {
 
     private String email;
     private String name;
