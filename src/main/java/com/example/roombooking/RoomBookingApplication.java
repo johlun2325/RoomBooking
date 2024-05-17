@@ -46,6 +46,11 @@ public class RoomBookingApplication {
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         }
+        else if (Objects.equals(args[0], "loadDefaultBookingData")) {
+            SpringApplication application = new SpringApplication(LoadDefaultBookingData.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        }
 
     }
 
