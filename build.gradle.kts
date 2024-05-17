@@ -40,13 +40,18 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+    implementation ("com.rabbitmq:amqp-client")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    //testImpl h2 - se backend3start
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+//backend3start integration test config

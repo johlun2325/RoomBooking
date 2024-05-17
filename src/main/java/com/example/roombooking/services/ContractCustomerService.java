@@ -1,8 +1,7 @@
 package com.example.roombooking.services;
 
 import com.example.roombooking.dto.ContractCustomerDTO;
-import com.example.roombooking.models.ContractCustomer;
-import org.springframework.data.domain.Sort;
+import com.example.roombooking.models.External.ContractCustomer;
 
 import java.util.List;
 

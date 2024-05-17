@@ -1,9 +1,9 @@
 package com.example.roombooking.repos;
 
-import com.example.roombooking.models.External.Shipper;
+import com.example.roombooking.models.Events.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ShipperRepo extends JpaRepository<Shipper, Long> {
+public interface EventRepo extends JpaRepository<Message, Long> {
 }
