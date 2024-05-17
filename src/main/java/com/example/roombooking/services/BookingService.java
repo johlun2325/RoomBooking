@@ -4,6 +4,7 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.models.Booking;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BookingService {
