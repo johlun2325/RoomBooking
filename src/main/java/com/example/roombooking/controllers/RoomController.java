@@ -29,6 +29,7 @@ public class RoomController {
                     @RequestParam String startDate,
                     @RequestParam String endDate,
                     @RequestParam int numberOfPeople,
+                    @RequestParam double roomPrice,
                     Model model) {
 
         RoomLiteDTO room = roomService.findRoomById(id);
@@ -43,6 +44,7 @@ public class RoomController {
         model.addAttribute("endDateText", "Slut datum");
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("roomIdText", "Room ID");
+        model.addAttribute("roomPriceText", "Room Price");
         model.addAttribute("buttonText", "Boka");
 
         return "new-booking";

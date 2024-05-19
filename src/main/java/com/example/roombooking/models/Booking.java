@@ -36,12 +36,14 @@ public class Booking {
 
     private LocalDate startDate;
     private LocalDate endDate;
+    private double totalPrice;
 
-    public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
+    public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate, double totalPrice) {
         this.customer = customer;
         this.room = room;
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.totalPrice = totalPrice;
     }
 }

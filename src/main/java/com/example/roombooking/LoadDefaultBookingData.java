@@ -46,9 +46,7 @@ public class LoadDefaultBookingData implements CommandLineRunner {
         Room room9 = new Room(2995.95, doubleRoom);
         Room room10 = new Room(3995.95, largeDoubleRoom);
 
-        roomRepo.saveAll(
-                List.of(room1, room2, room3, room4, room5,
-                        room6, room7, room8, room9, room10));
+        roomRepo.saveAll(List.of(room1, room2, room3, room4, room5, room6, room7, room8, room9, room10));
 
         Customer customer1 = new Customer("John Doe", "861023-4531", "john.doe@email.com");
         Customer customer2 = new Customer("Mary Smith", "920510-5261", "mary.smith@email.com");
@@ -57,9 +55,9 @@ public class LoadDefaultBookingData implements CommandLineRunner {
 
         customerRepo.saveAll(List.of(customer1, customer2, customer3, customer4));
 
-        Booking booking1 = new Booking(customer1, room1, 1, LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15));
-        Booking booking2 = new Booking(customer2, room2, 2, LocalDate.of(2024, 2, 20), LocalDate.of(2024, 2, 25));
-        Booking booking3 = new Booking(customer3, room3, 3, LocalDate.of(2024, 2, 15), LocalDate.of(2024, 2, 20));
+        Booking booking1 = new Booking(customer1, room1, 1, LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15), 1 * room1.getPrice());
+        Booking booking2 = new Booking(customer2, room2, 2, LocalDate.of(2024, 2, 20), LocalDate.of(2024, 2, 25), 2 * room1.getPrice());
+        Booking booking3 = new Booking(customer3, room3, 3, LocalDate.of(2024, 2, 15), LocalDate.of(2024, 2, 20), 3 * room1.getPrice());
 //            Booking booking4 = new Booking(customer4, room1, 2, LocalDate.of(2024, 2, 5), LocalDate.of(2024, 2, 7));
 
         bookingRepo.saveAll(List.of(booking1, booking2, booking3));

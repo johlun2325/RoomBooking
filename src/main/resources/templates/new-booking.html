@@ -62,6 +62,11 @@
                     <input type="text" class="form-control" id="roomId" name="roomId" th:value="*{room.id}" readonly>
                 </div>
 
+                <div class="mb-3">
+                    <label for="roomPrice" class="form-label" th:text="${roomPriceText}"></label>
+                    <input type="text" class="form-control" id="roomPrice" name="roomPrice" th:value="*{room.price}" readonly>
+                </div>
+
                 <button type="submit" class="btn btn-primary" th:text="${buttonText}"></button>
             </form>
 

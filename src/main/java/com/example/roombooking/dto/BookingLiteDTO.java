@@ -18,5 +18,6 @@ public class BookingLiteDTO {
     private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
+    private double totalPrice;
 
 }
