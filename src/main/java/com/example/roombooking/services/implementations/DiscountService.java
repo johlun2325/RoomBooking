@@ -1,10 +1,13 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.utilities.BookingPriceCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
@@ -13,38 +16,36 @@ import java.util.Locale;
 @Service
 public class DiscountService {
 
+    BookingPriceCalculator bookingPriceCalculator = new BookingPriceCalculator();
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscountService.class);
-    private static final double NO_DISCOUNT = 0.0;
-    private static final double ZERO_POINT_FIVE_PERCENT_DISCOUNT = 0.005;
-    private static final double TWO_PERCENT_DISCOUNT = 0.02;
+    private static final double ZERO_POINT_FIVE_PERCENT_DISCOUNT = 0.995;
+    private static final double TWO_PERCENT_DISCOUNT = 0.98;
 
-    private double moreThanTwoDaysDiscount(Booking booking) {
+    private void moreThanTwoDaysDiscount(Booking booking) {
         long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
 
-        if (numberOfDays >= 2) {
+        if (numberOfDays > 1) {
             LOGGER.info("More than two days discount applied");
-            return ZERO_POINT_FIVE_PERCENT_DISCOUNT;
+            bookingPriceCalculator.applyDiscount(booking, ZERO_POINT_FIVE_PERCENT_DISCOUNT, numberOfDays - 1);
         }
-        return NO_DISCOUNT;
     }
 
-    private double sundayToMondayDiscount(Booking booking) {
+    private void sundayToMondayDiscount(Booking booking) {
         var numberOfWeeks = booking.getStartDate()
                 .datesUntil(booking.getEndDate().plusDays(1))
                 .map(date -> date.get(WeekFields.of(new Locale("sv", "SE")).weekOfYear()))
                 .distinct()
                 .count();
 
-        if (numberOfWeeks >= 2) {
+        if (numberOfWeeks > 1) {
             LOGGER.info("Sunday to Monday discount applied");
-            return TWO_PERCENT_DISCOUNT;
+            bookingPriceCalculator.applyDiscount(booking, TWO_PERCENT_DISCOUNT, numberOfWeeks - 1);
         }
-        return NO_DISCOUNT;
     }
 
-    private double annualDiscount(Booking booking) {
-        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
 
+    private void annualDiscount(Booking booking) {
+        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
         long totalDays = booking.getCustomer()
                 .getBookings()
                 .stream()
@@ -52,10 +53,17 @@ public class DiscountService {
                         .filter(date -> date.getYear() == LocalDate.now().getYear()))
                 .count();
 
-        if (totalDays + dateRange >= 11) {
+        // TODO: Need to return right number of days to be discounted
+        if (dateRange + totalDays > 10) {
             LOGGER.info("Annual discount applied");
-            return TWO_PERCENT_DISCOUNT;
+            bookingPriceCalculator.applyDiscount(booking, TWO_PERCENT_DISCOUNT,
+                    Math.min(dateRange + totalDays - 10, dateRange));
         }
-        return NO_DISCOUNT;
+    }
+
+    public void applyDiscounts(Booking booking) {
+        moreThanTwoDaysDiscount(booking);
+        sundayToMondayDiscount(booking);
+        annualDiscount(booking);
     }
 }
