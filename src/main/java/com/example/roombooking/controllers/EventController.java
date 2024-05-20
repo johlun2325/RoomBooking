@@ -1,5 +1,6 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.services.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
 
-//    @RequestMapping("/all/{roomNo}")
-//    public List<String> getMessages(@PathVariable String roomNo){
-//
-//    }
+    private final EventService service;
+
+    @RequestMapping("/all/{roomNo}")
+    public List<String> getMessages(@PathVariable String roomNo){
+        return service.getAllMessagesByRoomNumber(roomNo);
+    }
 }
