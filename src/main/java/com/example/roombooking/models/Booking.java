@@ -1,9 +1,9 @@
 package com.example.roombooking.models;
 
+import com.example.roombooking.utilities.BookingPriceCalculator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,12 +38,12 @@ public class Booking {
     private LocalDate endDate;
     private double totalPrice;
 
-    public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate, double totalPrice) {
+    public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
         this.room = room;
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = totalPrice;
+        this.totalPrice = new BookingPriceCalculator().totalPriceFormula(startDate, endDate, room.getPrice());
     }
 }

@@ -29,7 +29,6 @@ public class RoomController {
                     @RequestParam String startDate,
                     @RequestParam String endDate,
                     @RequestParam int numberOfPeople,
-                    @RequestParam double roomPrice,
                     Model model) {
 
         RoomLiteDTO room = roomService.findRoomById(id);

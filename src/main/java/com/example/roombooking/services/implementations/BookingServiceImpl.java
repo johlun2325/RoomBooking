@@ -113,13 +113,12 @@ public class BookingServiceImpl implements BookingService {
         BlacklistStatus status = blacklistService.fetchBlacklistedStatusByEmail(customer.getEmail());
 
         if (status.isOk()) {
-            Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate(), booking.getTotalPrice());
-            discountService.applyDiscount(newBooking);
+            Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
             bookingRepo.save(newBooking);
             LOGGER.info("Booking add");
             return;
         }
-        LOGGER.error("Customer is blacklisted");
+        LOGGER.warn("Customer is blacklisted");
     }
 
     @Override
@@ -156,7 +155,6 @@ public class BookingServiceImpl implements BookingService {
             foundBooking.setNumberOfPeople(numberOfPeople);
             foundBooking.setStartDate(updatedStartDate);
             foundBooking.setEndDate(updatedEndDate);
-            discountService.applyDiscount(foundBooking);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
 

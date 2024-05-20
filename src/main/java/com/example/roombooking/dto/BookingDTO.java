@@ -1,5 +1,6 @@
 package com.example.roombooking.dto;
 
+import com.example.roombooking.utilities.BookingPriceCalculator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,17 +32,7 @@ public class BookingDTO {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = totalPriceFormula();
+        this.totalPrice = new BookingPriceCalculator().totalPriceFormula(startDate, endDate, room.getPrice());
     }
 
-    private double totalPriceFormula() {
-        long numberOfDaysBooked = ChronoUnit.DAYS.between(startDate, endDate);
-        double roomPriceTimesPeopleCount = room.getPrice() * numberOfPeople;
-        final double TWENTY_PROCENT = 0.2;
-        double pricePerDay = room.getPrice() * TWENTY_PROCENT;
-
-        double result = roomPriceTimesPeopleCount + (pricePerDay * numberOfDaysBooked);
-        BigDecimal bigDecimal = new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
-        return bigDecimal.doubleValue();
-    }
 }
