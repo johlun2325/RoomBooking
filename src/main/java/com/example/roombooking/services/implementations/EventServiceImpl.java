@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -76,12 +77,24 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<MessageDTO> convertMessagesToDTO(Message message) {
-        return null;
+    public MessageDTO convertMessagesToDTO(Message message) {
+
+        return MessageDTO.builder()
+                .id(message.getId())
+                .roomNo(message.getRoomNo())
+                .timeStamp(message.getTimeStamp())
+                .message(message.getMessage()).build();
     }
 
     @Override
-    public List<Message> getAllMessages() {
-        return null;
+    public List<String> getAllMessagesByRoomNumber(String roomNo) {
+
+        List<Message> messages = repo.findAllByRoomNo(roomNo);
+
+        if (messages.isEmpty()) {
+            return List.of("No messages for room " + roomNo);
+        }
+
+        return messages.stream().map(Message::getMessage).toList();
     }
 }

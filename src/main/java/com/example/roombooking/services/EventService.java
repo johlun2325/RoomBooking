@@ -8,7 +8,7 @@ public interface EventService {
 
     List<Message> fetchEventsFromQueue(String queueName);
 
-    List<MessageDTO> convertMessagesToDTO(Message message);
+    MessageDTO convertMessagesToDTO(Message message);
 
-     List<Message> getAllMessages();
+     List<String> getAllMessagesByRoomNumber(String roomNo);
 }
