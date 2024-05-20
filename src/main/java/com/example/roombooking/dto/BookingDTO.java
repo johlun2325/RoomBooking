@@ -32,7 +32,7 @@ public class BookingDTO {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = new BookingPriceCalculator().totalPriceFormula(startDate, endDate, room.getPrice());
+        this.totalPrice = new BookingPriceCalculator().totalPriceFormula(startDate, endDate, room.getPrice(), numberOfPeople);
     }
 
 }
