@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
@@ -17,11 +15,11 @@ public class DiscountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscountService.class);
     private static final double NO_DISCOUNT = 0.0;
-    private static final double ZERO_POINT_FIVE_PERCENT_DISCOUNT = 0.0005;
+    private static final double ZERO_POINT_FIVE_PERCENT_DISCOUNT = 0.005;
     private static final double TWO_PERCENT_DISCOUNT = 0.02;
 
     private double moreThanTwoDaysDiscount(Booking booking) {
-        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
+        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
 
         if (numberOfDays >= 2) {
             LOGGER.info("More than two days discount applied");
@@ -32,7 +30,7 @@ public class DiscountService {
 
     private double sundayToMondayDiscount(Booking booking) {
         var numberOfWeeks = booking.getStartDate()
-                .datesUntil(booking.getEndDate())
+                .datesUntil(booking.getEndDate().plusDays(1))
                 .map(date -> date.get(WeekFields.of(new Locale("sv", "SE")).weekOfYear()))
                 .distinct()
                 .count();
@@ -45,12 +43,12 @@ public class DiscountService {
     }
 
     private double annualDiscount(Booking booking) {
-        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
+        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
 
         long totalDays = booking.getCustomer()
                 .getBookings()
                 .stream()
-                .flatMap(b -> b.getStartDate().datesUntil(b.getEndDate())
+                .flatMap(b -> b.getStartDate().datesUntil(b.getEndDate().plusDays(1))
                         .filter(date -> date.getYear() == LocalDate.now().getYear()))
                 .count();
 

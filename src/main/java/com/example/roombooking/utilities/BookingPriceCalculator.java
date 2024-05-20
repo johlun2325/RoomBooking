@@ -7,8 +7,6 @@ import java.time.temporal.ChronoUnit;
 
 public class BookingPriceCalculator {
 
-//    private static final double PRICE_PER_DAY = 50;
-
     public double totalPriceFormula(LocalDate start, LocalDate end, double roomPrice, int numberOfPeople) {
         long numberOfDaysBooked = ChronoUnit.DAYS.between(start, end);
         double totalPrice = (roomPrice * numberOfPeople) * numberOfDaysBooked;
