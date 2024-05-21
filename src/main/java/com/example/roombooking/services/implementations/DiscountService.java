@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
@@ -21,8 +19,8 @@ public class DiscountService {
     private static final double ZERO_POINT_FIVE_PERCENT_DISCOUNT = 0.995;
     private static final double TWO_PERCENT_DISCOUNT = 0.98;
 
-    private void moreThanTwoDaysDiscount(Booking booking) {
-        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
+    public void moreThanTwoDaysDiscount(Booking booking) {
+        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
 
         if (numberOfDays > 1) {
             LOGGER.info("More than two days discount applied");
@@ -30,9 +28,9 @@ public class DiscountService {
         }
     }
 
-    private void sundayToMondayDiscount(Booking booking) {
+    public void sundayToMondayDiscount(Booking booking) {
         var numberOfWeeks = booking.getStartDate()
-                .datesUntil(booking.getEndDate().plusDays(1))
+                .datesUntil(booking.getEndDate())
                 .map(date -> date.get(WeekFields.of(new Locale("sv", "SE")).weekOfYear()))
                 .distinct()
                 .count();
@@ -43,27 +41,19 @@ public class DiscountService {
         }
     }
 
-
-    private void annualDiscount(Booking booking) {
-        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate().plusDays(1));
+    public void annualDiscount(Booking booking) {
+        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
         long totalDays = booking.getCustomer()
                 .getBookings()
                 .stream()
-                .flatMap(b -> b.getStartDate().datesUntil(b.getEndDate().plusDays(1))
+                .flatMap(b -> b.getStartDate().datesUntil(b.getEndDate())
                         .filter(date -> date.getYear() == LocalDate.now().getYear()))
                 .count();
 
-        // TODO: Need to return right number of days to be discounted
-        if (dateRange + totalDays > 10) {
+        if (totalDays + dateRange > 10) {
             LOGGER.info("Annual discount applied");
-            bookingPriceCalculator.applyDiscount(booking, TWO_PERCENT_DISCOUNT,
-                    Math.min(dateRange + totalDays - 10, dateRange));
+            bookingPriceCalculator.applyDiscount(booking, TWO_PERCENT_DISCOUNT, Math.min(dateRange, totalDays + dateRange - 10));
         }
     }
 
-    public void applyDiscounts(Booking booking) {
-        moreThanTwoDaysDiscount(booking);
-        sundayToMondayDiscount(booking);
-        annualDiscount(booking);
-    }
 }
