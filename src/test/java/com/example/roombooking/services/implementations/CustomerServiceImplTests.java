@@ -30,19 +30,19 @@ class CustomerServiceImplTests {
     private CustomerServiceImpl service = new CustomerServiceImpl(repo);
 
 
-    private Long id = 1L;
-    private String name = "Anna";
-    private String ssn = "343434-3434";
-    private String email = "mockmock@mail.se";
+    private final Long id = 1L;
+    private final String name = "Anna";
+    private final String ssn = "343434-3434";
+    private final String email = "mockmock@mail.se";
 
-    private Customer customer = new Customer(id,name,ssn,email, new ArrayList<>());
+    private final Customer customer = new Customer(id,name,ssn,email, new ArrayList<>());
 
-    private CustomerDTO customerDTO = new CustomerDTO().builder()
+    private final CustomerDTO customerDTO = new CustomerDTO().builder()
             .id(customer.getId()).name(customer.getName())
             .ssn(customer.getSsn()).email(customer.getEmail())
             .bookings(new ArrayList<>()).build();
 
-    private CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
+    private final CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
             .id(customer.getId()).name(customer.getName())
             .ssn(customer.getSsn()).email(customer.getEmail()).build();
 
@@ -92,7 +92,7 @@ class CustomerServiceImplTests {
         CustomerServiceImpl serv = new CustomerServiceImpl(repo);
 
         List<CustomerDTO> allCustomers = serv.findAllCustomers();
-        assertTrue(allCustomers.size() == 1);
+        assertEquals(1, allCustomers.size());
     }
 
     @Test

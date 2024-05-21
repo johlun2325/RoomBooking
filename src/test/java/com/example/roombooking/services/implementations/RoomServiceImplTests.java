@@ -31,14 +31,14 @@ class RoomServiceImplTests {
     @InjectMocks
     private RoomServiceImpl service = new RoomServiceImpl(repo);
 
-    private Long id = 1L;
-    private double price = 100.0;
-    private RoomType roomType = new RoomType();
-    private List<Booking> bookings = new ArrayList<>();
+    private final Long id = 1L;
+    private final double price = 100.0;
+    private final RoomType roomType = new RoomType();
+    private final List<Booking> bookings = new ArrayList<>();
 
-    private Room room = new Room(id, price, roomType, bookings);
+    private final Room room = new Room(id, price, roomType, bookings);
 
-    private RoomLiteDTO liteRoom = new RoomLiteDTO().builder()
+    private final RoomLiteDTO liteRoom = new RoomLiteDTO().builder()
             .id(room.getId())
             .price(room.getPrice())
             .roomType(room.getRoomType()).build();
@@ -70,7 +70,7 @@ class RoomServiceImplTests {
         RoomServiceImpl serv = new RoomServiceImpl(repo);
 
         List<RoomLiteDTO> allRooms = serv.findAllRooms();
-        assertTrue(allRooms.size() == 1);
+        assertEquals(1, allRooms.size());
 
     }
 
