@@ -92,7 +92,7 @@ public class EventServiceImpl implements EventService {
         List<Message> messages = repo.findAllByRoomNo(roomNo);
 
         if (messages.isEmpty()) {
-            return List.of("No messages for room " + roomNo);
+            return List.of("Inga meddelanden för rum " + roomNo);
         }
 
         return messages.stream().map(Message::getMessage).toList();
