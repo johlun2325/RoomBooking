@@ -31,8 +31,7 @@
                         <td th:text="${room.roomType.type}"></td>
 
                         <td>
-<!--                            <a th:text="${messages}" th:href="@{/customer/updateForm/{id}(id=${cust.id})}" class="btn btn-primary btn-sm" style="width: 85px"></a>-->
-                            <a th:text="${messages}" th:href="@{/all/{roomNo}(id=${room.id})}" class="btn btn-primary btn-sm" style="width: 95px"></a>
+                            <a th:text="${messages}" th:href="@{/room/all/{id}(id=${room.id})}" class="btn btn-primary btn-sm"></a>
                         </td>
 
                     </tr>

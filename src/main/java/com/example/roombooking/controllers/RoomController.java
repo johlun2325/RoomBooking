@@ -31,11 +31,12 @@ public class RoomController {
         return "allRooms";
     }
 
-    @GetMapping("/all/{roomNo}")
-    String showMessagesByRoomNo(Model model){
-        model.addAttribute("test", "test");
+    @GetMapping("/all/{id}")
+    String showMessagesByRoomNo(Model model, @PathVariable Long id){
+        model.addAttribute("pageHeader", "Meddelanden");
+        model.addAttribute("id",id);
 
-        return "redirect:/room/all";
+        return "roomMessages";
     }
 
     @GetMapping({"/book/{id}"})
