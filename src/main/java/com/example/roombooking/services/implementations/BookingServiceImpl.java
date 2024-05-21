@@ -12,6 +12,7 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
+import com.example.roombooking.utilities.Discount;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,9 +115,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (status.isOk()) {
             Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
-            discountService.sundayToMondayDiscount(newBooking);
-            discountService.annualDiscount(newBooking);
-            discountService.moreThanTwoDaysDiscount(newBooking);
+            discountService.applyDiscounts(newBooking); // 10865.81450
             bookingRepo.save(newBooking);
             LOGGER.info("Booking add");
             return;

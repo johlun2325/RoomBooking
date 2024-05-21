@@ -24,7 +24,7 @@ public class BookingDTO {
     private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double totalPrice;
+    private BigDecimal totalPrice;
 
     public BookingDTO(CustomerLiteDTO customer, RoomLiteDTO room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
@@ -32,7 +32,7 @@ public class BookingDTO {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = new BookingPriceCalculator().totalPriceFormula(startDate, endDate, room.getPrice(), numberOfPeople);
+        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
 
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Room {
     private Long id;
 
     @Min(value = 1, message = "Price must be at least 1")
-    private double price;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn
@@ -35,7 +36,7 @@ public class Room {
     private List<Booking> bookings;
 
     public Room(double price, RoomType roomType) {
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
         this.roomType = roomType;
         this.bookings = new ArrayList<>();
     }
