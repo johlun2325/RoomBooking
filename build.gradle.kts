@@ -55,10 +55,10 @@ tasks.withType<Test> {
 }
 
 //backend3start integration test config
-val integrationTestTask = tasks.register<Test>("integrationTest") {
+val integrationTestTask = tasks.register<Test>("integrationTests") {
     group = "verification"
     filter {
-        includeTestsMatching("*integrationTest")
+        includeTestsMatching("*IntegrationTests")
     }
 }
 
