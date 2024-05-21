@@ -19,10 +19,25 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping()
-    List<RoomLiteDTO> getAllRooms() {
-        return roomService.findAllRooms();
+    @GetMapping("/all")
+    String getAllRooms(Model model) {
+        List<RoomLiteDTO> rooms = roomService.findAllRooms();
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("pageHeader", "Våra rum");
+        model.addAttribute("title", "Alla rum");
+        model.addAttribute("roomId", "Rums-id");
+        model.addAttribute("roomType", "Typ");
+        model.addAttribute("messages", "Se meddelanden");
+        return "allRooms";
     }
+
+//    @GetMapping("/all/{id}")
+//    String showMessagesByRoomNo(Model model, @PathVariable Long id){
+//        model.addAttribute("pageHeader", "Meddelanden");
+//        model.addAttribute("id",id);
+//
+//        return "roomMessages";
+//    }
 
     @GetMapping({"/book/{id}"})
     String bookRoom(@PathVariable Long id,

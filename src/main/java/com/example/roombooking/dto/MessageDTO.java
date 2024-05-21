@@ -15,7 +15,7 @@ import java.util.Date;
 public class MessageDTO {
 
     private Long id;
-    public String type;
+//    public String type;
     public Date timeStamp;
     public String roomNo;
     public String message;
