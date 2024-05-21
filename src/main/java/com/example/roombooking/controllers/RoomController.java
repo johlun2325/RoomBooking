@@ -31,13 +31,13 @@ public class RoomController {
         return "allRooms";
     }
 
-    @GetMapping("/all/{id}")
-    String showMessagesByRoomNo(Model model, @PathVariable Long id){
-        model.addAttribute("pageHeader", "Meddelanden");
-        model.addAttribute("id",id);
-
-        return "roomMessages";
-    }
+//    @GetMapping("/all/{id}")
+//    String showMessagesByRoomNo(Model model, @PathVariable Long id){
+//        model.addAttribute("pageHeader", "Meddelanden");
+//        model.addAttribute("id",id);
+//
+//        return "roomMessages";
+//    }
 
     @GetMapping({"/book/{id}"})
     String bookRoom(@PathVariable Long id,
