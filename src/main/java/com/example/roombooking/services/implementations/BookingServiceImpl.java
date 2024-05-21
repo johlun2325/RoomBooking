@@ -115,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (status.isOk()) {
             Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
-            discountService.applyDiscounts(newBooking); // 10865.81450
+            discountService.applyDiscounts(newBooking);
             bookingRepo.save(newBooking);
             LOGGER.info("Booking add");
             return;
