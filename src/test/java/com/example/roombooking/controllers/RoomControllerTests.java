@@ -5,22 +5,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class TypeControllerTest {
+class RoomControllerTests {
     @Autowired
-    private TypeController typeController;
+    private RoomController roomController;
 
     @Test
     public void contextLoads() throws Exception {
-        assertThat(typeController).isNotNull();
+        assertThat(roomController).isNotNull();
     }
     @Test
-    void getAllTypes() {
+    void getAllRooms() {
     }
 
     @Test
-    void getType() {
+    void getRoom() {
+    }
+
+    @Test
+    void searchRooms() {
     }
 }

@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class BookingServiceImplTest {
+class BookingServiceImplTests {
 
 
     @Mock

@@ -64,7 +64,7 @@ val integrationTestTask = tasks.register<Test>("integrationTest") {
 
 tasks.test{
     filter{
-        includeTestsMatching("*Test")
+        includeTestsMatching("*Tests")
 
     }
 }

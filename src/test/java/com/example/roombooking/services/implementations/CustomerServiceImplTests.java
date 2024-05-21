@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class CustomerServiceImplTest {
+class CustomerServiceImplTests {
 
     @Mock
     private CustomerRepo repo;

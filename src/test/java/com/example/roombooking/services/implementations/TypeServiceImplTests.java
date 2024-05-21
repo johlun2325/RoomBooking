@@ -2,9 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class TypeServiceImplTest {
+class TypeServiceImplTests {
 
     @Test
     void findAllTypes() {
