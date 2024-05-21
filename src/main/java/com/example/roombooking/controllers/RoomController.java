@@ -22,10 +22,20 @@ public class RoomController {
     @GetMapping("/all")
     String getAllRooms(Model model) {
         List<RoomLiteDTO> rooms = roomService.findAllRooms();
-        model.addAttribute("allRooms", rooms);
+        model.addAttribute("rooms", rooms);
         model.addAttribute("pageHeader", "Våra rum");
         model.addAttribute("title", "Alla rum");
+        model.addAttribute("roomId", "Rums-id");
+        model.addAttribute("roomType", "Typ");
+        model.addAttribute("messages", "Se meddelanden");
         return "allRooms";
+    }
+
+    @GetMapping("/all/{roomNo}")
+    String showMessagesByRoomNo(Model model){
+        model.addAttribute("test", "test");
+
+        return "redirect:/room/all";
     }
 
     @GetMapping({"/book/{id}"})
