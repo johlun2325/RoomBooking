@@ -27,7 +27,7 @@ public class DiscountService {
     }
 
     private BigDecimal multiNightDiscount(Booking booking) {
-        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
+        long numberOfDays = ChronoUnit.DAYS.between(booking.getStartDate().plusDays(1), booking.getEndDate().plusDays(1));
 
         if (numberOfDays > 1) {
             BigDecimal reduction = calculateDiscount(booking, ZERO_POINT_FIVE_PERCENT_DISCOUNT, numberOfDays - 1);
@@ -38,8 +38,7 @@ public class DiscountService {
     }
 
     private BigDecimal sundayToMondayDiscount(Booking booking) {
-        long numberOfWeeks = booking.getStartDate()
-                .datesUntil(booking.getEndDate())
+        long numberOfWeeks = booking.getStartDate().plusDays(1).datesUntil(booking.getEndDate().plusDays(1))
                 .map(date -> date.get(WeekFields.of(new Locale("sv", "SE")).weekOfYear()))
                 .distinct()
                 .count();
@@ -53,7 +52,7 @@ public class DiscountService {
     }
 
     private BigDecimal loyalCustomerDiscount(Booking booking) {
-        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
+        long dateRange = ChronoUnit.DAYS.between(booking.getStartDate().plusDays(1), booking.getEndDate().plusDays(1));
         long totalDays = booking.getCustomer()
                 .getBookings()
                 .stream()

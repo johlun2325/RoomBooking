@@ -55,22 +55,22 @@ class ContractCustomerImplIntegrationTest {
         assertTrue(  result.contains("</allcustomers>") );
     }
 
-//    @Test
-//    void fetchAndSaveContractCustomersShouldSaveToDatabaseTest() throws IOException {
-//        StreamProvider provider = mock(StreamProvider.class);
-//        when(provider.getDataStream("https://javaintegration.systementor.se/customers"))
-//                .thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomers.xml"));
-//
-//        systemUnderTest = new ContractCustomerImpl(provider, contractCustomerRepo);
-//
-//        // Arrange
-//        contractCustomerRepo.deleteAll();
-//
-//        // Act
-//        systemUnderTest.fetchContractCustomers();
-//
-//        //Assert
-//        assertEquals(3, contractCustomerRepo.count());
-//    }
+    @Test
+    void fetchAndSaveContractCustomersShouldSaveToDatabaseTest() throws IOException {
+        StreamProvider provider = mock(StreamProvider.class);
+        when(provider.getDataStream("https://javaintegration.systementor.se/customers"))
+                .thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomers.xml"));
+
+        systemUnderTest = new ContractCustomerImpl(provider, contractCustomerRepo);
+
+        // Arrange
+        contractCustomerRepo.deleteAll();
+
+        // Act
+        contractCustomerRepo.saveAll(systemUnderTest.fetchContractCustomers());
+
+        //Assert
+        assertEquals(3, contractCustomerRepo.count());
+    }
 
 }
