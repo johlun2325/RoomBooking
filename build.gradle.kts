@@ -54,7 +54,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-//backend3start integration test config
 val integrationTestTask = tasks.register<Test>("integrationTest") {
     group = "verification"
     filter {
