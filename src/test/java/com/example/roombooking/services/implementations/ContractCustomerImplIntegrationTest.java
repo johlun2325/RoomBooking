@@ -21,13 +21,12 @@ class ContractCustomerImplIntegrationTest {
     @Autowired
     StreamProvider streamProvider;
 
-    private ContractCustomerImpl systemUnderTest;
+    ContractCustomerImpl systemUnderTest;
 
     @Test
     void willFetchContractCustomersTest() throws IOException {
         systemUnderTest = new ContractCustomerImpl(streamProvider, contractCustomerRepo);
-        String url = "https://javaintegration.systementor.se/customers";
-        Scanner s = new Scanner(systemUnderTest.streamProvider.getDataStream(url)).useDelimiter("\\A");
+        Scanner s = new Scanner(systemUnderTest.getStreamProvider().getDataStream("https://javaintegration.systementor.se/customers")).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
         assertTrue(result.contains("<allcustomers>"));
@@ -63,14 +62,8 @@ class ContractCustomerImplIntegrationTest {
                 .thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomers.xml"));
 
         systemUnderTest = new ContractCustomerImpl(provider, contractCustomerRepo);
-
-        // Arrange
         contractCustomerRepo.deleteAll();
-
-        // Act
         contractCustomerRepo.saveAll(systemUnderTest.fetchContractCustomers());
-
-        //Assert
         assertEquals(3, contractCustomerRepo.count());
     }
 
