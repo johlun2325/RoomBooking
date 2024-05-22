@@ -25,7 +25,6 @@ public class LoadContractCustomerApplication implements CommandLineRunner {
         List<ContractCustomer> customers = service.fetchContractCustomers();
 
         if (customers != null) {
-
             long newCustomersCount = customers
                     .stream()
                     .filter(customer -> repo.findById(customer.getId()).isEmpty())
@@ -33,9 +32,7 @@ public class LoadContractCustomerApplication implements CommandLineRunner {
                     .count();
 
             LOGGER.info("Saved {} new contract customers.", newCustomersCount);
-
-        }
-        else {
+        } else {
             LOGGER.info("No customers were found");
         }
     }

@@ -20,12 +20,12 @@ class BlacklistServiceIntegrationTest {
         Scanner s = new Scanner(streamProvider.getDataStream("https://javabl.systementor.se/api/jeri/blacklist")).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
-        assertTrue(result.contains("id"));
-        assertTrue(result.contains("email"));
-        assertTrue(result.contains("name"));
-        assertTrue(result.contains("group"));
-        assertTrue(result.contains("created"));
-        assertTrue(result.contains("ok"));
+        assertTrue(result.contains("\"id\""));
+        assertTrue(result.contains("\"email\""));
+        assertTrue(result.contains("\"name\""));
+        assertTrue(result.contains("\"group\""));
+        assertTrue(result.contains("\"created\""));
+        assertTrue(result.contains("\"ok\""));
     }
 
     @Test
@@ -36,7 +36,7 @@ class BlacklistServiceIntegrationTest {
         Scanner s = new Scanner(streamProvider.getDataStream(URL)).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
-        assertTrue(result.contains("statusText"));
-        assertTrue(result.contains("ok"));
+        assertTrue(result.contains("\"statusText\""));
+        assertTrue(result.contains("\"ok\""));
     }
 }

@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class ShipperServiceImplIntegrationTest {
@@ -39,5 +43,16 @@ class ShipperServiceImplIntegrationTest {
         assertTrue(  result.contains("\"fax\"") );
     }
 
+    @Test
+    void fetchAndSaveShippersShouldSaveToDatabaseTest() throws IOException {
+        final String URL = "https://javaintegration.systementor.se/shippers";
+        StreamProvider provider = mock(StreamProvider.class);
+        when(provider.getDataStream(URL))
+                .thenReturn(getClass().getClassLoader().getResourceAsStream("shippers.json"));
 
+        sut = new ShipperServiceImpl(provider, shipperRepo);
+        shipperRepo.deleteAll();
+        shipperRepo.saveAll(Arrays.asList(sut.fetchShippers(URL)));
+        assertEquals(3, shipperRepo.count());
+    }
 }
