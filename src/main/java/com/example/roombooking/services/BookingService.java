@@ -4,7 +4,6 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.models.Booking;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface BookingService {
@@ -12,8 +11,6 @@ public interface BookingService {
     BookingLiteDTO convertToBookingLiteDto(Booking booking);
 
     BookingDTO convertToDto(Booking booking);
-
-    Booking convertDtoToBooking(BookingDTO booking);
 
     BookingDTO findBookingById(Long id);
 

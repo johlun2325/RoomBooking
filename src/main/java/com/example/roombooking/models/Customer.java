@@ -12,11 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
-//@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Customer {
-
 
     @Id
     @GeneratedValue
@@ -71,6 +69,5 @@ public class Customer {
     public void removeBooking(Booking booking) {
         bookings.removeIf(it -> it.equals(booking));
     }
-
 }
 

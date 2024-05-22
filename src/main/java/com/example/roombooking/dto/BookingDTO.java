@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Data
 @AllArgsConstructor
@@ -32,7 +29,8 @@ public class BookingDTO {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
+        this.totalPrice = new BookingPriceCalculator()
+                .calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
 
 }

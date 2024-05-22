@@ -31,5 +31,4 @@ public class BlacklistedCustomer {
 
     @JsonProperty("ok")
     private boolean isOk;
-
 }

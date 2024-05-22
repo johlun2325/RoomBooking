@@ -51,5 +51,4 @@ public class Room {
     public void removeBooking(Booking booking) {
         bookings.removeIf(it -> it.equals(booking));
     }
-
 }

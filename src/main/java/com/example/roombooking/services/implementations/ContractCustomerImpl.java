@@ -52,11 +52,6 @@ public class ContractCustomerImpl implements ContractCustomerService {
     }
 
     @Override
-    public ContractCustomer convertDtoToContractCustomer(ContractCustomerDTO contractCustomer) {
-        return contractCustomerRepo.findById(contractCustomer.getId()).orElseThrow(NoSuchElementException::new);
-    }
-
-    @Override
     public ContractCustomerDTO findContractCustomerById(Long id) {
         return contractCustomerRepo.findById(id)
                 .map(this::convertToContractCustomerDto)

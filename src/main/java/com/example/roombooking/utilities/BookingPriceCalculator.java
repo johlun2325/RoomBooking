@@ -1,7 +1,5 @@
 package com.example.roombooking.utilities;
 
-import com.example.roombooking.models.Booking;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

@@ -11,12 +11,11 @@ public interface ContractCustomerService {
 
     List<ContractCustomerDTO> findAllContractCustomers();
 
-    ContractCustomer convertDtoToContractCustomer(ContractCustomerDTO contractCustomer);
-
     ContractCustomerDTO convertToContractCustomerDto(ContractCustomer contractCustomer);
 
     List<ContractCustomerDTO> findAllSorted(String sortOrder, String sortColumn);
 
     List<ContractCustomerDTO> findAllByCompanyNameStartingWith(String query, String sortOrder, String sortColumn);
+
     List<ContractCustomer> fetchContractCustomers();
 }

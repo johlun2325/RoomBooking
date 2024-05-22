@@ -18,24 +18,21 @@ public class LoadShippersApplication implements CommandLineRunner {
     private final ShipperRepo shipperRepo;
     private final ShipperService service;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
-    String url = "https://javaintegration.systementor.se/shippers";
+    private final String URL = "https://javaintegration.systementor.se/shippers";
 
     @Override
     public void run(String... args) {
 
-        Shipper[] shippers = service.fetchShippers(url);
+        Shipper[] shippers = service.fetchShippers(URL);
 
         if (shippers != null) {
-
             long newShippersCount = Arrays.stream(shippers)
                     .filter(shipper -> shipperRepo.findById(shipper.getId()).isEmpty())
                     .peek(shipperRepo::save)
                     .count();
 
             LOGGER.info("Saved {} new shippers", newShippersCount);
-
-        }
-        else {
+        } else {
             LOGGER.info("No shippers were found");
         }
     }

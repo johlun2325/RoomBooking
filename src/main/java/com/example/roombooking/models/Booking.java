@@ -38,6 +38,8 @@ public class Booking {
 
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @Min(value = 0, message = "Price cannot be lower than 0")
     private BigDecimal totalPrice;
 
     public Booking(Long id, Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
@@ -47,7 +49,8 @@ public class Booking {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
+        this.totalPrice = new BookingPriceCalculator()
+                .calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
 
     public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
@@ -56,9 +59,9 @@ public class Booking {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
+        this.totalPrice = new BookingPriceCalculator()
+                .calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
-
 
     public void setDiscount(BigDecimal discount) {
         if (discount.compareTo(this.totalPrice) > 0) {

@@ -51,5 +51,4 @@ public class ContractCustomer {
 
         @JacksonXmlProperty(localName = "fax")
         private String fax;
-
 }

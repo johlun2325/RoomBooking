@@ -12,7 +12,6 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
-import com.example.roombooking.utilities.Discount;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,23 +63,6 @@ public class BookingServiceImpl implements BookingService {
                         booking.getRoom().getId(),
                         booking.getRoom().getPrice(),
                         booking.getRoom().getRoomType()))
-                .numberOfPeople(booking.getNumberOfPeople())
-                .startDate(booking.getStartDate())
-                .endDate(booking.getEndDate())
-                .totalPrice(booking.getTotalPrice())
-                .build();
-    }
-
-    //BookingDTO till booking - kolla om funkar
-    @Override
-    public Booking convertDtoToBooking(BookingDTO booking) {
-        Customer customer = customerRepo.findById(booking.getCustomer().getId()).orElseThrow(NoSuchElementException::new);
-        Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
-
-        return Booking.builder()
-                .id(booking.getId())
-                .customer(customer)
-                .room(room)
                 .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())

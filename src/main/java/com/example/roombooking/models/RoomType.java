@@ -33,8 +33,4 @@ public class RoomType {
         this.capacity = capacity;
         this.extraBeds = extraBeds;
     }
-
-
-
-
 }
