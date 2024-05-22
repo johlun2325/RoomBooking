@@ -2,7 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import org.junit.jupiter.api.Test;
 
-class TypeServiceImplTests {
+class TypeServiceImplTest {
 
     @Test
     void findAllTypes() {

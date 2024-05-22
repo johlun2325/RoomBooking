@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class RoomServiceImplTests {
+class RoomServiceImplTest {
 
 
     @Mock
