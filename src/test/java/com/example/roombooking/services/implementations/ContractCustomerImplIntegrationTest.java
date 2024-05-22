@@ -54,7 +54,7 @@ class ContractCustomerImplIntegrationTest {
         assertTrue(  result.contains("</customers>") );
         assertTrue(  result.contains("</allcustomers>") );
     }
-//
+
 //    @Test
 //    void fetchAndSaveContractCustomersShouldSaveToDatabaseTest() throws IOException {
 //        StreamProvider provider = mock(StreamProvider.class);

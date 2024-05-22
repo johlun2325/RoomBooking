@@ -40,6 +40,16 @@ public class Booking {
     private LocalDate endDate;
     private BigDecimal totalPrice;
 
+    public Booking(Long id, Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.customer = customer;
+        this.room = room;
+        this.numberOfPeople = numberOfPeople;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
+    }
+
     public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
         this.room = room;
@@ -48,6 +58,7 @@ public class Booking {
         this.endDate = endDate;
         this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
+
 
     public void setDiscount(BigDecimal discount) {
         if (discount.compareTo(this.totalPrice) > 0) {

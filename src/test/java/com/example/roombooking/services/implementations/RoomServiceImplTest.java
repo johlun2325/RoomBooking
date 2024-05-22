@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,7 @@ class RoomServiceImplTest {
     private RoomServiceImpl service = new RoomServiceImpl(repo);
 
     private final Long id = 1L;
-    private final double price = 100.0;
+    private final BigDecimal price = BigDecimal.valueOf(100.0);
     private final RoomType roomType = new RoomType();
     private final List<Booking> bookings = new ArrayList<>();
 

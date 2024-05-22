@@ -27,7 +27,7 @@ public class BlacklistedCustomer {
     private String group;
 
     @JsonProperty("created")
-    private LocalDateTime created = LocalDateTime.now();
+    private final LocalDateTime created = LocalDateTime.now();
 
     @JsonProperty("ok")
     private boolean isOk;

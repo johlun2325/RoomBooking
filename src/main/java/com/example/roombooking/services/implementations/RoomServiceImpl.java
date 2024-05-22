@@ -44,10 +44,10 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomLiteDTO> findAllRooms() {
+        LOGGER.info("Loading all rooms");
         return roomRepo.findAll()
                 .stream()
                 .map(this::convertToRoomLiteDto)
-                .peek(room -> LOGGER.info("Room data listed: ID %S".formatted(room.getId())))
                 .toList();
     }
 
