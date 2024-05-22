@@ -26,33 +26,33 @@ class ContractCustomerImplIntegrationTest {
     @Test
     void willFetchContractCustomersTest() throws IOException {
         systemUnderTest = new ContractCustomerImpl(streamProvider, contractCustomerRepo);
-        Scanner s = new Scanner(systemUnderTest.streamProvider.getDataStream("https://javaintegration.systementor.se/customers")).useDelimiter("\\A");
+        Scanner s = new Scanner(systemUnderTest.getStreamProvider().getDataStream("https://javaintegration.systementor.se/customers")).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
-        assertTrue(  result.contains("<allcustomers>") );
-        assertTrue(  result.contains("<customers>") );
-        assertTrue(  result.contains("<id>") );
-        assertTrue(  result.contains("</id>") );
-        assertTrue(  result.contains("<companyName>") );
-        assertTrue(  result.contains("</companyName>") );
-        assertTrue(  result.contains("<contactName>") );
-        assertTrue(  result.contains("</contactName>") );
-        assertTrue(  result.contains("<contactTitle>") );
-        assertTrue(  result.contains("</contactTitle>") );
-        assertTrue(  result.contains("<streetAddress>") );
-        assertTrue(  result.contains("</streetAddress>") );
-        assertTrue(  result.contains("<city>") );
-        assertTrue(  result.contains("</city>") );
-        assertTrue(  result.contains("<postalCode>") );
-        assertTrue(  result.contains("</postalCode>") );
-        assertTrue(  result.contains("<country>") );
-        assertTrue(  result.contains("</country>") );
-        assertTrue(  result.contains("<phone>") );
-        assertTrue(  result.contains("</phone>") );
-        assertTrue(  result.contains("<fax>") );
-        assertTrue(  result.contains("</fax>") );
-        assertTrue(  result.contains("</customers>") );
-        assertTrue(  result.contains("</allcustomers>") );
+        assertTrue(result.contains("<allcustomers>"));
+        assertTrue(result.contains("<customers>"));
+        assertTrue(result.contains("<id>"));
+        assertTrue(result.contains("</id>"));
+        assertTrue(result.contains("<companyName>"));
+        assertTrue(result.contains("</companyName>"));
+        assertTrue(result.contains("<contactName>"));
+        assertTrue(result.contains("</contactName>"));
+        assertTrue(result.contains("<contactTitle>"));
+        assertTrue(result.contains("</contactTitle>"));
+        assertTrue(result.contains("<streetAddress>"));
+        assertTrue(result.contains("</streetAddress>"));
+        assertTrue(result.contains("<city>"));
+        assertTrue(result.contains("</city>"));
+        assertTrue(result.contains("<postalCode>"));
+        assertTrue(result.contains("</postalCode>"));
+        assertTrue(result.contains("<country>"));
+        assertTrue(result.contains("</country>"));
+        assertTrue(result.contains("<phone>"));
+        assertTrue(result.contains("</phone>"));
+        assertTrue(result.contains("<fax>"));
+        assertTrue(result.contains("</fax>"));
+        assertTrue(result.contains("</customers>"));
+        assertTrue(result.contains("</allcustomers>"));
     }
 
     @Test
@@ -62,14 +62,8 @@ class ContractCustomerImplIntegrationTest {
                 .thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomers.xml"));
 
         systemUnderTest = new ContractCustomerImpl(provider, contractCustomerRepo);
-
-        // Arrange
         contractCustomerRepo.deleteAll();
-
-        // Act
         contractCustomerRepo.saveAll(systemUnderTest.fetchContractCustomers());
-
-        //Assert
         assertEquals(3, contractCustomerRepo.count());
     }
 
