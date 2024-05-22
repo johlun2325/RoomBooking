@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,7 +113,7 @@ class BookingServiceImplTest {
     @Test
     void findAllBookings() {
 
-        when(bookingRepo.findAll()).thenReturn(Arrays.asList(booking));
+        when(bookingRepo.findAll()).thenReturn(List.of(booking));
         BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
 
         List<BookingDTO> allCustomers = serv.findAllBookings();
