@@ -55,7 +55,7 @@
                         <td th:text="${room.roomType.type}"></td>
                         <td th:text="${room.price}"></td>
                         <td>
-                            <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople})}"
+                            <a th:href="@{/room/book/{id}(id=${room.id}, startDate=${startDate}, endDate=${endDate}, numberOfPeople=${numberOfPeople}, roomPrice=${room.getPrice()})}"
                                class="btn btn-success btn-sm"
                                th:text="${buttonBookText}">
                             </a>

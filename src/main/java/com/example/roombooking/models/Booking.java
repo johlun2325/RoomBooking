@@ -1,14 +1,16 @@
 package com.example.roombooking.models;
 
+import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.utilities.BookingPriceCalculator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -36,6 +38,7 @@ public class Booking {
 
     private LocalDate startDate;
     private LocalDate endDate;
+    private BigDecimal totalPrice;
 
     public Booking(Customer customer, Room room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
@@ -43,5 +46,15 @@ public class Booking {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        if (discount.compareTo(this.totalPrice) > 0) {
+            discount = BigDecimal.ZERO;
+        }
+
+        var difference = this.totalPrice.subtract(discount);
+        this.setTotalPrice(difference);
     }
 }

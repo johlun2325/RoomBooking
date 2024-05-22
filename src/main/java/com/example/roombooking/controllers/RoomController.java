@@ -58,6 +58,7 @@ public class RoomController {
         model.addAttribute("endDateText", "Slut datum");
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("roomIdText", "Room ID");
+        model.addAttribute("roomPriceText", "Room Price");
         model.addAttribute("buttonText", "Boka");
 
         return "new-booking";

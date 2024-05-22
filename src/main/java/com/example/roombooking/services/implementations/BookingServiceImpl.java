@@ -12,6 +12,7 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateUtility;
 import com.example.roombooking.utilities.Utility;
+import com.example.roombooking.utilities.Discount;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepo roomRepo;
     private final Utility dateUtility = new DateUtility();
     private final BlacklistService blacklistService = new BlacklistService();
+    private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     //Booking till BookingLiteDTO
@@ -44,6 +46,7 @@ public class BookingServiceImpl implements BookingService {
                 .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
+                .totalPrice(booking.getTotalPrice())
                 .build();
     }
 
@@ -64,6 +67,7 @@ public class BookingServiceImpl implements BookingService {
                 .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
+                .totalPrice(booking.getTotalPrice())
                 .build();
     }
 
@@ -80,21 +84,22 @@ public class BookingServiceImpl implements BookingService {
                 .numberOfPeople(booking.getNumberOfPeople())
                 .startDate(booking.getStartDate())
                 .endDate(booking.getEndDate())
+                .totalPrice(booking.getTotalPrice())
                 .build();
     }
 
     @Override
     public List<BookingDTO> findAllBookings() {
+        LOGGER.info("Loading all bookings");
         return bookingRepo.findAll()
                 .stream()
                 .map(this::convertToDto)
-                .peek(booking -> LOGGER.info("Booking data listed: ID {}", booking.getId()))
                 .toList();
     }
 
-    // TODO: No LOGGER here
     @Override
     public BookingDTO findBookingById(Long id) {
+        LOGGER.info("Loading booking with ID: {}", id);
         return bookingRepo.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(NoSuchElementException::new);
@@ -109,11 +114,13 @@ public class BookingServiceImpl implements BookingService {
         BlacklistStatus status = blacklistService.fetchBlacklistedStatusByEmail(customer.getEmail());
 
         if (status.isOk()) {
-            bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
+            Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
+            discountService.applyDiscounts(newBooking);
+            bookingRepo.save(newBooking);
             LOGGER.info("Booking add");
             return;
         }
-        LOGGER.error("Customer is blacklisted");
+        LOGGER.warn("Customer is blacklisted");
     }
 
     @Override
@@ -150,7 +157,11 @@ public class BookingServiceImpl implements BookingService {
             foundBooking.setNumberOfPeople(numberOfPeople);
             foundBooking.setStartDate(updatedStartDate);
             foundBooking.setEndDate(updatedEndDate);
+
+            bookingRepo.delete(foundBooking);               // Using delete for LoyaltyDiscount logic (needs to exclude the updated booking)
+            discountService.applyDiscounts(foundBooking);
             bookingRepo.save(foundBooking);
+
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
 
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));

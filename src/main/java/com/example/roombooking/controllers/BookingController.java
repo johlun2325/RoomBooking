@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -52,11 +53,14 @@ class BookingController {
                              @RequestParam String startDate,
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
-                             @RequestParam Long roomId) {
+                             @RequestParam Long roomId,
+                             @RequestParam double roomPrice) {
+
 
         var customer = new CustomerLiteDTO(ssn);
-        var room = new RoomLiteDTO(roomId);
-        BookingDTO bookingDTO = new BookingDTO(customer,
+        var room = new RoomLiteDTO(roomId, roomPrice);
+        BookingDTO bookingDTO = new BookingDTO(
+                customer,
                 room,
                 numberOfPeople,
                 dateUtility.convertToLocalDate(startDate),

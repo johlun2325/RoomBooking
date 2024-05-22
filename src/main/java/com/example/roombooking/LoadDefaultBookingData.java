@@ -46,9 +46,7 @@ public class LoadDefaultBookingData implements CommandLineRunner {
         Room room9 = new Room(2995.95, doubleRoom);
         Room room10 = new Room(3995.95, largeDoubleRoom);
 
-        roomRepo.saveAll(
-                List.of(room1, room2, room3, room4, room5,
-                        room6, room7, room8, room9, room10));
+        roomRepo.saveAll(List.of(room1, room2, room3, room4, room5, room6, room7, room8, room9, room10));
 
         Customer customer1 = new Customer("John Doe", "861023-4531", "john.doe@email.com");
         Customer customer2 = new Customer("Mary Smith", "920510-5261", "mary.smith@email.com");

@@ -63,7 +63,8 @@ public class CustomerServiceImpl implements CustomerService {
                                         booking.getRoom().getRoomType()),
                                 booking.getNumberOfPeople(),
                                 booking.getStartDate(),
-                                booking.getEndDate()))
+                                booking.getEndDate(),
+                                booking.getTotalPrice()))
                         .toList())
                 .build();
     }
@@ -82,10 +83,10 @@ public class CustomerServiceImpl implements CustomerService {
     // Find all customers - lista
     @Override
     public List<CustomerDTO> findAllCustomers() {
+        LOGGER.info("Loading all customers");
         return customerRepo.findAll()
                 .stream()
                 .map(this::convertToCustomerDto)
-                .peek(customer -> LOGGER.info("Customer data listed: ID {}", customer.getId()))
                 .toList();
     }
 
@@ -93,6 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
     // Find 1 customer by id - obj
     @Override
     public CustomerDTO findCustomerById(Long id) {
+        LOGGER.info("Loading customer with ID: {}", id);
         return customerRepo.findById(id)
                 .map(this::convertToCustomerDto)
                 .orElseThrow(NoSuchElementException::new);

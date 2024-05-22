@@ -1,5 +1,6 @@
 package com.example.roombooking.dto;
 
+import com.example.roombooking.utilities.BookingPriceCalculator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Data
 @AllArgsConstructor
@@ -21,6 +24,7 @@ public class BookingDTO {
     private int numberOfPeople;
     private LocalDate startDate;
     private LocalDate endDate;
+    private BigDecimal totalPrice;
 
     public BookingDTO(CustomerLiteDTO customer, RoomLiteDTO room, int numberOfPeople, LocalDate startDate, LocalDate endDate) {
         this.customer = customer;
@@ -28,11 +32,7 @@ public class BookingDTO {
         this.numberOfPeople = numberOfPeople;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.totalPrice = new BookingPriceCalculator().calculateTotalPrice(startDate, endDate, room.getPrice(), numberOfPeople);
     }
 
-    public double getTotalPrice() {
-        BigDecimal price = BigDecimal.valueOf(room.getPrice());
-        BigDecimal total = price.multiply(BigDecimal.valueOf(numberOfPeople));
-        return total.setScale(2, RoundingMode.HALF_UP).doubleValue();
-    }
 }

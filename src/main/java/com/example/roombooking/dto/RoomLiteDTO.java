@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,10 +15,11 @@ import lombok.NoArgsConstructor;
 public class RoomLiteDTO {
 
     private Long id;
-    private double price;
+    private BigDecimal price;
     private RoomType roomType;
 
-    public RoomLiteDTO(Long id) {
+    public RoomLiteDTO(Long id, double price) {
         this.id = id;
+        this.price = BigDecimal.valueOf(price);
     }
 }
