@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -41,37 +40,37 @@ class BookingServiceImplTest {
     private BookingServiceImpl service = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
 
     //Customer
-    private Long custId = 1L;
-    private String name = "Anna";
-    private String ssn = "343434-3434";
-    private String email = "mockmock@mail.se";
+    private final Long customerId = 1L;
+    private final String name = "Anna";
+    private final String ssn = "343434-3434";
+    private final String email = "mockmock@mail.se";
 
-    private Customer customer = new Customer(custId, name, ssn, email, new ArrayList<>());
+    private final Customer customer = new Customer(customerId, name, ssn, email, new ArrayList<>());
 
-    private CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
+    private final CustomerLiteDTO customerLiteDTO = new CustomerLiteDTO().builder()
             .id(customer.getId()).name(customer.getName())
             .ssn(customer.getSsn()).email(customer.getEmail()).build();
 
     //Room
-    private Long roomId = 2L;
-    private double price = 100.0;
-    private RoomType roomType = new RoomType();
-    private List<Booking> bookings = new ArrayList<>();
+    private final Long roomId = 2L;
+    private final double price = 100.0;
+    private final RoomType roomType = new RoomType();
+    private final List<Booking> bookings = new ArrayList<>();
 
-    private Room room = new Room(roomId, price, roomType, bookings);
+    private final Room room = new Room(roomId, price, roomType, bookings);
 
-    private RoomLiteDTO liteRoom = new RoomLiteDTO().builder()
+    private final RoomLiteDTO liteRoom = new RoomLiteDTO().builder()
             .id(room.getId())
             .price(room.getPrice())
             .roomType(room.getRoomType()).build();
 
     //Booking
-    private Long id = 1L;
-    private LocalDate startDate = LocalDate.of(2024, 1, 3);
-    private LocalDate endDate = LocalDate.of(2024, 1, 4);
-    private Booking booking = new Booking(id, customer, room, 1, startDate, endDate);
+    private final Long id = 1L;
+    private final LocalDate startDate = LocalDate.of(2024, 1, 3);
+    private final LocalDate endDate = LocalDate.of(2024, 1, 4);
+    private final Booking booking = new Booking(id, customer, room, 1, startDate, endDate);
 
-    private BookingDTO bookingDTO = new BookingDTO().builder()
+    private final BookingDTO bookingDTO = new BookingDTO().builder()
             .id(booking.getId())
             .numberOfPeople(booking.getNumberOfPeople())
             .startDate(booking.getStartDate())

@@ -47,8 +47,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-//    testImplementation("com.h2database:h2")
-    //testImpl h2 - se backend3start
+    testImplementation("com.h2database:h2")
 }
 
 tasks.withType<Test> {
@@ -56,3 +55,20 @@ tasks.withType<Test> {
 }
 
 //backend3start integration test config
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+    group = "verification"
+    filter {
+        includeTestsMatching("*IntegrationTest")
+    }
+}
+
+tasks.test{
+    filter{
+        includeTestsMatching("*Test")
+
+    }
+}
+//??
+tasks.check {
+    dependsOn(integrationTestTask)
+}

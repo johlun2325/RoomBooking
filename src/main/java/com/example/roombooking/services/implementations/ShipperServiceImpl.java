@@ -19,7 +19,7 @@ public class ShipperServiceImpl implements ShipperService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
     @Autowired
-    ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
+    public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
         this.streamProvider = streamProvider;
         this.repo = repo;
     }
