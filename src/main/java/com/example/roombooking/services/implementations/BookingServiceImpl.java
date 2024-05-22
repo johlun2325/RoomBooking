@@ -157,7 +157,11 @@ public class BookingServiceImpl implements BookingService {
             foundBooking.setNumberOfPeople(numberOfPeople);
             foundBooking.setStartDate(updatedStartDate);
             foundBooking.setEndDate(updatedEndDate);
+
+            bookingRepo.delete(foundBooking);               // Using delete for LoyaltyDiscount logic (needs to exclude the updated booking)
+            discountService.applyDiscounts(foundBooking);
             bookingRepo.save(foundBooking);
+
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
 
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));

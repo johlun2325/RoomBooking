@@ -62,7 +62,6 @@ public class DiscountService {
                 .count();
 
         if (totalDays + dateRange > 10) {
-
             BigDecimal reduction = calculateDiscount(booking, TWO_PERCENT_DISCOUNT, (Math.min(dateRange, totalDays + dateRange - 10)));
             LOGGER.info("Annual discount applied, amount: {} SEK", reduction);
             return reduction;
@@ -79,5 +78,4 @@ public class DiscountService {
 
         booking.setDiscount(totalDiscount);
     }
-
 }
