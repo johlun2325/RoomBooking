@@ -3,7 +3,6 @@ package com.example.roombooking.services.implementations;
 import com.example.roombooking.dto.BlacklistedCustomerDTO;
 import com.example.roombooking.models.External.BlacklistStatus;
 import com.example.roombooking.models.External.BlacklistedCustomer;
-import com.example.roombooking.repos.ContractCustomerRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
