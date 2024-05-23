@@ -1,13 +1,27 @@
 package com.example.roombooking;
 
+import com.example.roombooking.security.UserDataSeeder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
 
 @SpringBootApplication
 public class RoomBookingApplication {
+
+    @Autowired
+    private UserDataSeeder userDataSeeder;
+
+    @Bean
+    CommandLineRunner commandLineRunner() {
+        return args -> {
+            userDataSeeder.Seed();
+        };
+    }
 
     public static void main(String[] args) {
 

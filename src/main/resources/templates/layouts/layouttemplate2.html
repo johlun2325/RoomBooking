@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title th:text="${pageTitle}">Stefans Webshop</title>
+
+    <link rel="icon" type="image/*" size="32*32" href="/images/rocket.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/main.js"></script>
+
+
+    <th:block layout:fragment="extraHead" />
+
+</head>
+
+<body>
+
+
+<!------------------sidenav-------------->
+<input type="checkbox" id="active">
+<nav>
+    <div class="content">
+        <div class="info-admin">
+            <div class="user-card">
+                <div sec:authorize="isAuthenticated()" class="user-image">
+                    <img src="/images/accounts/1608977843009.jpg" alt="Admin Jane">
+                </div>
+                <div sec:authorize="isAuthenticated()" class="user-info">
+                    <h2>Hej, <th:block th:text="${user_userName}">Namnet</th:block></h2>
+                    <form action="/logout"
+                               method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <button class="redbutton" value="submit"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </form>
+<!--                    ...                    -->
+<!--                    <a href="/logout">-->
+<!--                        <i class="fas fa-sign-out-alt"></i>-->
+<!--                        Sign out-->
+<!--                    </a>-->
+                </div>
+
+                <div sec:authorize="isAnonymous()" class="user-image">
+                    <img src="/images/blank-profile-picture.png" alt="Admin Jane">
+                </div>
+                <div sec:authorize="isAnonymous()" class="user-info">
+                    <h2>Schemaadmin</h2>
+                    <a href="/scheduleadmin">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logga in
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <ul class="nav-item">
+            <li>
+                <a href="/" th:attrappend="id=${activeFunction=='home'? 'active' : null}" >
+                    <span class="sidebar-icon"><i class="fas fa-house"></i></span>
+                    <span class="sidebar-text"> Start</span>
+                </a>
+            </li>
+            <li>
+                <a href="/public" th:attrappend="id=${activeFunction=='publicschema'? 'active' : null}" >
+                    <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
+                    <span class="sidebar-text"> Publika scheman</span>
+                </a>
+            </li>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <li class="line-split"></li>
+                <li>
+                <a href="/scheduleadmin"  th:attrappend="id=${activeFunction=='schema'? 'active' : null}">
+                    <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
+                    <span class="sidebar-text"> Schemalägg</span>
+                </a>
+            </li>
+
+                <li>
+                    <a href="/admin/courses"  th:attrappend="id=${activeFunction=='classes'? 'active' : null}">
+                        <span class="sidebar-icon"><i class="fas fa-graduation-cap"></i></span>
+                        <span class="sidebar-text"> Klasser/kurser</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/rooms"  th:attrappend="id=${activeFunction=='salar'? 'active' : null}">
+                        <span class="sidebar-icon"><i class="fas fa-people-roof"></i></span>
+                        <span class="sidebar-text"> Resurser</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/teachers"  th:attrappend="id=${activeFunction=='teachers'? 'active' : null}">
+                        <span class="sidebar-icon"><i class="fas fa-person-chalkboard"></i></span>
+                        <span class="sidebar-text"> Utbildare</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/locations"  th:attrappend="id=${activeFunction=='locations'? 'active' : null}">
+                        <span class="sidebar-icon"><i class="fas fa-location-dot"></i></span>
+                        <span class="sidebar-text">   Platser</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <!--            <li>-->
+            <!--                <a href="#" class="link-flex">-->
+            <!--                        <span class="sidebar-icon">-->
+            <!--                            <i class="fas fa-inbox"></i>-->
+            <!--                            <span class="sidebar-text"> Messages</span>-->
+            <!--                        </span>-->
+            <!--                    <span class="messages-number">4</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-chart-line"></i></span>-->
+            <!--                    <span class="sidebar-text">Traffic & Engagement</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-tablet-alt"></i></span>-->
+            <!--                    <span class="sidebar-text">App Analysis</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-hand-holding-usd"></i></span>-->
+            <!--                    <span class="sidebar-text">Transactions</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-clipboard-list"></i></span>-->
+            <!--                    <span class="sidebar-text">Task List</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-cog"></i></span>-->
+            <!--                    <span class="sidebar-text">Settings</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li class="drop-menu">-->
+            <!--                <a href="#" class="link-flex" id="sub-btn">-->
+            <!--                        <span class="sidebar-icon">-->
+            <!--                            <i class="fas fa-pager"></i>-->
+            <!--                            <span class="sidebar-text"> Dropdown</span>-->
+            <!--                        </span>-->
+            <!--                    <span class="end-icon"><i class="fas fa-chevron-right"></i></span>-->
+            <!--                </a>-->
+            <!--                <div class="submenu">-->
+            <!--                    <ul class="nav-item">-->
+            <!--                        <li>-->
+            <!--                            <a href="#">-->
+            <!--                                <span class="sidebar-icon"><i class="fas fa-icons"></i></span>-->
+            <!--                                <span class="sidebar-text">First Item</span>-->
+            <!--                            </a>-->
+            <!--                        </li>-->
+            <!--                        <li>-->
+            <!--                            <a href="#">-->
+            <!--                                <span class="sidebar-icon"><i class="fas fa-icons"></i></span>-->
+            <!--                                <span class="sidebar-text">Second Item</span>-->
+            <!--                            </a>-->
+            <!--                        </li>-->
+            <!--                        <li>-->
+            <!--                            <a href="#">-->
+            <!--                                <span class="sidebar-icon"><i class="fas fa-icons"></i></span>-->
+            <!--                                <span class="sidebar-text">Third Item</span>-->
+            <!--                            </a>-->
+            <!--                        </li>-->
+            <!--                    </ul>-->
+            <!--                </div>-->
+            <!--            </li>-->
+            <!--            <li class="line-split"></li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-inbox"></i></span>-->
+            <!--                    <span class="sidebar-text">Rocket Overview</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#" class="link-flex">-->
+            <!--                        <span class="sidebar-icon">-->
+            <!--                            <i class="fas fa-book"></i>-->
+            <!--                            <span class="sidebar-text"> Documentation</span>-->
+            <!--                        </span>-->
+            <!--                    <span class="version-number">v2.0</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-shopping-cart"></i></span>-->
+            <!--                    <span class="sidebar-text">Buy now</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#">-->
+            <!--                    <span class="sidebar-icon"><i class="fas fa-book"></i></span>-->
+            <!--                    <span class="sidebar-text">Themesberg</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+        </ul>
+    </div>
+
+</nav>
+<!------------------main-------------->
+
+<th:block layout:fragment="mainContent" />
+
+<footer>
+    <div class="content">
+        <div class="footer-copyright">
+            <p>
+                Copyright © 2023 <span>Systementor AB</span>
+            </p>
+        </div>
+        <div class="footer-menu">
+<!--            <ul>-->
+<!--                <li><a href="#">About</a></li>-->
+
+<!--                <li><a href="#">Themes</a></li>-->
+
+<!--                <li><a href="#">Blog</a></li>-->
+
+<!--                <li><a href="#">Contact</a></li>-->
+<!--            </ul>-->
+        </div>
+    </div>
+
+</footer>
+
+</body>
+
+</html>
+
