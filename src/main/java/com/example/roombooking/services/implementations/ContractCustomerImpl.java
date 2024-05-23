@@ -38,7 +38,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
     @Override
     public ContractCustomerDTO convertToContractCustomerDto(ContractCustomer contractCustomer) {
         return ContractCustomerDTO.builder()
-                .id(contractCustomer.getInternalId())
+                .id(contractCustomer.getExternalId())
                 .companyName(contractCustomer.getCompanyName())
                 .contactName(contractCustomer.getContactName())
                 .contactTitle(contractCustomer.getContactTitle())

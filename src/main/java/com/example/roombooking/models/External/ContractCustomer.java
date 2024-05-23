@@ -20,10 +20,10 @@ public class ContractCustomer {
 
         @Id
         @GeneratedValue
-        private Long internalId;
+        private Long localId;
 
         @JacksonXmlProperty(localName = "id")
-        private Long id;
+        private Long externalId;
 
         @JacksonXmlProperty(localName = "companyName")
         private String companyName;
