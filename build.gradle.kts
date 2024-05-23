@@ -67,7 +67,4 @@ tasks.test{
 
     }
 }
-//??
-tasks.check {
-    dependsOn(integrationTestTask)
-}
+

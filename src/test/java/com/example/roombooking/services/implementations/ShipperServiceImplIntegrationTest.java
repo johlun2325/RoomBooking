@@ -26,26 +26,28 @@ class ShipperServiceImplIntegrationTest {
     String url = "https://javaintegration.systementor.se/shippers";
 
     @Test
-    public void fetchShippersWillFetch() throws IOException {
+    void fetchShippersWillFetch() throws IOException {
         sut = new ShipperServiceImpl(streamProvider, shipperRepo);
+
         Scanner s = new Scanner(sut.streamProvider.getDataStream(url)).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
-        assertTrue(  result.contains("\"id\"") );
-        assertTrue(  result.contains("\"email\"") );
-        assertTrue(  result.contains("\"companyName\"") );
-        assertTrue(  result.contains("\"contactName\"") );
-        assertTrue(  result.contains("\"contactTitle\"") );
-        assertTrue(  result.contains("\"streetAddress\"") );
-        assertTrue(  result.contains("\"postalCode\"") );
-        assertTrue(  result.contains("\"country\"") );
-        assertTrue(  result.contains("\"phone\"") );
-        assertTrue(  result.contains("\"fax\"") );
+        assertTrue(result.contains("\"id\""));
+        assertTrue(result.contains("\"email\""));
+        assertTrue(result.contains("\"companyName\""));
+        assertTrue(result.contains("\"contactName\""));
+        assertTrue(result.contains("\"contactTitle\""));
+        assertTrue(result.contains("\"streetAddress\""));
+        assertTrue(result.contains("\"postalCode\""));
+        assertTrue(result.contains("\"country\""));
+        assertTrue(result.contains("\"phone\""));
+        assertTrue(result.contains("\"fax\""));
     }
 
     @Test
     void fetchAndSaveShippersShouldSaveToDatabaseTest() throws IOException {
         final String URL = "https://javaintegration.systementor.se/shippers";
+
         StreamProvider provider = mock(StreamProvider.class);
         when(provider.getDataStream(URL))
                 .thenReturn(getClass().getClassLoader().getResourceAsStream("shippers.json"));
