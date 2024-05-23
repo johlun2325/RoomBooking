@@ -15,7 +15,7 @@ public class UserDataSeeder {
     @Autowired
     RoleRepository roleRepository;
 
-    public void Seed(){
+    public void seed() {
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
@@ -26,7 +26,7 @@ public class UserDataSeeder {
             addUser("ivan.radovan@hotmail.com","Admin");
         }
         if(userRepository.getUserByUsername("milo.radovan@systementor.hotmail.com") == null){
-            addUser("milo.radovan@systementor.hotmail.com","Customer");
+            addUser("milo.radovan@systementor.hotmail.com","Receptionist");
         }
     }
 

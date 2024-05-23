@@ -39,7 +39,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/login/**", "/logout")
+                        .requestMatchers("/", "/login/**", "/logout", "/room/**", "/contractCustomer/**", "/event/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

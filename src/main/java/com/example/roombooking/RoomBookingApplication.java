@@ -18,9 +18,7 @@ public class RoomBookingApplication {
 
     @Bean
     CommandLineRunner commandLineRunner() {
-        return args -> {
-            userDataSeeder.Seed();
-        };
+        return arg -> userDataSeeder.seed();
     }
 
     public static void main(String[] args) {
