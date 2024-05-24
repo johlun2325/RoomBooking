@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.atomic.AtomicReference;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -103,16 +104,24 @@ public class BookingServiceImpl implements BookingService {
 
     // TODO: Fungerar bara med befintliga kunder
     @Override
-    public void addBooking(BookingDTO booking) {
+    public String addBooking(BookingDTO booking) {
+        var message = new AtomicReference<String>();
+
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
         bookingRepo.save(new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate()));
         LOGGER.info("Booking add");
+
+        message.set("Customer with ID " + customer.getId() + " Made a booking with room ID " + room.getId() + " added");
+
+        return message.get();
     }
 
     @Override
-    public void updateBooking(BookingDTO booking) {
+    public String updateBooking(BookingDTO booking) {
+        var message = new AtomicReference<String>();
+
         bookingRepo.findById(booking.getId()).ifPresentOrElse(foundBooking -> {
 
             int capacity = foundBooking.getRoom().getRoomType().getCapacity();
@@ -147,17 +156,24 @@ public class BookingServiceImpl implements BookingService {
             foundBooking.setEndDate(updatedEndDate);
             bookingRepo.save(foundBooking);
             LOGGER.info("Booking with ID: {} updated", foundBooking.getId());
+            message.set("Booking with ID: " + foundBooking.getId() + " updated");
 
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
+        return message.get();
     }
 
 
     //delete by id with thymeleaf
     @Override
-    public void deleteBookingById(Long id) {
+    public String deleteBookingById(Long id) {
+        var message = new AtomicReference<String>();
+
         bookingRepo.findById(id).ifPresentOrElse(foundBooking -> {
             bookingRepo.delete(foundBooking);
             LOGGER.info("Booking with ID: {} deleted", id);
+            message.set("Booking with ID: " + id + " deleted");
         }, () -> LOGGER.warn("Booking with ID: {} not found", id));
+
+        return message.get();
     }
 }

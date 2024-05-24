@@ -179,35 +179,39 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String deleteCustomerById(Long id) {
 
-        Customer c = customerRepo.findById(id)
-                .orElseThrow(() -> {
-                    LOGGER.warn("Customer with ID: {} not found", id);
-                    return new RuntimeException("Customer not found");
-                });
-        String msg = "";
-
-        if (c != null){
-            if (c.getBookings().isEmpty()) {
-                customerRepo.deleteById(id);
-                msg = "Kunden togs bort";
-                LOGGER.info("Customer with ID: {} deleted", id);
-            }
-            else {
-                msg = "Kunden togs inte bort, den har aktiva bokningar";
-                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
-            }
-        }
-        return msg;
-
-
-//        customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
-//            if (!foundCustomer.getBookings().isEmpty()) {
-//                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
-//            }
-//            else {
-//                customerRepo.delete(foundCustomer);
+//        Customer c = customerRepo.findById(id)
+//                .orElseThrow(() -> {
+//                    LOGGER.warn("Customer with ID: {} not found", id);
+//                    return new RuntimeException("Customer not found");
+//                });
+//        String msg = "";
+//
+//        if (c != null){
+//            if (c.getBookings().isEmpty()) {
+//                customerRepo.deleteById(id);
+//                msg = "Kunden togs bort";
 //                LOGGER.info("Customer with ID: {} deleted", id);
 //            }
-//        }, () -> LOGGER.warn("Customer with ID: {} not found", id));
+//            else {
+//                msg = "Kunden togs inte bort, den har aktiva bokningar";
+//                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+//            }
+//        }
+//        return msg;
+
+        var message = new AtomicReference<String>();
+
+        customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {
+            if (!foundCustomer.getBookings().isEmpty()) {
+                LOGGER.warn("Customer with ID: {} has booking history and thereby not deleted", id);
+                message.set("Customer with ID: " + foundCustomer.getId() + " has booking history and thereby not deleted");
+            }
+            else {
+                customerRepo.delete(foundCustomer);
+                LOGGER.info("Customer with ID: {} deleted", id);
+                message.set("Customer with ID: " + id + " deleted");
+            }
+        }, () -> LOGGER.warn("Customer with ID: {} not found", id));
+        return message.get();
     }
 }

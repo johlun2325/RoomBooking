@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -52,7 +53,8 @@ class BookingController {
                              @RequestParam String startDate,
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
-                             @RequestParam Long roomId) {
+                             @RequestParam Long roomId,
+                             RedirectAttributes redirectAttributes) {
 
         var customer = new CustomerLiteDTO(ssn);
         var room = new RoomLiteDTO(roomId);
@@ -62,14 +64,18 @@ class BookingController {
                 dateUtility.convertToLocalDate(startDate),
                 dateUtility.convertToLocalDate(endDate));
 
-        bookingService.addBooking(bookingDTO);
+        String message = bookingService.addBooking(bookingDTO);
+        redirectAttributes.addFlashAttribute("message",message);
         return "redirect:/booking/all";
     }
 
 
     @RequestMapping("/delete/{id}")
-    public String deleteBooking(@PathVariable Long id) {
-        bookingService.deleteBookingById(id);
+    public String deleteBooking(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+
+        String message = bookingService.deleteBookingById(id);
+        redirectAttributes.addFlashAttribute("message",message);
+
         return "redirect:/booking/all";
     }
 
@@ -89,8 +95,11 @@ class BookingController {
     }
 
     @PostMapping("/update")
-    public String updateBooking(BookingDTO booking) {
-        bookingService.updateBooking(booking);
+    public String updateBooking(BookingDTO booking, RedirectAttributes redirectAttributes) {
+
+        String message = bookingService.updateBooking(booking);
+        redirectAttributes.addFlashAttribute("message",message);
+
         return "redirect:/booking/all";
     }
 
