@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" rel="stylesheet">
+    <title th:text="${pageTitle}"></title>
+
+    <style>
+        tr[href], i {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<nav>
+    <a th:href="@{/}" class="btn btn-link" aria-label="Home"><i class="bi bi-house"></i></a>
+</nav>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 th:text="${header}"></h1>
+            <div class="input-group">
+                <form method="get" class="d-flex w-100" th:action="@{/user/all/sort}">
+                    <input class="form-control flex-grow-1 rounded-0" type="search" id="searchInput"
+                           th:placeholder="${placeholder}" aria-label="Search" name="query" th:value="${query}">
+                    <button class="btn btn-outline-success rounded-0" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">
+                        <span th:text="${username}"></span>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=companyName&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
+                    </th>
+                    <th scope="col">
+                        <span th:text="${password}"></span>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=password&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=password&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
+                    </th>
+                    <th scope="col">
+                        <span th:text="${enabled}"></span>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=enabled&sortOrder=ASC|}"><i
+                                class="bi bi-sort-alpha-up"></i></a>
+                        <a th:href="@{|/user/all/sort?query=${query != null ? query : ''}&sortColumn=enabled&sortOrder=DESC|}"><i
+                                class="bi bi-sort-alpha-down-alt"></i></a>
+                    </th>
+                    <th scope="col" th:text="${update}"></th>
+                    <th scope="col" th:text="${delete}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${allUsers}"
+                    th:href="@{/user/{username}(username=${user.username})}" onclick="navigateToCustomer(this)">
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.password}"></td>
+                    <td th:text="${user.enabled}"></td>
+                    <td>
+                        <a th:text="${update}" th:href="@{/user/updateForm/{user}(user=${user.username})}" class="btn btn-primary btn-sm" style="width: 85px"></a>
+                    </td>
+                    <td>
+                        <a th:text="${delete}" th:href="@{/user/delete/{username}(username=${user.username})}" onclick="return confirmDelete()" class="btn btn-danger btn-sm" style="width: 85px"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function navigateToCustomer(row) {
+        window.location.href = row.getAttribute("href");
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function () {
+        if (searchInput.value === "") {
+            window.location.href = "http://localhost:8080/user/all";
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

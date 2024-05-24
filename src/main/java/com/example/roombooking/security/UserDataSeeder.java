@@ -1,10 +1,12 @@
 package com.example.roombooking.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserDataSeeder {
@@ -16,23 +18,26 @@ public class UserDataSeeder {
     RoleRepository roleRepository;
 
     public void seed() {
-        if (roleRepository.findByName("Admin") == null) {
+        if (roleRepository.findByName("Admin").isEmpty()) {
             addRole("Admin");
         }
-        if (roleRepository.findByName("Customer") == null) {
-            addRole("Customer");
+        if (roleRepository.findByName("Receptionist").isEmpty()) {
+            addRole("Receptionist");
         }
-        if(userRepository.getUserByUsername("ivan.radovan@hotmail.com") == null){
-            addUser("ivan.radovan@hotmail.com","Admin");
+        if (userRepository.getUserByUsername("walter.white@crystal.com").isEmpty()) {
+            addUser("walter.white@crystal.com", "Admin");
         }
-        if(userRepository.getUserByUsername("milo.radovan@systementor.hotmail.com") == null){
-            addUser("milo.radovan@systementor.hotmail.com","Receptionist");
+        if (userRepository.getUserByUsername("jesse.pinkman@crystal.com").isEmpty()) {
+            addUser("jesse.pinkman@crystal.com", "Receptionist");
         }
     }
 
     private void addUser(String mail, String group) {
         ArrayList<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName(group));
+        Role role = roleRepository.findByName(group)
+                .orElseThrow(() -> new NoSuchElementException("Role was not found in the database"));
+
+        roles.add(role);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hash = encoder.encode("123");

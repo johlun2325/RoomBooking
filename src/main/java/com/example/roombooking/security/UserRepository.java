@@ -1,15 +1,21 @@
 package com.example.roombooking.security;
 
 
+import com.example.roombooking.models.External.ContractCustomer;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository extends CrudRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT user FROM User user WHERE user.username = :username")
-    User getUserByUsername(@Param("username") String username);
+    Optional<User> getUserByUsername(@Param("username") String username);
+
+    List<User> findAllByUsernameStartingWith(String query, Sort sort);
 
 }

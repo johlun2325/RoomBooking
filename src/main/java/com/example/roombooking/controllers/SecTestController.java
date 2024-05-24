@@ -22,7 +22,7 @@ public class SecTestController {
 
     @GetMapping(path="/profile")
     @PreAuthorize("isAuthenticated()")
-    public String Edit(Model model){
+    public String edit(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         String username = auth.getName();
