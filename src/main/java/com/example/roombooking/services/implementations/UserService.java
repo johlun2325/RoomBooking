@@ -1,21 +1,18 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.ContractCustomerDTO;
 import com.example.roombooking.dto.UserDTO;
-import com.example.roombooking.models.External.ContractCustomer;
-import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.security.User;
 import com.example.roombooking.security.UserRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +32,22 @@ public class UserService {
                 .build();
     }
 
+    public User convertDtoToUser(UserDTO userDTO) {
+        return User.builder()
+                .id(userDTO.getId())
+                .username(userDTO.getUsername())
+                .password(userDTO.getPassword())
+                .enabled(userDTO.isEnabled())
+                .roles(userDTO.getRoles())
+                .build();
+    }
+
+    public User findUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    }
+
     public UserDTO findUserByUsername(String username) {
-        return userRepository.getUserByUsername(username)
+        return userRepository.findByUsername(username)
                 .map(this::convertToDto)
                 .orElseThrow(NoSuchElementException::new);
     }
@@ -60,6 +71,60 @@ public class UserService {
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+    }
+
+    public String addUser(UserDTO user) {
+        var message = new AtomicReference<String>();
+
+        return userRepository.findByUsername(user.getUsername())
+                .map(foundUser -> {
+                    message.set("User with username: %s exists".formatted(foundUser.getUsername()));
+                    LOGGER.warn(message.get());
+                    return message.get();
+                })
+                .orElseGet(() -> {
+                    userRepository.save(convertDtoToUser(user));
+                    message.set("User with username: %s added".formatted(user.getUsername()));
+                    LOGGER.info(message.get());
+                    return message.get();
+                });
+    }
+
+    public String updateUser(UserDTO user) {
+        var message = new AtomicReference<String>();
+
+        return userRepository.findById(user.getId())
+                .map(foundUser -> {
+                    foundUser.setUsername(user.getUsername());
+                    foundUser.setEnabled(user.isEnabled());
+                    foundUser.setRoles(user.getRoles());
+                    userRepository.save(foundUser);
+                    message.set("User with username: %s updated".formatted(user.getUsername()));
+                    LOGGER.info(message.get());
+                    return message.get();
+                })
+                .orElseGet(() -> {
+                    message.set("Customer with username: %s not found".formatted(user.getUsername()));
+                    LOGGER.warn(message.get());
+                    return message.get();
+                });
+    }
+
+    public String deleteUser(String userName) {
+        var message = new AtomicReference<String>();
+
+        return userRepository.findByUsername(userName)
+                .map(foundUser -> {
+                    userRepository.delete(foundUser);
+                    message.set("User with username: %s deleted".formatted(foundUser.getUsername()));
+                    LOGGER.info(message.get());
+                    return message.get();
+                })
+                .orElseGet(() -> {
+                    message.set("User with username: %s not found".formatted(userName));
+                    LOGGER.warn(message.get());
+                    return message.get();
+                });
     }
 
 }

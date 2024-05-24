@@ -1,77 +1,114 @@
 package com.example.roombooking.controllers;
 
+import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.dto.UserDTO;
+import com.example.roombooking.security.Role;
 import com.example.roombooking.services.implementations.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-        private final UserService userService;
+    private final UserService userService;
 
-        @GetMapping("/all")
-        public String getAllContractCustomers(Model model) {
-            model.addAttribute("allUsers", userService.findAllUsers());
-            model.addAttribute("pageTitle", "Användare");
-            model.addAttribute("header", "Alla användare");
-            model.addAttribute("placeholder", "Sök användare...");
-            model.addAttribute("username", "Användarnamn");
-            model.addAttribute("password", "Lösenord");
-            model.addAttribute("enabled", "Aktiverad");
-            model.addAttribute("update", "Uppdatera");
-            model.addAttribute("delete ", "Ta Bort");
-//            model.addAttribute("roles", "Roller");
+    @GetMapping("/all")
+    public String getAllContractCustomers(Model model) {
+        model.addAttribute("allUsers", userService.findAllUsers());
+        model.addAttribute("pageTitle", "Användare");
+        model.addAttribute("header", "Alla användare");
+        model.addAttribute("placeholder", "Sök användare...");
+        model.addAttribute("username", "Användarnamn");
+        model.addAttribute("update", "Uppdatera");
+        model.addAttribute("delete", "Ta Bort");
 
-            return "all-users";
+        return "all-users";
+    }
+
+    @GetMapping({"/{username}"})
+    public String getUser(@PathVariable String username, Model model) {
+        model.addAttribute("user", userService.findUserByUsername(username));
+        model.addAttribute("pageTitle", "Användare");
+        model.addAttribute("header", "Användare");
+        model.addAttribute("id", "ID");
+        model.addAttribute("username", "Användarnamn");
+        model.addAttribute("enabled", "Aktiverad");
+        model.addAttribute("yes", "Ja");
+        model.addAttribute("no", "Nej");
+        model.addAttribute("roles", "Roller");
+        model.addAttribute("update", "Uppdatera");
+        model.addAttribute("delete", "Ta Bort");
+
+        return "user-info";
+    }
+
+    @GetMapping("/all/sort")
+    public String sort(Model model,
+                       @RequestParam(defaultValue = "username") String sortColumn,
+                       @RequestParam(defaultValue = "ASC") String sortOrder,
+                       @RequestParam String query) {
+
+        model.addAttribute("allUsers", userService.findAllUsers());
+        model.addAttribute("pageTitle", "Användare");
+        model.addAttribute("header", "Alla användare");
+        model.addAttribute("placeholder", "Sök användare...");
+        model.addAttribute("username", "Användarnamn");
+        model.addAttribute("password", "Lösenord");
+        model.addAttribute("enabled", "Aktiverad");
+        model.addAttribute("update", "Uppdatera");
+        model.addAttribute("delete", "Ta Bort");
+        query = query.trim();
+
+        if (query.isEmpty()) {
+            model.addAttribute("allUsers", userService.findAllUsersSorted(sortOrder, sortColumn));
+        } else {
+            model.addAttribute("query", query);
+            model.addAttribute("allUsers", userService.findAllUsersSortAndQuery(query, sortOrder, sortColumn));
         }
 
-        @GetMapping({"/{username}"})
-        public String getContractCustomer(@PathVariable String username, Model model) {
-            model.addAttribute("user", userService.findUserByUsername(username));
-            model.addAttribute("pageHeader", "Företagskunder");
-            model.addAttribute("header", "Företagskund");
-            model.addAttribute("companyName", "Företag");
-            model.addAttribute("contactName", "Namn");
-            model.addAttribute("contactTitle", "Titel");
-            model.addAttribute("streetAddress", "Adress");
-            model.addAttribute("city", "Stad");
-            model.addAttribute("postalCode", "Postnummer");
-            model.addAttribute("country", "Land");
-            model.addAttribute("phone", "Mobilnummer");
-            model.addAttribute("fax", "Fax");
+        return "all-users";
+    }
 
-            return "show-contract-customer-info";
-        }
-//
-//        @GetMapping("/all/sort")
-//        public String sort(Model model,
-//                           @RequestParam(defaultValue = "companyName") String sortColumn,
-//                           @RequestParam(defaultValue = "ASC") String sortOrder,
-//                           @RequestParam String query) {
-//
-//            model.addAttribute("pageHeader", "Företagskunder");
-//            model.addAttribute("header", "Alla företagskunder");
-//            model.addAttribute("companyName", "Företag");
-//            model.addAttribute("contactName", "Namn");
-//            model.addAttribute("country", "Land");
-//            model.addAttribute("placeholder", "Sök företag...");
-//
-//            query = query.trim();
-//
-//            if (query.isEmpty()) {
-//                model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
-//            } else {
-//                model.addAttribute("query", query);
-//                model.addAttribute("allContractCustomers", contractCustomerService.findAllByCompanyNameStartingWith(query, sortOrder, sortColumn));
-//            }
-//
-//            return "all-contract-customers";
-//        }
+    @PostMapping("/add")
+    public String addUser(Model model,
+                              @RequestParam String username,
+                              @RequestParam String password,
+                              @RequestParam boolean enabled,
+                              @RequestParam Collection<Role> roles) {
+        model.addAttribute("message", userService.addUser(new UserDTO(username, password, enabled, roles)));
+        return "redirect:/user/all";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(Model model, UserDTO user) {
+        model.addAttribute("message", userService.updateUser(user));
+        return "redirect:/user/all";
+    }
+
+
+    @RequestMapping("/delete/{username}")
+    public String deleteUser(Model model, @PathVariable String username) {
+        model.addAttribute("message", userService.deleteUser(username));
+
+        return "redirect:/user/all";
+    }
+
+    @GetMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable UUID id, Model model) {
+        model.addAttribute("user", userService.findUserById(id));
+        model.addAttribute("pageTitle", "Kund");
+        model.addAttribute("header", "Uppdatera kund");
+        model.addAttribute("usernameText", "Ändra användarnamn");
+        model.addAttribute("enabled", "Aktiverad");
+        model.addAttribute("buttonText", "Uppdatera");
+        return "update-user";
+    }
 
 }

@@ -22,7 +22,9 @@ public class User {
     @Column(name="id")
     private UUID id;
 
+    @Column(unique = true)
     private String username;
+
     private String password;
     private boolean enabled;
 

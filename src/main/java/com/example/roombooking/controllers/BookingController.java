@@ -4,14 +4,13 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -20,7 +19,7 @@ import java.util.List;
 class BookingController {
 
     private final BookingService bookingService;
-    private final Utility dateUtility = new DateUtility();
+    private final DateUtility dateUtility = new DateStrategy();
 
     @GetMapping("/all")
     String getAllBookings(Model model) {

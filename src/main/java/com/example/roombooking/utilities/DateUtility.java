@@ -1,35 +1,11 @@
 package com.example.roombooking.utilities;
 
 import java.time.LocalDate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class DateUtility implements Utility {
+public interface DateUtility {
 
-    @Override
-    public LocalDate convertToLocalDate(String date) {
-        Pattern datePattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
+    LocalDate convertToLocalDate(String date);
 
-        Matcher matcher = datePattern.matcher(date);
-        if (!matcher.find()) throw new RuntimeException("Illegal date format");
+    boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2);
 
-        int yyyy = Integer.parseInt(matcher.group(1));
-        int mm = Integer.parseInt(matcher.group(2));
-        int dd = Integer.parseInt(matcher.group(3));
-
-        return LocalDate.of(yyyy, mm, dd);
-    }
-
-    @Override
-    public boolean areDatesOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-
-        if (start1.isAfter(end1) || start2.isAfter(end2)) {
-            throw new IllegalArgumentException("Start date must not be after end date");
-        }
-
-        long overlap = Math.min(end1.toEpochDay(), end2.toEpochDay()) -
-                Math.max(start1.toEpochDay(), start2.toEpochDay());
-
-        return overlap >= 0;
-    }
 }

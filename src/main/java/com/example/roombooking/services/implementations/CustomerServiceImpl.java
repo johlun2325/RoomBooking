@@ -106,9 +106,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepo.findCustomerBySsn(customer.getSsn())
                 .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
                         () -> {
-                    customerRepo.save(convertDtoToCustomer(customer));
-                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
-                });
+                            customerRepo.save(convertDtoToCustomer(customer));
+                            LOGGER.info("Customer with SSN: {} added", customer.getSsn());
+                        });
     }
 
 //    @Override

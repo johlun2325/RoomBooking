@@ -1,11 +1,12 @@
 package com.example.roombooking.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -24,16 +25,17 @@ public class UserDataSeeder {
         if (roleRepository.findByName("Receptionist").isEmpty()) {
             addRole("Receptionist");
         }
-        if (userRepository.getUserByUsername("walter.white@crystal.com").isEmpty()) {
+        if (userRepository.findByUsername("walter.white@crystal.com").isEmpty()) {
             addUser("walter.white@crystal.com", "Admin");
         }
-        if (userRepository.getUserByUsername("jesse.pinkman@crystal.com").isEmpty()) {
+        if (userRepository.findByUsername("jesse.pinkman@crystal.com").isEmpty()) {
             addUser("jesse.pinkman@crystal.com", "Receptionist");
+
         }
     }
 
     private void addUser(String mail, String group) {
-        ArrayList<Role> roles = new ArrayList<>();
+        List<Role> roles = new ArrayList<>();
         Role role = roleRepository.findByName(group)
                 .orElseThrow(() -> new NoSuchElementException("Role was not found in the database"));
 

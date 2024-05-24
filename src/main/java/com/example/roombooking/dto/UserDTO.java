@@ -21,4 +21,10 @@ public class UserDTO {
     private boolean enabled;
     private Collection<Role> roles;
 
+    public UserDTO(String username, String password, boolean enabled, Collection<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.roles = roles;
+    }
 }
