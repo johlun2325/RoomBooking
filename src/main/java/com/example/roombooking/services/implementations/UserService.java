@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    private final RoleService roleService;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     public UserDTO convertToDto(User user) {
@@ -28,7 +30,7 @@ public class UserService {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .enabled(user.isEnabled())
-                .roles(user.getRoles())
+                .roles(user.getRoles().stream().map(roleService::convertToDto).toList())
                 .build();
     }
 
@@ -38,7 +40,7 @@ public class UserService {
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
                 .enabled(userDTO.isEnabled())
-                .roles(userDTO.getRoles())
+                .roles(userDTO.getRoles().stream().map(roleService::convertDtoToRole).toList())
                 .build();
     }
 
@@ -83,7 +85,10 @@ public class UserService {
                     return message.get();
                 })
                 .orElseGet(() -> {
-                    userRepository.save(convertDtoToUser(user));
+                    User newUser = convertDtoToUser(user);
+                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                    newUser.setPassword(encoder.encode(newUser.getPassword()));
+                    userRepository.save(newUser);
                     message.set("User with username: %s added".formatted(user.getUsername()));
                     LOGGER.info(message.get());
                     return message.get();
@@ -97,7 +102,10 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setUsername(user.getUsername());
                     foundUser.setEnabled(user.isEnabled());
-                    foundUser.setRoles(user.getRoles());
+                    foundUser.setRoles(user.getRoles()
+                            .stream()
+                            .map(roleService::convertDtoToRole)
+                            .toList());
                     userRepository.save(foundUser);
                     message.set("User with username: %s updated".formatted(user.getUsername()));
                     LOGGER.info(message.get());

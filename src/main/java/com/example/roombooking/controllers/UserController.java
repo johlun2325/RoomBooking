@@ -1,15 +1,17 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.CustomerDTO;
+import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.dto.UserDTO;
-import com.example.roombooking.security.Role;
+import com.example.roombooking.services.implementations.RoleService;
 import com.example.roombooking.services.implementations.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @GetMapping("/all")
     public String getAllContractCustomers(Model model) {
@@ -76,15 +79,38 @@ public class UserController {
         return "all-users";
     }
 
+    @GetMapping("/new")
+    public String openNewCustomerPage(Model model) {
+        model.addAttribute("pageTitle", "Användare");
+        model.addAttribute("header", "Skapa en ny användare");
+        model.addAttribute("userDTO", new UserDTO());
+        model.addAttribute("usernameText", "Ange användarnamn");
+        model.addAttribute("passwordText", "Ange lösenord");
+        model.addAttribute("rolesText", "Välj en eller flera roller");
+        model.addAttribute("allRoles", roleService.findAllRoles());
+        model.addAttribute("submitText", "Lägg till");
+
+        return "new-user";
+    }
+
     @PostMapping("/add")
-    public String addUser(Model model,
-                              @RequestParam String username,
-                              @RequestParam String password,
-                              @RequestParam boolean enabled,
-                              @RequestParam Collection<Role> roles) {
-        model.addAttribute("message", userService.addUser(new UserDTO(username, password, enabled, roles)));
+    public String addUser(Model model, @RequestParam MultiValueMap<String, String> formData) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(formData.getFirst("username"));
+        userDTO.setPassword(formData.getFirst("password"));
+        userDTO.setEnabled(true);
+
+
+        List<RoleDTO> roles = new ArrayList<>();
+        formData.get("roles").forEach(r -> roles.add(roleService.findRoleByName(r)));
+        userDTO.setRoles(roles);
+
+        model.addAttribute("message", userService.addUser(userDTO));
+
         return "redirect:/user/all";
     }
+
+
 
     @PostMapping("/update")
     public String updateUser(Model model, UserDTO user) {

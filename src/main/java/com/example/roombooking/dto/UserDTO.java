@@ -1,6 +1,5 @@
 package com.example.roombooking.dto;
 
-import com.example.roombooking.security.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +18,9 @@ public class UserDTO {
     private String username;
     private String password;
     private boolean enabled;
-    private Collection<Role> roles;
+    private Collection<RoleDTO> roles;
 
-    public UserDTO(String username, String password, boolean enabled, Collection<Role> roles) {
+    public UserDTO(String username, String password, boolean enabled, Collection<RoleDTO> roles) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
