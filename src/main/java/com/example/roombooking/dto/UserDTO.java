@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
 import java.util.UUID;
 
 @Data
@@ -18,12 +17,6 @@ public class UserDTO {
     private String username;
     private String password;
     private boolean enabled;
-    private Collection<RoleDTO> roles;
+    private String[] roleNames; // Is used because Thymeleaf can only send a String[] of an attribute from the Role class (We use name).
 
-    public UserDTO(String username, String password, boolean enabled, Collection<RoleDTO> roles) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-        this.roles = roles;
-    }
 }

@@ -1,23 +1,15 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.dto.UserDTO;
-import com.example.roombooking.security.Role;
 import com.example.roombooking.services.implementations.RoleService;
 import com.example.roombooking.services.implementations.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -58,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/all/sort")
-    public String sort(Model model,
+    public String sortAndSearchUsers(Model model,
                        @RequestParam(defaultValue = "username") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
                        @RequestParam String query) {
@@ -92,51 +84,45 @@ public class UserController {
         model.addAttribute("usernameText", "Ange användarnamn");
         model.addAttribute("passwordText", "Ange lösenord");
         model.addAttribute("rolesText", "Välj en eller flera roller");
-        model.addAttribute("allRoles", roleService.findAllRoles());
+        model.addAttribute("allRoles", roleService.findAllRolesDto());
         model.addAttribute("submitText", "Skapa");
 
         return "new-user";
     }
 
     @PostMapping( "/add")
-    public String addUser(RedirectAttributes redirectAttributes, @RequestParam MultiValueMap<String, String> formData) {
-        UserDTO userDTO = new UserDTO(
-                formData.getFirst("username"),
-                formData.getFirst("password"),
-                true,
-                formData.get("roles")
-                        .stream()
-                        .map(roleService::findRoleByNameDto)
-                        .toList());
-
-        String message = userService.addUser(userDTO);
+    public String addUser(RedirectAttributes redirectAttributes, UserDTO user) {
+        String message = userService.addUser(user);
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/user/all";
     }
 
 
     @PostMapping("/update")
-    public String updateUser(Model model, UserDTO user) {
-        model.addAttribute("message", userService.updateUser(user));
+    public String updateUser(RedirectAttributes redirectAttributes, UserDTO user) {
+        redirectAttributes.addFlashAttribute("message", userService.updateUser(user));
         return "redirect:/user/all";
     }
 
 
     @RequestMapping("/delete/{username}")
-    public String deleteUser(Model model, @PathVariable String username) {
-        model.addAttribute("message", userService.deleteUser(username));
+    public String deleteUser(RedirectAttributes redirectAttributes, @PathVariable String username) {
+        redirectAttributes.addFlashAttribute("message", userService.deleteUser(username));
 
         return "redirect:/user/all";
     }
 
     @GetMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable UUID id, Model model) {
-        model.addAttribute("user", userService.findUserById(id));
+        model.addAttribute("userDto", userService.convertToDto(userService.findUserById(id)));
         model.addAttribute("pageTitle", "Kund");
         model.addAttribute("header", "Uppdatera kund");
         model.addAttribute("usernameText", "Ändra användarnamn");
         model.addAttribute("enabled", "Aktiverad");
+        model.addAttribute("rolesText", "Uppdatera roll");
         model.addAttribute("buttonText", "Uppdatera");
+        model.addAttribute("allRoles", roleService.findAllRolesDto());
+
         return "update-user";
     }
 

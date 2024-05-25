@@ -29,7 +29,10 @@ public class UserService {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .enabled(user.isEnabled())
-                .roles(user.getRoles().stream().map(roleService::convertToDto).toList())
+                .roleNames(user.getRoles()
+                        .stream()
+                        .map(Role::getName)
+                        .toArray(String[]::new))
                 .build();
     }
 
@@ -39,7 +42,9 @@ public class UserService {
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
                 .enabled(userDTO.isEnabled())
-                .roles(userDTO.getRoles().stream().map(roleService::convertDtoToRole).toList())
+                .roles(Arrays.stream(userDTO.getRoleNames())
+                        .map(roleService::findRoleByName)
+                        .toList())
                 .build();
     }
 
@@ -85,8 +90,8 @@ public class UserService {
                 })
                 .orElseGet(() -> {
                     User newUser = convertDtoToUser(user);
-                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                    newUser.setPassword(encoder.encode(newUser.getPassword()));
+                    newUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+                    newUser.setEnabled(!newUser.getRoles().isEmpty());
                     userRepository.save(newUser);
                     message.set("User with username: %s added".formatted(user.getUsername()));
                     LOGGER.info(message.get());
@@ -101,9 +106,8 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setUsername(user.getUsername());
                     foundUser.setEnabled(user.isEnabled());
-                    foundUser.setRoles(user.getRoles()
-                            .stream()
-                            .map(roleService::convertDtoToRole)
+                    foundUser.setRoles(Arrays.stream(user.getRoleNames())
+                            .map(roleService::findRoleByName)
                             .toList());
                     userRepository.save(foundUser);
                     message.set("User with username: %s updated".formatted(user.getUsername()));
