@@ -2,17 +2,22 @@ package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.dto.UserDTO;
+import com.example.roombooking.security.Role;
 import com.example.roombooking.services.implementations.RoleService;
 import com.example.roombooking.services.implementations.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -82,34 +87,32 @@ public class UserController {
     @GetMapping("/new")
     public String openNewCustomerPage(Model model) {
         model.addAttribute("pageTitle", "Användare");
-        model.addAttribute("header", "Skapa en ny användare");
+        model.addAttribute("header", "Skapa användare");
         model.addAttribute("userDTO", new UserDTO());
         model.addAttribute("usernameText", "Ange användarnamn");
         model.addAttribute("passwordText", "Ange lösenord");
         model.addAttribute("rolesText", "Välj en eller flera roller");
         model.addAttribute("allRoles", roleService.findAllRoles());
-        model.addAttribute("submitText", "Lägg till");
+        model.addAttribute("submitText", "Skapa");
 
         return "new-user";
     }
 
-    @PostMapping("/add")
-    public String addUser(Model model, @RequestParam MultiValueMap<String, String> formData) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(formData.getFirst("username"));
-        userDTO.setPassword(formData.getFirst("password"));
-        userDTO.setEnabled(true);
+    @PostMapping( "/add")
+    public String addUser(RedirectAttributes redirectAttributes, @RequestParam MultiValueMap<String, String> formData) {
+        UserDTO userDTO = new UserDTO(
+                formData.getFirst("username"),
+                formData.getFirst("password"),
+                true,
+                formData.get("roles")
+                        .stream()
+                        .map(roleService::findRoleByNameDto)
+                        .toList());
 
-
-        List<RoleDTO> roles = new ArrayList<>();
-        formData.get("roles").forEach(r -> roles.add(roleService.findRoleByName(r)));
-        userDTO.setRoles(roles);
-
-        model.addAttribute("message", userService.addUser(userDTO));
-
+        String message = userService.addUser(userDTO);
+        redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/user/all";
     }
-
 
 
     @PostMapping("/update")

@@ -37,7 +37,22 @@
                 </div>
 
                 <input type="hidden" id="password" th:field="*{password}">
-                <input type="hidden" id="roles" th:field="*{roles}">
+<!--                <input type="hidden" id="roles" th:field="*{roles}">-->
+
+                <div class="d-flex mb-3">
+                    <div class="btn-group dropend">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" th:text="${rolesText}">
+                        </button>
+                        <div class="dropdown-menu p-3">
+                            <div class="form-check" th:each="role : ${allRoles}">
+                                <input class="form-check-input" type="checkbox" th:value="${role.name}"
+                                       th:id="${role.name}" th:field="*{roles}" th:checked="${userDTO.roles.contains(role)}">
+                                <label class="form-check-label" th:for="${role.name}" th:text="${role.name}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <button type="submit" class="btn btn-primary" th:text="${buttonText}"></button>
 

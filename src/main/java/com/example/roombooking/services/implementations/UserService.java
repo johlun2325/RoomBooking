@@ -1,6 +1,8 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.dto.UserDTO;
+import com.example.roombooking.security.Role;
 import com.example.roombooking.security.User;
 import com.example.roombooking.security.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +12,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
 
     private final UserRepository userRepository;
     private final RoleService roleService;

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -22,5 +23,8 @@ public class Role {
 
     @Column(unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
 
 }

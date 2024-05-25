@@ -3,14 +3,17 @@ package com.example.roombooking.services.implementations;
 import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.security.Role;
 import com.example.roombooking.security.RoleRepository;
+import com.example.roombooking.security.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class RoleService {
         return roleRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
-    public RoleDTO findRoleByName(String name) {
+    public RoleDTO findRoleByNameDto(String name) {
         return roleRepository.findByName(name)
                 .map(this::convertToDto)
                 .orElseThrow(NoSuchElementException::new);
