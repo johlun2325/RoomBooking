@@ -11,11 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -108,9 +106,13 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setUsername(user.getUsername());
                     foundUser.setEnabled(user.isEnabled());
-                    foundUser.setRoles(Arrays.stream(user.getRoleNames())
+
+                    var roles = (Arrays.stream(user.getRoleNames())
                             .map(roleService::findRoleByName)
-                            .toList());
+                            .collect(Collectors.toCollection(ArrayList::new)));
+                    foundUser.getRoles().clear();
+                    foundUser.getRoles().addAll(roles);
+
                     userRepository.save(foundUser);
                     message.set("User with username: %s updated".formatted(user.getUsername()));
                     LOGGER.info(message.get());
