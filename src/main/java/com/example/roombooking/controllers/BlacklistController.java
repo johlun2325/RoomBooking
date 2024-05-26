@@ -42,8 +42,9 @@ public class BlacklistController {
                           @RequestParam String email,
                           @RequestParam String name,
                           @RequestParam(defaultValue = "false") boolean isOk) {
+
         model.addAttribute("message", blacklistService.addCustomerToBlacklist(
-                new BlacklistedCustomerDTO(email, name, isOk)));
+                                                  new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
@@ -66,14 +67,13 @@ public class BlacklistController {
         return "blacklist/blacklist-form.html";
     }
 
-
     @RequestMapping("/update")
     String updateToBlacklist(Model model,
                              @RequestParam String email,
                              @RequestParam String name,
                              @RequestParam(defaultValue = "false") boolean isOk) {
         model.addAttribute("message", blacklistService.updateCustomerToBlacklist(
-                new BlacklistedCustomerDTO(email, name, isOk)));
+                                                  new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
@@ -81,6 +81,4 @@ public class BlacklistController {
 
         return "blacklist/blacklist-menu.html";
     }
-
-
 }

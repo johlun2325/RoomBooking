@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.UUID;
 
 @Controller
@@ -54,7 +53,6 @@ public class UserController {
                        @RequestParam(defaultValue = "username") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
                        @RequestParam String query) {
-
         model.addAttribute("allUsers", userService.findAllUsers());
         model.addAttribute("pageTitle", "Användare");
         model.addAttribute("header", "Alla användare");
@@ -64,14 +62,14 @@ public class UserController {
         model.addAttribute("enabled", "Aktiverad");
         model.addAttribute("update", "Uppdatera");
         model.addAttribute("delete", "Ta Bort");
-        query = query.trim();
 
-        if (query.isEmpty()) {
-            model.addAttribute("allUsers", userService.findAllUsersSorted(sortOrder, sortColumn));
-        } else {
-            model.addAttribute("query", query);
-            model.addAttribute("allUsers", userService.findAllUsersSortAndQuery(query, sortOrder, sortColumn));
-        }
+        query = query.trim();
+        var users = query.isEmpty()
+                ? userService.findAllUsersSorted(sortOrder, sortColumn)
+                : userService.findAllUsersSortAndQuery(query, sortOrder, sortColumn);
+
+        model.addAttribute("query", query);
+        model.addAttribute("allUsers", users);
 
         return "user/users.html";
     }
@@ -97,18 +95,15 @@ public class UserController {
         return "redirect:/user/all";
     }
 
-
     @PostMapping("/update")
     public String updateUser(RedirectAttributes redirectAttributes, UserDTO user) {
         redirectAttributes.addFlashAttribute("message", userService.updateUser(user));
         return "redirect:/user/all";
     }
 
-
     @RequestMapping("/delete/{username}")
     public String deleteUser(RedirectAttributes redirectAttributes, @PathVariable String username) {
         redirectAttributes.addFlashAttribute("message", userService.deleteUser(username));
-
         return "redirect:/user/all";
     }
 
@@ -125,5 +120,4 @@ public class UserController {
 
         return "user/update-user.html";
     }
-
 }

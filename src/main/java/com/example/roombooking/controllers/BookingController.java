@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
@@ -54,13 +53,12 @@ class BookingController {
                              @RequestParam int numberOfPeople,
                              @RequestParam Long roomId,
                              @RequestParam double roomPrice) {
-        BookingDTO bookingDTO = new BookingDTO(
-                new CustomerLiteDTO(ssn),
-                new RoomLiteDTO(roomId, roomPrice),
-                numberOfPeople,
-                dateUtility.convertToLocalDate(startDate),
-                dateUtility.convertToLocalDate(endDate));
 
+        BookingDTO bookingDTO = new BookingDTO(new CustomerLiteDTO(ssn),
+                                               new RoomLiteDTO(roomId, roomPrice),
+                                               numberOfPeople,
+                                               dateUtility.convertToLocalDate(startDate),
+                                               dateUtility.convertToLocalDate(endDate));
         bookingService.addBooking(bookingDTO);
         return "redirect:/booking/all";
     }
@@ -102,5 +100,4 @@ class BookingController {
 
         return "room/search-room.html";
     }
-
 }

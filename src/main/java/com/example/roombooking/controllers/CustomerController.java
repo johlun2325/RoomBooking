@@ -57,6 +57,7 @@ public class CustomerController {
     public String addCustomer(@RequestParam String name,
                               @RequestParam String ssn,
                               @RequestParam String email) {
+
         customerService.addCustomer(new CustomerDTO(name, ssn, email));
         return "redirect:/customer/all";
     }
