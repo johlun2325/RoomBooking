@@ -4,6 +4,7 @@ import com.example.roombooking.LoadContractCustomerApplication;
 import com.example.roombooking.models.External.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
 import com.example.roombooking.services.ShipperService;
+import com.example.roombooking.utilities.StreamProvider;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
@@ -16,6 +17,9 @@ import java.io.InputStream;
 
 @Service
 public class ShipperServiceImpl implements ShipperService {
+
+    StreamProvider streamProvider;
+    private final ShipperRepo repo;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
     @Autowired
@@ -23,10 +27,6 @@ public class ShipperServiceImpl implements ShipperService {
         this.streamProvider = streamProvider;
         this.repo = repo;
     }
-
-    StreamProvider streamProvider;
-
-    private final ShipperRepo repo;
 
     @Override
     public Shipper[] fetchShippers(String url) {

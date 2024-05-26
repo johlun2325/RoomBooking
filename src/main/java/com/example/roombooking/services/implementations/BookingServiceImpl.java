@@ -33,7 +33,6 @@ public class BookingServiceImpl implements BookingService {
     private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
-    //Booking till BookingLiteDTO
     @Override
     public BookingLiteDTO convertToBookingLiteDto(Booking booking) {
         return BookingLiteDTO.builder()
@@ -49,7 +48,6 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
-    //Booking till BookingDTO
     @Override
     public BookingDTO convertToDto(Booking booking) {
         return BookingDTO.builder()
@@ -117,7 +115,6 @@ public class BookingServiceImpl implements BookingService {
                 return;
             }
 
-            // Use updated dates from the DTO
             LocalDate updatedStartDate = booking.getStartDate();
             LocalDate updatedEndDate = booking.getEndDate();
 
@@ -149,8 +146,6 @@ public class BookingServiceImpl implements BookingService {
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
     }
 
-
-    //delete by id with thymeleaf
     @Override
     public void deleteBookingById(Long id) {
         bookingRepo.findById(id).ifPresentOrElse(foundBooking -> {

@@ -1,14 +1,11 @@
 package com.example.roombooking.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,16 +36,5 @@ public class Room {
         this.price = BigDecimal.valueOf(price);
         this.roomType = roomType;
         this.bookings = new ArrayList<>();
-    }
-
-    public void addBooking(Booking booking) {
-        boolean notFound = bookings.stream().noneMatch(it -> it.equals(booking));
-        if (notFound) {
-            bookings.add(booking);
-        }
-    }
-
-    public void removeBooking(Booking booking) {
-        bookings.removeIf(it -> it.equals(booking));
     }
 }

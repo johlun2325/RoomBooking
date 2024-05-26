@@ -14,7 +14,6 @@ public interface CustomerService {
 
     CustomerDTO convertToCustomerDto(Customer customer);
 
-    // Usage: When a new customer creates a new booking!
     Customer convertLiteDtoToCustomer(CustomerLiteDTO customer);
 
     List<CustomerDTO> findAllCustomers();
@@ -23,7 +22,6 @@ public interface CustomerService {
 
     void addCustomer(CustomerDTO customer);
 
-    //thymeleaf delete
     void deleteCustomerById(Long id);
 
     String updateCustomer(CustomerDTO customer);

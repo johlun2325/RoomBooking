@@ -2,6 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.models.External.ContractCustomer;
 import com.example.roombooking.repos.ContractCustomerRepo;
+import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

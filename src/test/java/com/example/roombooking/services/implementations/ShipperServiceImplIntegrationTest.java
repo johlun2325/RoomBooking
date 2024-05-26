@@ -1,6 +1,7 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.repos.ShipperRepo;
+import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

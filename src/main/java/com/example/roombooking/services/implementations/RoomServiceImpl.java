@@ -32,7 +32,6 @@ public class RoomServiceImpl implements RoomService {
                 .build();
     }
 
-    // Usage: When a new customer creates a new booking!
     @Override
     public Room convertLiteDtoToRoom(RoomLiteDTO room) {
         return Room.builder()
@@ -51,7 +50,6 @@ public class RoomServiceImpl implements RoomService {
                 .toList();
     }
 
-    // TODO: No LOGGER here
     @Override
     public RoomLiteDTO findRoomById(Long id) {
         return roomRepo.findById(id)
