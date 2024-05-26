@@ -20,6 +20,7 @@
             font-size: 20px;
             font-weight: bold;
         }
+
         .login-link:hover {
             color: #666;
         }
@@ -84,6 +85,14 @@
 
             <div class="mb-3" sec:authorize="hasAuthority('Admin')">
                 <a th:href="@{/user/all}" class="btn btn-dark m-3 w-50">Se alla användare</a>
+            </div>
+
+            <div class="mb-3" sec:authorize="hasAuthority('Admin')">
+                <a th:href="@{/role/new}" class="btn btn-dark m-3 w-50">Lägg till roller</a>
+            </div>
+
+            <div class="mb-3" sec:authorize="hasAuthority('Admin')">
+                <a th:href="@{/role/all}" class="btn btn-dark m-3 w-50">Se alla användare</a>
             </div>
 
         </div>

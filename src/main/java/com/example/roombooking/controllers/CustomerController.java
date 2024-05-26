@@ -44,9 +44,9 @@ public class CustomerController {
                 "pageTitle", "Ny Kund",
                 "header","Lägg till ny kund",
                 "fullNameText", "Fullständigt namn",
-                "nameTitle", "Please enter only Swedish letters and spaces.",
+                "nameTitle", "Använd endast mellanrum och svenska bokstäver.",
                 "ssnText", "Personnummer",
-                "ssnTitle", "Please enter a number in the format YYMMDD-XXXX.",
+                "ssnTitle", "Använd format YYMMDD-XXXX.",
                 "emailText", "E-postadress",
                 "buttonText", "Lägg till"));
 

@@ -19,7 +19,7 @@ public class UserController {
     private final RoleService roleService;
 
     @GetMapping("/all")
-    public String getAllContractCustomers(Model model) {
+    public String getAllUsers(Model model) {
         model.addAttribute("allUsers", userService.findAllUsers());
         model.addAttribute("pageTitle", "Användare");
         model.addAttribute("header", "Alla användare");
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/new")
-    public String openNewCustomerPage(Model model) {
+    public String createNewUser(Model model) {
         model.addAttribute("pageTitle", "Användare");
         model.addAttribute("header", "Skapa användare");
         model.addAttribute("userDTO", new UserDTO());

@@ -24,7 +24,7 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private Collection<User> users;
 
 }

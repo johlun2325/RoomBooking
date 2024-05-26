@@ -2,6 +2,7 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.dto.UserDTO;
 import com.example.roombooking.security.Role;
+import com.example.roombooking.security.RoleRepository;
 import com.example.roombooking.security.User;
 import com.example.roombooking.security.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleService roleService;
+    private final RoleRepository roleRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     public UserDTO convertToDto(User user) {
@@ -43,7 +44,8 @@ public class UserService {
                 .password(userDTO.getPassword())
                 .enabled(userDTO.isEnabled())
                 .roles(Arrays.stream(userDTO.getRoleNames())
-                        .map(roleService::findRoleByName)
+                        .map(role -> roleRepository.findByName(role)
+                                .orElseThrow(NoSuchElementException::new))
                         .toList())
                 .build();
     }
@@ -108,7 +110,8 @@ public class UserService {
                     foundUser.setEnabled(user.isEnabled());
 
                     var roles = (Arrays.stream(user.getRoleNames())
-                            .map(roleService::findRoleByName)
+                            .map(role -> roleRepository.findByName(role)
+                                    .orElseThrow(NoSuchElementException::new))
                             .collect(Collectors.toCollection(ArrayList::new)));
                     foundUser.getRoles().clear();
                     foundUser.getRoles().addAll(roles);

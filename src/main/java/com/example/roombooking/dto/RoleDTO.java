@@ -15,5 +15,6 @@ public class RoleDTO {
 
     private UUID id;
     private String name;
+    private String[] users;
 
 }
