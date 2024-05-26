@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,17 +33,7 @@ public class User {
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    private Collection<Role> roles;
 
-//    public void addRole(Role role) {
-//        boolean exists = this.roles.contains(role);
-//        if (!exists) {
-//            this.roles.add(role);
-//        }
-//    }
-//
-//    public void removeRole(Role role) {
-//        this.roles.removeIf(r -> r.equals(role));
-//    }
 }
 

@@ -1,7 +1,6 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.dto.UserDTO;
-import com.example.roombooking.services.implementations.RoleService;
 import com.example.roombooking.services.implementations.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @GetMapping("/all")
     public String getAllUsers(Model model) {
@@ -82,7 +80,7 @@ public class UserController {
         model.addAttribute("usernameText", "Ange användarnamn");
         model.addAttribute("passwordText", "Ange lösenord");
         model.addAttribute("rolesText", "Välj en eller flera roller");
-        model.addAttribute("allRoles", roleService.findAllRolesDto());
+        model.addAttribute("allRoles", userService.findAllRolesDto());
         model.addAttribute("submitText", "Skapa");
 
         return "user/new-user.html";
@@ -116,7 +114,7 @@ public class UserController {
         model.addAttribute("enabled", "Aktiverad");
         model.addAttribute("rolesText", "Uppdatera roll");
         model.addAttribute("buttonText", "Uppdatera");
-        model.addAttribute("allRoles", roleService.findAllRolesDto());
+        model.addAttribute("allRoles", userService.findAllRolesDto());
 
         return "user/update-user.html";
     }

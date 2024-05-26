@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.RoleDTO;
 import com.example.roombooking.dto.UserDTO;
 import com.example.roombooking.security.Role;
 import com.example.roombooking.security.RoleRepository;
@@ -24,7 +25,18 @@ public class UserService {
     private final RoleRepository roleRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    public UserDTO convertToDto(User user) {
+    private RoleDTO convertRoleToDto(Role role) {
+        return RoleDTO.builder()
+                .id(role.getId())
+                .name(role.getName())
+                .users(role.getUsers()
+                        .stream()
+                        .map(User::getUsername)
+                        .toArray(String[]::new))
+                .build();
+    }
+
+    public UserDTO convertUserToDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -50,37 +62,51 @@ public class UserService {
                 .build();
     }
 
+    public List<RoleDTO> findAllRolesDto() {
+        return roleRepository.findAll()
+                .stream()
+                .map(this::convertRoleToDto)
+                .toList();
+    }
+
     public UserDTO findUserById(UUID id) {
         return userRepository.findById(id)
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     public UserDTO findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     public List<UserDTO> findAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .toList();
     }
 
     public List<UserDTO> findAllUsersSorted(String sortOrder, String userNameColumn) {
         return userRepository.findAll(Sort.by(Sort.Direction.fromString(sortOrder), userNameColumn))
                 .stream()
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .toList();
     }
 
     public List<UserDTO> findAllUsersSortAndQuery(String query, String sortOrder, String sortColumn) {
         return userRepository.findAllByUsernameStartingWith(query, Sort.by(Sort.Direction.fromString(sortOrder), sortColumn))
                 .stream()
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .toList();
+    }
+
+    private Collection<Role> arrayRolesToCollection(String[] roles) {
+        return Arrays.stream(roles)
+                .map(role -> roleRepository.findByName(role)
+                        .orElseThrow(NoSuchElementException::new))
+                .collect(Collectors.toList());
     }
 
     public String addUser(UserDTO user) {
@@ -110,12 +136,7 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setUsername(user.getUsername());
                     foundUser.setEnabled(user.isEnabled());
-                    foundUser.setRoles(Arrays
-                            .stream(user.getRoleNames())
-                            .map(role -> roleRepository.findByName(role)
-                                    .orElseThrow(NoSuchElementException::new))
-                            .collect(Collectors.toList()));
-
+                    foundUser.setRoles(arrayRolesToCollection(user.getRoleNames()));
                     userRepository.save(foundUser);
                     message.set("User with username: %s updated".formatted(user.getUsername()));
                     LOGGER.info(message.get());
@@ -144,5 +165,4 @@ public class UserService {
                     return message.get();
                 });
     }
-
 }
