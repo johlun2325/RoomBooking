@@ -22,23 +22,11 @@
             <h1 class="mt-3 mb-3" th:text="${header}"></h1>
             <form action="#" th:action="@{/booking/add}" method="post">
 
-                <!--Hidden until checking for existing customer-->
-                <!--    <div class="mb-3">-->
-                <!--        <label for="name" class="form-label" hidden="until-found">Fullständigt namn</label>-->
-                <!--        <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces." hidden="until-found" required>-->
-                <!--    </div>-->
-
                 <div class="mb-3">
                     <label for="ssn" class="form-label" th:text="${ssnText}"></label>
                     <input type="text" class="form-control" id="ssn" name="ssn" pattern="\d{6}-\d{4}"
                            title="Please enter a number in the format YYMMDD-XXXX." required>
                 </div>
-
-                <!--Hidden until checking for existing customer-->
-                <!--    <div class="mb-3">-->
-                <!--        <label for="email" class="form-label" hidden="until-found">E-postadress</label>-->
-                <!--        <input type="email" class="form-control" id="email" name="email" hidden="until-found" required>-->
-                <!--    </div>-->
 
                 <div class="mb-3">
                     <label for="startDate" class="form-label" th:text="${startDateText}"></label>

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @Controller
 public class SecTestController {
 
@@ -20,7 +19,7 @@ public class SecTestController {
         return "security/admin";
     }
 
-    @GetMapping(path="/profile")
+    @GetMapping(path="/receptionist")
     @PreAuthorize("isAuthenticated()")
     public String edit(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -30,14 +29,4 @@ public class SecTestController {
 
         return "security/profile";
     }
-
-
-
-
-
-
-
-
-
-
 }

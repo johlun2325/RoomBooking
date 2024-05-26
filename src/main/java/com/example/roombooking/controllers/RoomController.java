@@ -28,7 +28,7 @@ public class RoomController {
         model.addAttribute("roomId", "Rums-id");
         model.addAttribute("roomType", "Typ");
         model.addAttribute("messages", "Se meddelanden");
-        return "allRooms";
+        return "room/rooms.html";
     }
 
 //    @GetMapping("/all/{id}")
@@ -61,7 +61,7 @@ public class RoomController {
         model.addAttribute("roomPriceText", "Room Price");
         model.addAttribute("buttonText", "Boka");
 
-        return "new-booking";
+        return "booking/new-booking.html";
     }
 
 
@@ -89,7 +89,7 @@ public class RoomController {
         model.addAttribute("buttonBookText", "Boka nu");
         model.addAttribute("roomTypeTh", "Rum Type");
 
-        return "searchForm";
+        return "room/search-room.html";
     }
 
 

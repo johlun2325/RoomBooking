@@ -39,7 +39,7 @@ class BookingController {
         model.addAttribute("delete", "Ta bort");
         model.addAttribute("hem", "Hem");
 
-        return "allBookings";
+        return "booking/bookings.html";
     }
 
     @GetMapping({"/{id}"})
@@ -54,13 +54,9 @@ class BookingController {
                              @RequestParam int numberOfPeople,
                              @RequestParam Long roomId,
                              @RequestParam double roomPrice) {
-
-
-        var customer = new CustomerLiteDTO(ssn);
-        var room = new RoomLiteDTO(roomId, roomPrice);
         BookingDTO bookingDTO = new BookingDTO(
-                customer,
-                room,
+                new CustomerLiteDTO(ssn),
+                new RoomLiteDTO(roomId, roomPrice),
                 numberOfPeople,
                 dateUtility.convertToLocalDate(startDate),
                 dateUtility.convertToLocalDate(endDate));
@@ -69,14 +65,12 @@ class BookingController {
         return "redirect:/booking/all";
     }
 
-
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {
         bookingService.deleteBookingById(id);
         return "redirect:/booking/all";
     }
 
-    // /updateForm/{id}
     @RequestMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable Long id, Model model){
         BookingDTO booking = bookingService.findBookingById(id);
@@ -88,7 +82,7 @@ class BookingController {
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("buttonText", "Uppdatera");
 
-        return "updateBookingForm";
+        return "booking/update-booking.html";
     }
 
     @PostMapping("/update")
@@ -106,7 +100,7 @@ class BookingController {
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("submitText", "Sök");
 
-        return "searchForm";
+        return "room/search-room.html";
     }
 
 }

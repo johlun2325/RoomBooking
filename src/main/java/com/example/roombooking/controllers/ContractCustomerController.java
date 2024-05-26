@@ -1,10 +1,7 @@
 package com.example.roombooking.controllers;
 
-
-import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +16,6 @@ public class ContractCustomerController {
 
     private final ContractCustomerService contractCustomerService;
 
-
     @GetMapping("/all")
     public String getAllContractCustomers(Model model) {
         model.addAttribute("allContractCustomers", contractCustomerService.findAllContractCustomers());
@@ -30,7 +26,7 @@ public class ContractCustomerController {
         model.addAttribute("country", "Land");
         model.addAttribute("placeholder", "Sök företag...");
 
-        return "all-contract-customers";
+        return "contract_customer/all-contract-customers.html";
     }
 
     @GetMapping({"/{id}"})
@@ -48,7 +44,7 @@ public class ContractCustomerController {
         model.addAttribute("phone", "Mobilnummer");
         model.addAttribute("fax", "Fax");
 
-        return "show-contract-customer-info";
+        return "contract_customer/info-contract-customer.html";
     }
 
     @GetMapping("/all/sort")
@@ -56,7 +52,6 @@ public class ContractCustomerController {
                        @RequestParam(defaultValue = "companyName") String sortColumn,
                        @RequestParam(defaultValue = "ASC") String sortOrder,
                        @RequestParam String query) {
-
         model.addAttribute("pageHeader", "Företagskunder");
         model.addAttribute("header", "Alla företagskunder");
         model.addAttribute("companyName", "Företag");
@@ -65,14 +60,13 @@ public class ContractCustomerController {
         model.addAttribute("placeholder", "Sök företag...");
 
         query = query.trim();
+        var contractCustomers = query.isEmpty()
+                ? contractCustomerService.findAllSorted(sortOrder, sortColumn)
+                : contractCustomerService.findAllByCompanyNameStartingWith(query, sortOrder, sortColumn);
 
-        if (query.isEmpty()) {
-            model.addAttribute("allContractCustomers", contractCustomerService.findAllSorted(sortOrder, sortColumn));
-        } else {
-            model.addAttribute("query", query);
-            model.addAttribute("allContractCustomers", contractCustomerService.findAllByCompanyNameStartingWith(query, sortOrder, sortColumn));
-        }
+        model.addAttribute("query", query);
+        model.addAttribute("allContractCustomers", contractCustomers);
 
-        return "all-contract-customers";
+        return "contract_customer/all-contract-customers.html";
     }
 }

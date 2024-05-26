@@ -29,7 +29,7 @@ public class UserController {
         model.addAttribute("update", "Uppdatera");
         model.addAttribute("delete", "Ta Bort");
 
-        return "all-users";
+        return "user/users.html";
     }
 
     @GetMapping({"/{username}"})
@@ -46,7 +46,7 @@ public class UserController {
         model.addAttribute("update", "Uppdatera");
         model.addAttribute("delete", "Ta Bort");
 
-        return "user-info";
+        return "user/user-info.html";
     }
 
     @GetMapping("/all/sort")
@@ -73,7 +73,7 @@ public class UserController {
             model.addAttribute("allUsers", userService.findAllUsersSortAndQuery(query, sortOrder, sortColumn));
         }
 
-        return "all-users";
+        return "user/users.html";
     }
 
     @GetMapping("/new")
@@ -87,7 +87,7 @@ public class UserController {
         model.addAttribute("allRoles", roleService.findAllRolesDto());
         model.addAttribute("submitText", "Skapa");
 
-        return "new-user";
+        return "user/new-user.html";
     }
 
     @PostMapping( "/add")
@@ -123,7 +123,7 @@ public class UserController {
         model.addAttribute("buttonText", "Uppdatera");
         model.addAttribute("allRoles", roleService.findAllRolesDto());
 
-        return "update-user";
+        return "user/update-user.html";
     }
 
 }

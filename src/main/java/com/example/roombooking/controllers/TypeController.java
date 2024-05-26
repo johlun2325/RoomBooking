@@ -26,5 +26,4 @@ public class TypeController {
     RoomType getType(@PathVariable Long id) {
         return typeService.findTypeById(id);
     }
-
 }
