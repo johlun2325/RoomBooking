@@ -50,8 +50,10 @@ public class UserService {
                 .build();
     }
 
-    public User findUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public UserDTO findUserById(UUID id) {
+        return userRepository.findById(id)
+                .map(this::convertToDto)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public UserDTO findUserByUsername(String username) {
@@ -108,13 +110,11 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setUsername(user.getUsername());
                     foundUser.setEnabled(user.isEnabled());
-
-                    var roles = (Arrays.stream(user.getRoleNames())
+                    foundUser.setRoles(Arrays
+                            .stream(user.getRoleNames())
                             .map(role -> roleRepository.findByName(role)
                                     .orElseThrow(NoSuchElementException::new))
-                            .collect(Collectors.toCollection(ArrayList::new)));
-                    foundUser.getRoles().clear();
-                    foundUser.getRoles().addAll(roles);
+                            .collect(Collectors.toList()));
 
                     userRepository.save(foundUser);
                     message.set("User with username: %s updated".formatted(user.getUsername()));

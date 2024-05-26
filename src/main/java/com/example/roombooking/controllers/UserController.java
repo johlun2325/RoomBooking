@@ -109,7 +109,7 @@ public class UserController {
 
     @GetMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable UUID id, Model model) {
-        model.addAttribute("userDto", userService.convertToDto(userService.findUserById(id)));
+        model.addAttribute("userDto", userService.findUserById(id));
         model.addAttribute("pageTitle", "Kund");
         model.addAttribute("header", "Uppdatera kund");
         model.addAttribute("usernameText", "Ändra användarnamn");

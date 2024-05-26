@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,27 +37,27 @@ public class RoleService {
                 .build();
     }
 
-    public Role convertDtoToRole(RoleDTO role) {
+    public Role convertDtoToRole(RoleDTO roleDTO) {
         return Role.builder()
-                .id(role.getId())
-                .name(role.getName())
-                .users(Arrays.stream(role.getUsers())
+                .id(roleDTO.getId())
+                .name(roleDTO.getName())
+                .users(Arrays.stream(roleDTO.getUsers())
                         .map(user -> userRepository.findByUsername(user)
                                 .orElseThrow(NoSuchElementException::new))
                         .toList())
                 .build();
     }
 
-    public Role findRoleById(UUID id) {
-        return roleRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public RoleDTO findRoleById(UUID id) {
+        return roleRepository.findById(id)
+                .map(this::convertToDto)
+                .orElseThrow(NoSuchElementException::new);
     }
 
-    public Role findRoleByName(String name) {
-        return roleRepository.findByName(name).orElseThrow(NoSuchElementException::new);
-    }
-
-    public RoleDTO findRoleByNameDto(String name) {
-        return convertToDto(findRoleByName(name));
+    public RoleDTO findRoleByName(String name) {
+        return roleRepository.findByName(name)
+                .map(this::convertToDto)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public List<RoleDTO> findAllRolesDto() {
@@ -90,9 +91,38 @@ public class RoleService {
                     return message.get();
                 })
                 .orElseGet(() -> {
-                    roleRepository.save(convertDtoToRole(role));
+                    Role newRole = convertDtoToRole(role);
+                    roleRepository.save(newRole);
+
+
+
+
                     message.set("Role %s added".formatted(role.getName()));
                     LOGGER.info(message.get());
+                    return message.get();
+                });
+    }
+
+    public String updateRole(RoleDTO role) {
+        var message = new AtomicReference<String>();
+
+        return roleRepository.findById(role.getId())
+                .map(foundRole -> {
+                    foundRole.setName(role.getName());
+                    foundRole.setUsers(Arrays
+                            .stream(role.getUsers())
+                            .map(username -> userRepository.findByUsername(username)
+                                    .orElseThrow(NoSuchElementException::new))
+                            .collect(Collectors.toList()));
+
+                    roleRepository.save(foundRole);
+                    message.set("Role %s updated".formatted(foundRole.getName()));
+                    LOGGER.info(message.get());
+                    return message.get();
+                })
+                .orElseGet(() -> {
+                    message.set("Role %s not found".formatted(role.getName()));
+                    LOGGER.warn(message.get());
                     return message.get();
                 });
     }

@@ -20,7 +20,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h1 th:text="${header}"></h1>
             <div class="input-group">
                 <form method="get" class="d-flex w-100" th:action="@{/role/all/sort}">
@@ -41,6 +41,7 @@
                         <a th:href="@{|/role/all/sort?query=${query != null ? query : ''}&sortColumn=name&sortOrder=DESC|}"><i
                                 class="bi bi-sort-alpha-down-alt"></i></a>
                     </th>
+                    <th scope="col" th:text="${updateText}"></th>
                     <th scope="col" th:text="${deleteText}"></th>
                 </tr>
                 </thead>
@@ -48,6 +49,9 @@
                 <tr th:each="role : ${allRoles}"
                     th:href="@{/role/{name}(name=${role.name})}" onclick="navigateToCustomer(this)">
                     <td th:text="${role.name}"></td>
+                    <td>
+                        <a th:text="${updateText}" th:href="@{/role/updateForm/{id}(id=${role.id})}" class="btn btn-secondary btn-sm" style="width: 85px"></a>
+                    </td>
                     <td>
                         <a th:text="${deleteText}" th:href="@{/role/delete/{name}(name=${role.name})}"
                            onclick="return confirmDelete()" class="btn btn-danger btn-sm" style="width: 85px"></a>

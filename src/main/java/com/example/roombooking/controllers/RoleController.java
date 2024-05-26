@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/role")
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class RoleController {
         model.addAttribute("header", "Alla roller");
         model.addAttribute("placeholder", "Sök roll...");
         model.addAttribute("nameText", "Roll");
+        model.addAttribute("updateText", "Uppdatera");
         model.addAttribute("deleteText", "Ta Bort");
 
         return "role/roles.html";
@@ -31,12 +34,12 @@ public class RoleController {
 
     @GetMapping({"/{name}"})
     public String getRole(@PathVariable String name, Model model) {
-        model.addAttribute("role", roleService.findRoleByName(name));
+        model.addAttribute("roleDto", roleService.findRoleByName(name));
         model.addAttribute("pageTitle", "Roll");
         model.addAttribute("header", "Roll");
         model.addAttribute("idText", "ID");
         model.addAttribute("nameText", "Roll");
-        model.addAttribute("usersText", "Roller");
+        model.addAttribute("usersText", "Användare");
 
         return "role/role-info.html";
     }
@@ -52,6 +55,7 @@ public class RoleController {
         model.addAttribute("header", "Alla roller");
         model.addAttribute("placeholder", "Sök roll...");
         model.addAttribute("nameText", "Roll");
+        model.addAttribute("updateText", "Uppdatera");
         model.addAttribute("deleteText", "Ta Bort");
 
         query = query.trim();
@@ -60,7 +64,7 @@ public class RoleController {
                 : roleService.findAllRolesSortAndQuery(query, sortOrder, sortColumn);
 
         model.addAttribute("query", query);
-        model.addAttribute("allUsers", roles);
+        model.addAttribute("allRoles", roles);
 
         return "role/roles.html";
     }
@@ -89,6 +93,25 @@ public class RoleController {
     public String deleteRole(RedirectAttributes redirectAttributes, @PathVariable String name) {
         redirectAttributes.addFlashAttribute("message", roleService.deleteRole(name));
         return "redirect:/role/all";
+    }
+
+    @PostMapping("/update")
+    public String updateRole(RedirectAttributes redirectAttributes, RoleDTO role) {
+        redirectAttributes.addFlashAttribute("message", roleService.updateRole(role));
+        return "redirect:/role/all";
+    }
+
+    @GetMapping("/updateForm/{id}")
+    public String updateByForm(@PathVariable UUID id, Model model) {
+        model.addAttribute("roleDto", roleService.findRoleById(id));
+        model.addAttribute("pageTitle", "Roll");
+        model.addAttribute("header", "Uppdatera roll");
+        model.addAttribute("roleText", "Ändra rollbenämning");
+        model.addAttribute("usersText", "Uppdatera användare");
+        model.addAttribute("buttonText", "Uppdatera");
+        model.addAttribute("allUsers", userService.findAllUsers());
+
+        return "role/update-role.html";
     }
 
 }
