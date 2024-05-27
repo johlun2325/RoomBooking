@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class SecTestController {
@@ -28,5 +29,11 @@ public class SecTestController {
         model.addAttribute("username", username);
 
         return "security/profile";
+    }
+
+    @RequestMapping("/login")
+    public String login(Model model) {
+
+        return "security/login.html";
     }
 }

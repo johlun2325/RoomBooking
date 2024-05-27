@@ -45,7 +45,6 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.security:spring-security-test")
 
-
     implementation ("com.rabbitmq:amqp-client")
 
     compileOnly("org.projectlombok:lombok")
