@@ -1,5 +1,6 @@
 package com.example.roombooking.security;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,21 @@ public class UserDataSeeder {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    IntegrationProperties integrationProperties;
+
     public void seed() {
-        if (roleRepository.findByName("Admin").isEmpty()) {
-            addRole("Admin");
+        if (roleRepository.findByName(integrationProperties.getSeed().getRole1()).isEmpty()) {
+            addRole(integrationProperties.getSeed().getRole1());
         }
-        if (roleRepository.findByName("Receptionist").isEmpty()) {
-            addRole("Receptionist");
+        if (roleRepository.findByName(integrationProperties.getSeed().getRole2()).isEmpty()) {
+            addRole(integrationProperties.getSeed().getRole2());
         }
-        if (userRepository.findByUsername("walter.white@crystal.com").isEmpty()) {
-            addUser("walter.white@crystal.com", "Admin");
+        if (userRepository.findByUsername(integrationProperties.getSeed().getUsername1()).isEmpty()) {
+            addUser(integrationProperties.getSeed().getUsername1(), integrationProperties.getSeed().getRole1());
         }
-        if (userRepository.findByUsername("jesse.pinkman@crystal.com").isEmpty()) {
-            addUser("jesse.pinkman@crystal.com", "Receptionist");
+        if (userRepository.findByUsername(integrationProperties.getSeed().getUsername2()).isEmpty()) {
+            addUser(integrationProperties.getSeed().getUsername2(), integrationProperties.getSeed().getRole2());
 
         }
     }
@@ -42,7 +46,7 @@ public class UserDataSeeder {
         roles.add(role);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hash = encoder.encode("123");
+        String hash = encoder.encode(integrationProperties.getSeed().getPassword());
         User user = User.builder()
                 .enabled(true)
                 .password(hash)
