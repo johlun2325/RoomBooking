@@ -11,5 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class BlacklistProperties {
 
     private String url;
+    private String httpName;
+    private String httpValue;
+    private String requestBody;
 
 }

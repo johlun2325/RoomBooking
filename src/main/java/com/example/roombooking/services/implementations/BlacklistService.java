@@ -80,7 +80,7 @@ public class BlacklistService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/%s".formatted(email)))
-                .header("Content-Type", "application/json")
+                .header(integrationProperties.getBlacklist().getHttpName(), integrationProperties.getBlacklist().getHttpValue())
                 .GET()
                 .build();
 
@@ -92,7 +92,7 @@ public class BlacklistService {
         String url = integrationProperties.getBlacklist().getUrl();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
+                .header(integrationProperties.getBlacklist().getHttpName(), integrationProperties.getBlacklist().getHttpValue())
                 .GET()
                 .build();
 
@@ -110,8 +110,8 @@ public class BlacklistService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
+                .header(integrationProperties.getBlacklist().getHttpName(), integrationProperties.getBlacklist().getHttpValue())
+                .POST(HttpRequest.BodyPublishers.ofString(integrationProperties.getBlacklist().getRequestBody()
                         .formatted(blacklistedCustomerDTO.getEmail(), blacklistedCustomerDTO.getName(), blacklistedCustomerDTO.isOk())))
                 .build();
 
@@ -129,8 +129,8 @@ public class BlacklistService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/%s".formatted(blacklistedCustomerDTO.getEmail())))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
+                .header(integrationProperties.getBlacklist().getHttpName(), integrationProperties.getBlacklist().getHttpValue())
+                .PUT(HttpRequest.BodyPublishers.ofString(integrationProperties.getBlacklist().getRequestBody()
                         .formatted(blacklistedCustomerDTO.getEmail(), blacklistedCustomerDTO.getName(), blacklistedCustomerDTO.isOk())))
                 .build();
 
