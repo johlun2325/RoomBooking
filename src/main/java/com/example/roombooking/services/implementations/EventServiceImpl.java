@@ -1,5 +1,7 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.EventProperties;
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.dto.MessageDTO;
 import com.example.roombooking.models.Events.Message;
 import com.example.roombooking.repos.EventRepo;
@@ -14,6 +16,8 @@ import com.rabbitmq.client.DeliverCallback;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,17 +33,20 @@ public class EventServiceImpl implements EventService {
     private final EventRepo repo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
 
+    @Autowired
+    IntegrationProperties integrationProperties;
+
 
     @Override
-    public List<Message> fetchEventsFromQueue(String queueName) {
+    public List<Message> fetchEventsFromQueue() {
         LOGGER.info("Starting to fetch contract customers from external service.");
 
         List<Message> messages = new ArrayList<>();
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
+        factory.setHost(integrationProperties.getEvent().getHost());
+        factory.setUsername(integrationProperties.getEvent().getUsername());
+        factory.setPassword(integrationProperties.getEvent().getPassword());
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -60,7 +67,7 @@ public class EventServiceImpl implements EventService {
 
             };
 
-            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+            channel.basicConsume(integrationProperties.getEvent().getQueue(), true, deliverCallback, consumerTag -> {
 
             });
 

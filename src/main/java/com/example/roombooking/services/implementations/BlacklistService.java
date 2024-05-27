@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.dto.BlacklistedCustomerDTO;
 import com.example.roombooking.models.External.BlacklistStatus;
 import com.example.roombooking.models.External.BlacklistedCustomer;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -24,6 +26,11 @@ public class BlacklistService {
 
     private final ObjectMapper jsonMapper = new JsonMapper().registerModule(new JavaTimeModule());
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacklistService.class);
+
+    @Autowired
+    private IntegrationProperties integrationProperties;
+
+    private final String url = integrationProperties.getBlacklist().getUrl();
 
     private boolean isBlacklisted(String email) {
         var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
@@ -68,7 +75,7 @@ public class BlacklistService {
 
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklistcheck/%s".formatted(email)))
+                .uri(URI.create(url + "/%s".formatted(email)))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
@@ -79,7 +86,7 @@ public class BlacklistService {
 
     public List<BlacklistedCustomer> fetchAllBlacklistedCustomers() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
+                .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
@@ -96,7 +103,7 @@ public class BlacklistService {
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist"))
+                .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
                         .formatted(blacklistedCustomerDTO.getEmail(), blacklistedCustomerDTO.getName(), blacklistedCustomerDTO.isOk())))
@@ -114,7 +121,7 @@ public class BlacklistService {
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/jeri/blacklist/%s".formatted(blacklistedCustomerDTO.getEmail())))
+                .uri(URI.create(url + "/%s".formatted(blacklistedCustomerDTO.getEmail())))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString("{\"email\":\"%s\", \"name\":\"%s\", \"isOk\":\"%s\"}"
                         .formatted(blacklistedCustomerDTO.getEmail(), blacklistedCustomerDTO.getName(), blacklistedCustomerDTO.isOk())))

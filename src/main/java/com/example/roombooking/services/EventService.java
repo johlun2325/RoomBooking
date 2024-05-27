@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EventService {
 
-    List<Message> fetchEventsFromQueue(String queueName);
+    List<Message> fetchEventsFromQueue();
 
     MessageDTO convertMessagesToDTO(Message message);
 

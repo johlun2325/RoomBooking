@@ -1,5 +1,6 @@
 package com.example.roombooking;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.models.Events.Message;
 import com.example.roombooking.repos.EventRepo;
 import com.example.roombooking.services.EventService;
@@ -7,6 +8,7 @@ import com.example.roombooking.services.implementations.ContractCustomerImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +25,9 @@ public class LoadMessagesApplication implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        String queueName = "3f9ff6e5-cb89-4204-b503-1d9e5e3278bd";
 
         try {
-            List<Message> messages = service.fetchEventsFromQueue(queueName);
+            List<Message> messages = service.fetchEventsFromQueue();
             messageRepo.saveAll(messages);
             LOGGER.info("Saved {} messages to database", messages.size());
 

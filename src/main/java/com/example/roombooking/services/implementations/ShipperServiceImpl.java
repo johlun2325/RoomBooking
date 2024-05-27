@@ -1,6 +1,7 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.LoadContractCustomerApplication;
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.models.External.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
 import com.example.roombooking.services.ShipperService;
@@ -23,14 +24,19 @@ public class ShipperServiceImpl implements ShipperService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
     @Autowired
+    private IntegrationProperties integrationProperties;
+
+//    @Autowired
     public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
         this.streamProvider = streamProvider;
         this.repo = repo;
     }
 
     @Override
-    public Shipper[] fetchShippers(String url) {
+    public Shipper[] fetchShippers() {
         LOGGER.info("Starting to fetch shippers from external service.");
+         String url = integrationProperties.getShipper().getUrl();
+
 
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());

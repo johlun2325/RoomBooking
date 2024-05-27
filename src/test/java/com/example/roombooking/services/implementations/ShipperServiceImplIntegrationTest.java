@@ -47,7 +47,7 @@ class ShipperServiceImplIntegrationTest {
 
     @Test
     void fetchAndSaveShippersShouldSaveToDatabaseTest() throws IOException {
-        final String URL = "https://javaintegration.systementor.se/shippers";
+        final String URL = "https://javaintegration.systementor.se/shippers"; //properties
 
         StreamProvider provider = mock(StreamProvider.class);
         when(provider.getDataStream(URL))
@@ -55,7 +55,7 @@ class ShipperServiceImplIntegrationTest {
 
         sut = new ShipperServiceImpl(provider, shipperRepo);
         shipperRepo.deleteAll();
-        shipperRepo.saveAll(Arrays.asList(sut.fetchShippers(URL)));
+        shipperRepo.saveAll(Arrays.asList(sut.fetchShippers()));
         assertEquals(3, shipperRepo.count());
     }
 }

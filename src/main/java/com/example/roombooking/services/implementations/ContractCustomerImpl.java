@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.dto.ContractCustomerDTO;
 import com.example.roombooking.models.External.ContractCustomer;
 import com.example.roombooking.models.External.ContractCustomers;
@@ -29,6 +30,9 @@ public class ContractCustomerImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
+
+    @Autowired
+    private IntegrationProperties integrationProperties;
 
     @Autowired
     public ContractCustomerImpl(StreamProvider streamProvider, ContractCustomerRepo contractCustomerRepo) {
@@ -86,7 +90,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
     @Override
     public List<ContractCustomer> fetchContractCustomers() {
         LOGGER.info("Starting to fetch contract customers from external service.");
-        String url = "https://javaintegration.systementor.se/customers";
+        String url = integrationProperties.getContractCustomer().getUrl();
 
         var xmlModule = new JacksonXmlModule();
         xmlModule.setDefaultUseWrapper(false);

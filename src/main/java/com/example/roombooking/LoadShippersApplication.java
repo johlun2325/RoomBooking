@@ -18,12 +18,11 @@ public class LoadShippersApplication implements CommandLineRunner {
     private final ShipperRepo shipperRepo;
     private final ShipperService service;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
-    private final String URL = "https://javaintegration.systementor.se/shippers";
 
     @Override
     public void run(String... args) {
 
-        Shipper[] shippers = service.fetchShippers(URL);
+        Shipper[] shippers = service.fetchShippers();
 
         if (shippers != null) {
             long newShippersCount = Arrays.stream(shippers)
