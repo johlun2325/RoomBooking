@@ -44,6 +44,7 @@ dependencies {
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.security:spring-security-test")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
 
     implementation ("com.rabbitmq:amqp-client")
 

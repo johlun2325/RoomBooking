@@ -35,14 +35,12 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/login/**", "/logout", "/room/**", "/contractCustomer/**", "/event/**").permitAll()
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/", "/login/**", "/logout", "/room/**", "/contractCustomer/**", "/event/**", "/password/**").permitAll()
                         .anyRequest().authenticated())
 //                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .formLogin(form -> form

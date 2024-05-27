@@ -44,7 +44,7 @@
 
                     <div class="form-group">
                         <label for="username">Email address</label>
-                        <input type="email" class="form-control" id="username" name="username" placeholder="email@example.com" required >
+                        <input type="email" class="form-control" id="username" name="username" placeholder="email@example.com" autofocus="autofocus" required >
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -52,7 +52,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
                     <div class="text-center mt-3">
-                        <a th:href="@{/forgotPassword}">Forgot password?</a>
+                        <a th:href="@{/password/reset}">Forgot password?</a>
                     </div>
                 </form>
             </div>
@@ -64,4 +64,3 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
