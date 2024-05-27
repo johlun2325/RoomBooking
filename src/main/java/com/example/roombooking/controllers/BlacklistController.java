@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BlacklistController {
 
-    private final BlacklistService blacklistService = new BlacklistService();
+    private final BlacklistService blacklistService;
 
     @GetMapping("/menu")
     String toBlacklistMenu(Model model) {

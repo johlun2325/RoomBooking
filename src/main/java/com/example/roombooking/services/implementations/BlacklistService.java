@@ -27,10 +27,12 @@ public class BlacklistService {
     private final ObjectMapper jsonMapper = new JsonMapper().registerModule(new JavaTimeModule());
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacklistService.class);
 
-    @Autowired
-    private IntegrationProperties integrationProperties;
 
-    private final String url = integrationProperties.getBlacklist().getUrl();
+    private IntegrationProperties integrationProperties;
+    @Autowired
+    public BlacklistService(IntegrationProperties integrationProperties) {
+        this.integrationProperties = integrationProperties;
+    }
 
     private boolean isBlacklisted(String email) {
         var allBlacklistedCustomers = fetchAllBlacklistedCustomers();
@@ -74,6 +76,8 @@ public class BlacklistService {
     }
 
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
+        String url = integrationProperties.getBlacklist().getUrl();
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/%s".formatted(email)))
                 .header("Content-Type", "application/json")
@@ -85,6 +89,7 @@ public class BlacklistService {
     }
 
     public List<BlacklistedCustomer> fetchAllBlacklistedCustomers() {
+        String url = integrationProperties.getBlacklist().getUrl();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
@@ -96,6 +101,7 @@ public class BlacklistService {
     }
 
     public String addCustomerToBlacklist(BlacklistedCustomerDTO blacklistedCustomerDTO) {
+        String url = integrationProperties.getBlacklist().getUrl();
         String message;
         if (isBlacklisted(blacklistedCustomerDTO.getEmail())) {
             message = "Customer with email %s, already blacklisted".formatted(blacklistedCustomerDTO.getEmail());
@@ -114,6 +120,7 @@ public class BlacklistService {
     }
 
     public String updateCustomerToBlacklist(BlacklistedCustomerDTO blacklistedCustomerDTO) {
+        String url = integrationProperties.getBlacklist().getUrl();
         String message;
         if (!isBlacklisted(blacklistedCustomerDTO.getEmail())) {
             message = "Customer with email %s is not blacklisted".formatted(blacklistedCustomerDTO.getEmail());

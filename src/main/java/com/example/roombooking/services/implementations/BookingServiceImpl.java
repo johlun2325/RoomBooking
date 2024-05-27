@@ -28,8 +28,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
+    private final BlacklistService blacklistService;
     private final DateUtility dateUtility = new DateStrategy();
-    private final BlacklistService blacklistService = new BlacklistService();
     private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 

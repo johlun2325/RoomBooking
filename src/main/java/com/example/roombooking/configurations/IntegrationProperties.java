@@ -16,4 +16,5 @@ public class IntegrationProperties {
     private ShipperProperties shipper;
     private ContractCustomerProperties contractCustomer;
     private EventProperties event;
+
 }
