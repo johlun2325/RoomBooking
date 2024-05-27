@@ -6,6 +6,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,9 +39,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/login/**", "/logout", "/room/**", "/contractCustomer/**", "/event/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/login/**",
+                                "/logout",
+                                "/room/**",
+                                "/contractCustomer/**",
+                                "/event/**").permitAll() //properties ??
                         .anyRequest().authenticated())
-                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.permitAll())
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout((logout) -> {
                     logout.permitAll();
                     logout.logoutSuccessUrl("/");

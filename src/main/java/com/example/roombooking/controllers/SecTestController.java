@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SecTestController {
 
     @GetMapping(path="/admin")
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('Admin')") //properties????
     public String empty(Model model) {
 
         model.addAttribute("activeFunction", "queues");
