@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class SecTestController {
@@ -31,9 +31,26 @@ public class SecTestController {
         return "security/profile";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login(Model model) {
+        return "security/login.html";
+    }
+
+    @PostMapping("/login")
+    public String homepage(Model model) {
+        return "index.html";
+    }
+
+    @GetMapping("/forgotPassword")
+    public String forgotPassword(Model model) {
+        return "security/forgot-password.html";
+    }
+
+    @PostMapping("/newPassword")
+    public String retrievePassword(Model model) {
+        // TODO: Send email to user with temporary password (timer)
 
         return "security/login.html";
     }
+
 }

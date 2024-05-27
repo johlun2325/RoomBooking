@@ -35,6 +35,8 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -45,10 +47,10 @@ public class WebSecurityConfig {
 //                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .formLogin(form -> form
                         .loginPage("/login")
-//                        .defaultSuccessUrl("/", true)
-//                        .failureUrl("/login?error=true")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
                         .permitAll())
-                .logout((logout) -> {
+                .logout(logout -> {
                     logout.permitAll();
                     logout.logoutSuccessUrl("/");
                 });
