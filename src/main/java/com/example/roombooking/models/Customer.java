@@ -58,16 +58,5 @@ public class Customer {
         this.email = email;
         this.bookings = bookings;
     }
-
-    public void addBooking(Booking booking) {
-        boolean notFound = bookings.stream().noneMatch(it -> it.equals(booking));
-        if (notFound) {
-            bookings.add(booking);
-        }
-    }
-
-    public void removeBooking(Booking booking) {
-        bookings.removeIf(it -> it.equals(booking));
-    }
 }
 

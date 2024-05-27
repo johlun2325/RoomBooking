@@ -10,5 +10,5 @@ public interface EventService {
 
     MessageDTO convertMessagesToDTO(Message message);
 
-     List<String> getAllMessagesByRoomNumber(String roomNo);
+    List<String> getAllMessagesByRoomNumber(String roomNo);
 }

@@ -1,4 +1,4 @@
-package com.example.roombooking.services.implementations;
+package com.example.roombooking.utilities;
 
 import org.springframework.stereotype.Service;
 

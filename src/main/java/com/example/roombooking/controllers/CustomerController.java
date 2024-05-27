@@ -17,7 +17,6 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    // Get all with thymeleaf
     @GetMapping("/all")
     public String getAllCustomers(Model model) {
         List<CustomerDTO> all = customerService.findAllCustomers();
@@ -31,7 +30,7 @@ public class CustomerController {
         model.addAttribute("delete", "Ta bort");
         model.addAttribute("update", "Uppdatera");
 
-        return "allCustomers";
+        return "customer/customers.html";
     }
 
     @GetMapping({"/{id}"})
@@ -45,24 +44,24 @@ public class CustomerController {
                 "pageTitle", "Ny Kund",
                 "header","Lägg till ny kund",
                 "fullNameText", "Fullständigt namn",
-                "nameTitle", "Please enter only Swedish letters and spaces.",
+                "nameTitle", "Använd endast mellanrum och svenska bokstäver.",
                 "ssnText", "Personnummer",
-                "ssnTitle", "Please enter a number in the format YYMMDD-XXXX.",
+                "ssnTitle", "Använd format YYMMDD-XXXX.",
                 "emailText", "E-postadress",
                 "buttonText", "Lägg till"));
 
-        return "new-customer";
+        return "customer/new-customer.html";
     }
 
     @PostMapping("/add")
     public String addCustomer(@RequestParam String name,
                               @RequestParam String ssn,
                               @RequestParam String email) {
+
         customerService.addCustomer(new CustomerDTO(name, ssn, email));
         return "redirect:/customer/all";
     }
 
-    //thymeleaf update
     @GetMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable Long id, Model model) {
         CustomerDTO customer = customerService.findCustomerById(id);
@@ -73,7 +72,8 @@ public class CustomerController {
         model.addAttribute("ssnText", "Ändra personnummer");
         model.addAttribute("emailText", "Ändra e-postadress");
         model.addAttribute("buttonText", "Uppdatera");
-        return "updateCustomerForm";
+
+        return "customer/update-customer.html";
     }
 
     @PostMapping("/update")
@@ -82,13 +82,10 @@ public class CustomerController {
         return "redirect:/customer/all";
     }
 
-
     // TODO: Add error message on the frontend for trying to remove customer with bookings
-    // Delete with thymeleaf
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
         return "redirect:/customer/all";
     }
-
 }

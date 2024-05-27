@@ -4,8 +4,8 @@ import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.RoomService;
+import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepo roomRepo;
-    private final Utility dateUtility = new DateUtility();
+    private final DateUtility dateUtility = new DateStrategy();
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     @Override
@@ -32,7 +32,6 @@ public class RoomServiceImpl implements RoomService {
                 .build();
     }
 
-    // Usage: When a new customer creates a new booking!
     @Override
     public Room convertLiteDtoToRoom(RoomLiteDTO room) {
         return Room.builder()
@@ -51,7 +50,6 @@ public class RoomServiceImpl implements RoomService {
                 .toList();
     }
 
-    // TODO: No LOGGER here
     @Override
     public RoomLiteDTO findRoomById(Long id) {
         return roomRepo.findById(id)

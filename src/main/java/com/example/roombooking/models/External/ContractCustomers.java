@@ -1,6 +1,5 @@
 package com.example.roombooking.models.External;
 
-import com.example.roombooking.models.External.ContractCustomer;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

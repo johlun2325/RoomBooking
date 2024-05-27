@@ -4,14 +4,12 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -20,7 +18,7 @@ import java.util.List;
 class BookingController {
 
     private final BookingService bookingService;
-    private final Utility dateUtility = new DateUtility();
+    private final DateUtility dateUtility = new DateStrategy();
 
     @GetMapping("/all")
     String getAllBookings(Model model) {
@@ -40,7 +38,7 @@ class BookingController {
         model.addAttribute("delete", "Ta bort");
         model.addAttribute("hem", "Hem");
 
-        return "allBookings";
+        return "booking/bookings.html";
     }
 
     @GetMapping({"/{id}"})
@@ -56,20 +54,14 @@ class BookingController {
                              @RequestParam Long roomId,
                              @RequestParam double roomPrice) {
 
-
-        var customer = new CustomerLiteDTO(ssn);
-        var room = new RoomLiteDTO(roomId, roomPrice);
-        BookingDTO bookingDTO = new BookingDTO(
-                customer,
-                room,
-                numberOfPeople,
-                dateUtility.convertToLocalDate(startDate),
-                dateUtility.convertToLocalDate(endDate));
-
+        BookingDTO bookingDTO = new BookingDTO(new CustomerLiteDTO(ssn),
+                                               new RoomLiteDTO(roomId, roomPrice),
+                                               numberOfPeople,
+                                               dateUtility.convertToLocalDate(startDate),
+                                               dateUtility.convertToLocalDate(endDate));
         bookingService.addBooking(bookingDTO);
         return "redirect:/booking/all";
     }
-
 
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {
@@ -77,7 +69,6 @@ class BookingController {
         return "redirect:/booking/all";
     }
 
-    // /updateForm/{id}
     @RequestMapping("/updateForm/{id}")
     public String updateByForm(@PathVariable Long id, Model model){
         BookingDTO booking = bookingService.findBookingById(id);
@@ -89,7 +80,7 @@ class BookingController {
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("buttonText", "Uppdatera");
 
-        return "updateBookingForm";
+        return "booking/update-booking.html";
     }
 
     @PostMapping("/update")
@@ -107,7 +98,6 @@ class BookingController {
         model.addAttribute("numberOfPeopleText", "Antal personer");
         model.addAttribute("submitText", "Sök");
 
-        return "searchForm";
+        return "room/search-room.html";
     }
-
 }

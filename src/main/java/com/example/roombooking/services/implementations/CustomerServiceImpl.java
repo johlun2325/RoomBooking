@@ -23,7 +23,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepo customerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    //customerDTO till customer
     @Override
     public Customer convertDtoToCustomer(CustomerDTO customer) {
         return Customer.builder()
@@ -34,7 +33,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    //customer till customerLiteDTO
     @Override
     public CustomerLiteDTO convertToCustomerLiteDto(Customer customer) {
         return CustomerLiteDTO.builder()
@@ -45,7 +43,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    //customer till customerDTO
     @Override
     public CustomerDTO convertToCustomerDto(Customer customer) {
         return CustomerDTO.builder()
@@ -80,7 +77,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    // Find all customers - lista
     @Override
     public List<CustomerDTO> findAllCustomers() {
         LOGGER.info("Loading all customers");
@@ -90,8 +86,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .toList();
     }
 
-    // TODO: No LOGGER here
-    // Find 1 customer by id - obj
     @Override
     public CustomerDTO findCustomerById(Long id) {
         LOGGER.info("Loading customer with ID: {}", id);
@@ -106,9 +100,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepo.findCustomerBySsn(customer.getSsn())
                 .ifPresentOrElse(foundCustomer -> LOGGER.warn("Customer with SSN: {} exists", customer.getSsn()),
                         () -> {
-                    customerRepo.save(convertDtoToCustomer(customer));
-                    LOGGER.info("Customer with SSN: {} added", customer.getSsn());
-                });
+                            customerRepo.save(convertDtoToCustomer(customer));
+                            LOGGER.info("Customer with SSN: {} added", customer.getSsn());
+                        });
     }
 
 //    @Override
@@ -167,7 +161,6 @@ public class CustomerServiceImpl implements CustomerService {
                 });
     }
 
-    // Thymeleaf Delete: Delete customer by ID
     @Override
     public void deleteCustomerById(Long id) {
         customerRepo.findById(id).ifPresentOrElse(foundCustomer -> {

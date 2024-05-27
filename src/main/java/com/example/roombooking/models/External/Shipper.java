@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
-//@Builder
 public class Shipper {
 
     @Id
@@ -31,17 +29,4 @@ public class Shipper {
     private String phone;
     private String fax;
 
-    public Shipper(Long id, String email, String companyName, String contactName, String contactTitle, String streetAddress, String city, String postalCode, String country, String phone, String fax) {
-        this.id = id;
-        this.email = email;
-        this.companyName = companyName;
-        this.contactName = contactName;
-        this.contactTitle = contactTitle;
-        this.streetAddress = streetAddress;
-        this.city = city;
-        this.postalCode = postalCode;
-        this.country = country;
-        this.phone = phone;
-        this.fax = fax;
-    }
 }

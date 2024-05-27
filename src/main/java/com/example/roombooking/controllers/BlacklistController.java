@@ -16,18 +16,16 @@ public class BlacklistController {
 
     @GetMapping("/menu")
     String toBlacklistMenu(Model model) {
-
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
         model.addAttribute("updateButtonText", "Uppdatera");
 
-        return "blacklist-menu";
+        return "blacklist/blacklist-menu.html";
     }
 
     @GetMapping("/addToBlacklist")
     String toBlacklistBanPage(Model model) {
-
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Spärra kund");
         model.addAttribute("actionUrl", "ban");
@@ -36,7 +34,7 @@ public class BlacklistController {
         model.addAttribute("updatingStatus", false);
         model.addAttribute("submitButtonText", "Skicka");
 
-        return "blacklist-ban";
+        return "blacklist/blacklist-form.html";
     }
 
     @PostMapping("/ban")
@@ -45,18 +43,18 @@ public class BlacklistController {
                           @RequestParam String name,
                           @RequestParam(defaultValue = "false") boolean isOk) {
 
-        model.addAttribute("message", blacklistService.addCustomerToBlacklist(new BlacklistedCustomerDTO(email, name, isOk)));
+        model.addAttribute("message", blacklistService.addCustomerToBlacklist(
+                                                  new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
         model.addAttribute("updateButtonText", "Uppdatera");
 
-        return "blacklist-menu";
+        return "blacklist/blacklist-menu.html";
     }
 
     @GetMapping("/updateToBlacklist")
     String toBlacklistUpdatePage(Model model) {
-
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Uppdatera kund");
         model.addAttribute("actionUrl", "update");
@@ -66,24 +64,21 @@ public class BlacklistController {
         model.addAttribute("updatingStatus", true);
         model.addAttribute("submitButtonText", "Uppdatera");
 
-        return "blacklist-ban";
+        return "blacklist/blacklist-form.html";
     }
-
 
     @RequestMapping("/update")
     String updateToBlacklist(Model model,
                              @RequestParam String email,
                              @RequestParam String name,
                              @RequestParam(defaultValue = "false") boolean isOk) {
-
-        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(new BlacklistedCustomerDTO(email, name, isOk)));
+        model.addAttribute("message", blacklistService.updateCustomerToBlacklist(
+                                                  new BlacklistedCustomerDTO(email, name, isOk)));
         model.addAttribute("pageTitle", "Blacklist");
         model.addAttribute("header", "Blacklist");
         model.addAttribute("banButtonText", "Spärra");
         model.addAttribute("updateButtonText", "Uppdatera");
 
-        return "blacklist-menu";
+        return "blacklist/blacklist-menu.html";
     }
-
-
 }

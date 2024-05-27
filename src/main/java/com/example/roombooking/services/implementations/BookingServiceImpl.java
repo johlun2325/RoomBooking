@@ -10,8 +10,8 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import com.example.roombooking.utilities.Utility;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +28,11 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
-    private final Utility dateUtility = new DateUtility();
+    private final DateUtility dateUtility = new DateStrategy();
     private final BlacklistService blacklistService = new BlacklistService();
     private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
-    //Booking till BookingLiteDTO
     @Override
     public BookingLiteDTO convertToBookingLiteDto(Booking booking) {
         return BookingLiteDTO.builder()
@@ -49,7 +48,6 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
-    //Booking till BookingDTO
     @Override
     public BookingDTO convertToDto(Booking booking) {
         return BookingDTO.builder()
@@ -117,7 +115,6 @@ public class BookingServiceImpl implements BookingService {
                 return;
             }
 
-            // Use updated dates from the DTO
             LocalDate updatedStartDate = booking.getStartDate();
             LocalDate updatedEndDate = booking.getEndDate();
 
@@ -149,8 +146,6 @@ public class BookingServiceImpl implements BookingService {
         }, () -> LOGGER.warn("Booking with ID: {} not found", booking.getId()));
     }
 
-
-    //delete by id with thymeleaf
     @Override
     public void deleteBookingById(Long id) {
         bookingRepo.findById(id).ifPresentOrElse(foundBooking -> {

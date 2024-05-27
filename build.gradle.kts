@@ -40,6 +40,12 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    implementation("org.springframework.security:spring-security-test")
+
+
     implementation ("com.rabbitmq:amqp-client")
 
     compileOnly("org.projectlombok:lombok")

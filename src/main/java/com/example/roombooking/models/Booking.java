@@ -1,6 +1,5 @@
 package com.example.roombooking.models;
 
-import com.example.roombooking.dto.CustomerDTO;
 import com.example.roombooking.utilities.BookingPriceCalculator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
