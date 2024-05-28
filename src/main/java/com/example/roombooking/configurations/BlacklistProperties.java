@@ -14,5 +14,6 @@ public class BlacklistProperties {
     private String httpName;
     private String httpValue;
     private String requestBody;
+    private String check;
 
 }

@@ -77,7 +77,7 @@ public class BlacklistService {
     }
 
     public BlacklistStatus fetchBlacklistedStatusByEmail(String email) {
-        String url = integrationProperties.getBlacklist().getUrl();
+        String url = integrationProperties.getBlacklist().getCheck();
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/%s".formatted(email)))
