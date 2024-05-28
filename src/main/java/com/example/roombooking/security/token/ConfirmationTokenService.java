@@ -1,13 +1,15 @@
 package com.example.roombooking.security.token;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Service;
 
-@Controller
-@RequestMapping("/blacklist")
+@Service
 @RequiredArgsConstructor
 public class ConfirmationTokenService {
 
-//    Optinal<ConfirmationToken> findB
+    private final ConfirmationTokenRepository confirmationTokenRepository;
+
+    public void saveConfirmationToken(ConfirmationToken token) {
+        confirmationTokenRepository.save(token);
+    }
 }

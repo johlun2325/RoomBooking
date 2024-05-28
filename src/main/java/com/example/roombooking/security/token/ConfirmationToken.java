@@ -1,10 +1,7 @@
 package com.example.roombooking.security.token;
 
 import com.example.roombooking.security.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Entity
 public class ConfirmationToken {
 
     @Id
@@ -33,17 +30,16 @@ public class ConfirmationToken {
     private LocalDateTime confirmedAt;
 
     @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
-                             LocalDateTime confirmedAt,
                              User user) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.confirmedAt = confirmedAt;
         this.user = user;
     }
 }
