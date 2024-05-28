@@ -29,6 +29,7 @@ public class BlacklistService {
 
 
     private IntegrationProperties integrationProperties;
+
     @Autowired
     public BlacklistService(IntegrationProperties integrationProperties) {
         this.integrationProperties = integrationProperties;
