@@ -50,7 +50,7 @@ public class SecTestController {
 
     @PostMapping("/password/new")
     public String retrievePassword(Model model, @RequestParam String username) throws MessagingException {
-        emailService.send("zion78@ethereal.email", username, "Reset Password", "");
+        emailService.send("zion78@ethereal.email", username, "Reset Password", "Hej!");
 
         return "security/login.html";
     }
