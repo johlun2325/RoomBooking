@@ -13,13 +13,16 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void send(String from, String to, String subject, String content) throws MessagingException {
+    private static final String ETHEREAL_EMAIL = "zion78@ethereal.email";
+    private static final String SUBJECT = "Reset Password";
+
+    public void send(String to, String content) throws MessagingException {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 
-            helper.setFrom(from);
+            helper.setFrom(ETHEREAL_EMAIL);
             helper.setTo(to);
-            helper.setSubject(subject);
+            helper.setSubject(SUBJECT);
             mimeMessage.setContent(content, "text/html");
             mailSender.send(mimeMessage);
     }

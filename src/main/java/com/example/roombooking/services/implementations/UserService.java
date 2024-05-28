@@ -170,33 +170,51 @@ public class UserService {
                 });
     }
 
-    public String newPassword(UserDTO user) {
+    public String requestPasswordReset(String username) {
         var message = new AtomicReference<String>();
 
-        return userRepository.findByUsername(user.getUsername())
+        return userRepository.findByUsername(username)
                 .map(foundUser -> {
 
-                    foundUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-                    userRepository.save(foundUser);
 
                     String token = UUID.randomUUID().toString();
-
                     ConfirmationToken confirmationToken = new ConfirmationToken(
                             token,
                             LocalDateTime.now(),
                             LocalDateTime.now().plusHours(24),
                             foundUser
                     );
-
                     confirmationTokenService.saveConfirmationToken(confirmationToken);
 
+                    String link = "http://localhost:8080/password/validation?token=" + token;
+
+                    message.set("User with username: %s password link sent".formatted(foundUser.getUsername()));
+                    LOGGER.info(message.get());
+                    return link;
+                })
+                .orElseGet(() -> {
+                    message.set("User with username: %s not found".formatted(username));
+                    LOGGER.warn(message.get());
+                    return "failed";
+                });
+    }
+
+    public String resetPassword(String username, String password) {
+        var message = new AtomicReference<String>();
+
+        return userRepository.findByUsername(username)
+                .map(foundUser -> {
+
+                    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                    foundUser.setPassword(bCryptPasswordEncoder.encode(password));
+                    userRepository.save(foundUser);
 
                     message.set("User with username: %s password updated".formatted(foundUser.getUsername()));
                     LOGGER.info(message.get());
-                    return token;
+                    return message.get();
                 })
                 .orElseGet(() -> {
-                    message.set("User with username: %s not found".formatted(user.getUsername()));
+                    message.set("User with username: %s not found".formatted(username));
                     LOGGER.warn(message.get());
                     return message.get();
                 });

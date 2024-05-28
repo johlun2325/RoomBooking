@@ -42,4 +42,11 @@ public class ConfirmationToken {
         this.expiresAt = expiresAt;
         this.user = user;
     }
+
+    public boolean notExpired() {
+        if (confirmedAt == null)
+            throw new RuntimeException("Token has not yet been confirmed.");
+
+        return confirmedAt.isBefore(expiresAt);
+    }
 }
