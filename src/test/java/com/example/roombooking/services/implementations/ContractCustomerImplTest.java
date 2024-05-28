@@ -70,5 +70,19 @@ class ContractCustomerImplTest {
 
     }
 
+//    @Test
+//    void fetchAndSaveBooksShouldInsertNewRecords() throws IOException {
+//        // Arrange
+//        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomer.xml"));
+//        when(contractCustomerRepo.findByExternalId(Mockito.anyLong())).thenReturn(Optional.empty());
+//
+//        // Act
+//        systemUnderTest.fetchContractCustomers().forEach(c -> contractCustomerRepo.save(c));
+//
+//        //Assert
+//        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
+//
+//    }
+
 
 }
