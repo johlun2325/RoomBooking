@@ -16,8 +16,9 @@ import lombok.RequiredArgsConstructor;
 public class RoomCleaningFinished extends Message{
 
     @JsonProperty("CleaningByUser")
-    @Column(name = "cleaning_by_user", nullable = true)
+    @Column(name = "cleaning_by_user")
     public String cleaningByUser;
+
     @Override
     public String getMessage() {
         return "Städning avslutat av " +  getCleaningByUser() + " " + getTimeStamp();

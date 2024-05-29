@@ -27,8 +27,7 @@ public class BlacklistService {
     private final ObjectMapper jsonMapper = new JsonMapper().registerModule(new JavaTimeModule());
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacklistService.class);
 
-
-    private IntegrationProperties integrationProperties;
+    private final IntegrationProperties integrationProperties;
 
     @Autowired
     public BlacklistService(IntegrationProperties integrationProperties) {

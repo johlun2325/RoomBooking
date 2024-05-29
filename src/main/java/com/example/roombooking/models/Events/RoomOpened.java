@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Entity
 @DiscriminatorValue("RoomOpened")
-public class RoomOpened extends Message{
+public class RoomOpened extends Message {
 
     @Override
     public String getMessage() {

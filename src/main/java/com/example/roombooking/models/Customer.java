@@ -30,7 +30,7 @@ public class Customer {
     private String ssn;
 
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
-    // TODO: Regex pattern for email
+    @Pattern(regexp = "^[A-Za-z0-9.-_@\\s]+", message = "Email must contain only English letters, spaces, numbers, hyphen, dot, at sign and underscore.")
     private String email;
 
     @OneToMany(mappedBy = "customer")

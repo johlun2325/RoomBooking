@@ -1,9 +1,6 @@
 package com.example.roombooking.controllers;
 
-import com.example.roombooking.security.token.ConfirmationTokenRepository;
-import com.example.roombooking.services.implementations.EmailService;
-import com.example.roombooking.services.implementations.UserService;
-import jakarta.mail.MessagingException;
+import com.example.roombooking.security.token.SecurityTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
@@ -11,112 +8,74 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
 public class SecurityController {
 
-    private final UserService userService;
-    private final EmailService emailService;
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final SecurityTokenService securityTokenService;
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String toLogin(Model model, @RequestParam(required = false) String message) {
         model.addAttribute("pageTitle", "Logga in");
         model.addAttribute("header", "Logga in");
         model.addAttribute("usernameLabelText", "E-postadress");
         model.addAttribute("usernamePlaceholder", "email@example.com");
         model.addAttribute("passwordLabelText", "Lösenord");
-        model.addAttribute("passwordPlaceholder", "Hemligt");
+        model.addAttribute("passwordPlaceholder", "Lösenord");
         model.addAttribute("submitText", "Logga in");
         model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
+        model.addAttribute("paramErrorMessage", "Fel inloggningsuppgifter!");
+
+        if (message != null) {
+            model.addAttribute("message", message);
+        }
 
         return "security/login.html";
     }
 
     @GetMapping("/password/request")
-    public String forgotPasswordForm(Model model) {
+    public String toNewPasswordForm(Model model) {
         model.addAttribute("pageTitle", "Lösenord");
         model.addAttribute("header", "Begär nytt lösenord");
         model.addAttribute("usernameLabelText", "E-postadress");
         model.addAttribute("placeholder", "email@example.com");
-        model.addAttribute("usernameRepeatLabelText", "Upprepa e-postadress");
-        model.addAttribute("plasubmitTextceholder", "Nytt lösenord");
+        model.addAttribute("submitText", "Skicka");
 
         return "security/password-request.html";
     }
 
     @PostMapping("/password/send-link")
     @Async
-    public CompletableFuture<String> sendResetPasswordLink(Model model, @RequestParam String username) throws MessagingException {
+    public CompletableFuture<String> sendPasswordResetRequest(RedirectAttributes redirectAttributes, @RequestParam String username) {
+        String message = securityTokenService.resetPasswordRequestConfirmation(username)
+                ? "Återställningslänk till lösenord har skickats till användaren '%s'".formatted(username)
+                : "Användaren '%s' är inte registrerad.".formatted(username);
 
-        model.addAttribute("pageTitle", "Logga in");
-        model.addAttribute("header", "Logga in");
-        model.addAttribute("usernameLabelText", "E-postadress");
-        model.addAttribute("usernamePlaceholder", "email@example.com");
-        model.addAttribute("passwordLabelText", "Lösenord");
-        model.addAttribute("passwordPlaceholder", "Hemligt");
-        model.addAttribute("submitText", "Logga in");
-        model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
-
-        final String link =  userService.requestPasswordReset(username);
-        if (!link.equalsIgnoreCase("failed")) {
-            emailService.send(username, link);
-        }
-
-        // TODO: The requestPasswordReset() will return a String. Check the string if error-message is returned (user not found)
-
-        return CompletableFuture.completedFuture("security/login.html");
+        redirectAttributes.addFlashAttribute("message", message);
+        return CompletableFuture.completedFuture("redirect:/login");
     }
 
     @PostMapping("/password/reset")
-    public String resetPassword(Model model, @RequestParam String password, @RequestParam String username) {
+    public String resetPassword(RedirectAttributes redirectAttributes, @RequestParam String password, @RequestParam String username) {
+        securityTokenService.resetPassword(username, password);
+        redirectAttributes.addFlashAttribute("message", "Användaren %s har återställt lösenordet.".formatted(username));
 
-        userService.resetPassword(username, password);
-
-        model.addAttribute("pageTitle", "Logga in");
-        model.addAttribute("header", "Logga in");
-        model.addAttribute("usernameLabelText", "E-postadress");
-        model.addAttribute("usernamePlaceholder", "email@example.com");
-        model.addAttribute("passwordLabelText", "Lösenord");
-        model.addAttribute("passwordPlaceholder", "Hemligt");
-        model.addAttribute("submitText", "Logga in");
-        model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
-
-        return "security/login.html";
+        return "redirect:/login";
     }
 
     @GetMapping("/password/validation")
-    public String validateToken(Model model, @RequestParam("token") String token) {
-        var confirmationToken = confirmationTokenRepository.findByToken(token).orElseThrow(NoSuchElementException::new);
-        confirmationToken.setConfirmedAt(LocalDateTime.now());
-        confirmationTokenRepository.save(confirmationToken);
+    public String validateSecurityToken(Model model, RedirectAttributes redirectAttributes, @RequestParam("token") String token) {
+        String message = securityTokenService.checkSecurityToken(token);
 
-        String page;
-        if (confirmationToken.notExpired()) {
-            // TODO: Model user to the page
-            model.addAttribute("username", confirmationToken.getUser().getUsername());
-            page = "security/password-reset.html";
-        } else {
-
-            // TODO: We need to send in the "expired time" token message with Model
-
-            model.addAttribute("pageTitle", "Logga in");
-            model.addAttribute("header", "Logga in");
-            model.addAttribute("usernameLabelText", "E-postadress");
-            model.addAttribute("usernamePlaceholder", "email@example.com");
-            model.addAttribute("passwordLabelText", "Lösenord");
-            model.addAttribute("passwordPlaceholder", "Hemligt");
-            model.addAttribute("submitText", "Logga in");
-            model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
-
-            page = "security/login.html";
+        if (message.contains("Rejected")) {
+            redirectAttributes.addFlashAttribute("message", message.replace("Rejected: ", ""));
+            return "redirect:/login";
         }
 
-        return page;
+        model.addAttribute("username", message.replace("Rejected: ", ""));
+        return "security/password-reset.html";
     }
 }

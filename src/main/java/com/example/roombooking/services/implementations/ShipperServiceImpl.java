@@ -26,7 +26,6 @@ public class ShipperServiceImpl implements ShipperService {
     @Autowired
     private IntegrationProperties integrationProperties;
 
-//    @Autowired
     public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
         this.streamProvider = streamProvider;
         this.repo = repo;
