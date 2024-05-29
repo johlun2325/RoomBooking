@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
 
 @Controller
@@ -16,14 +15,6 @@ import java.util.List;
 public class EventController {
 
     private final EventService service;
-
-//    @RequestMapping("/all/{roomNo}")
-//    public String getMessages(@PathVariable String roomNo, Model model){
-//
-//        List<String> messages = service.getAllMessagesByRoomNumber(roomNo);
-//
-//        return "redirect:allrooms";
-//    }
 
     @GetMapping("/all/{id}")
     String showMessagesByRoomNo(Model model, @PathVariable Long id){

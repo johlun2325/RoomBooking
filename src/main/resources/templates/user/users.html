@@ -12,6 +12,13 @@
         tr[href], i {
             cursor: pointer;
         }
+
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
     </style>
 </head>
 
@@ -52,10 +59,12 @@
                     th:href="@{/user/{username}(username=${user.username})}" onclick="navigateToCustomer(this)">
                     <td th:text="${user.username}"></td>
                     <td>
-                        <a th:text="${update}" th:href="@{/user/updateForm/{id}(id=${user.id})}" class="btn btn-primary btn-sm" style="width: 85px"></a>
+                        <a th:text="${update}" th:href="@{/user/updateForm/{id}(id=${user.id})}"
+                           class="btn btn-primary btn-sm" style="width: 85px"></a>
                     </td>
                     <td>
-                        <a th:text="${delete}" th:href="@{/user/delete/{username}(username=${user.username})}" onclick="return confirmDelete()" class="btn btn-danger btn-sm" style="width: 85px"></a>
+                        <a th:text="${delete}" th:href="@{/user/delete/{username}(username=${user.username})}"
+                           onclick="return confirmDelete()" class="btn btn-danger btn-sm" style="width: 85px"></a>
                     </td>
                 </tr>
                 </tbody>
@@ -85,9 +94,11 @@
     });
 
     const alertDiv = document.getElementById("alertMessage");
+
     function hideAlert() {
         alertDiv.style.display = "none";
     }
+
     setTimeout(hideAlert, 5000);
 </script>
 

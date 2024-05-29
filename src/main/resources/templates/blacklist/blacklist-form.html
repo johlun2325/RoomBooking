@@ -7,6 +7,14 @@
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" rel="stylesheet">
     <title th:text="${pageTitle}"></title>
+    <style>
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -28,7 +36,8 @@
 
                 <div class="mb-3">
                     <label for="name" class="form-label" th:text="${nameText}"></label>
-                    <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+" title="Please enter only Swedish letters and spaces.">
+                    <input type="text" class="form-control" id="name" name="name" pattern="[A-Öa-ö\s]+"
+                           title="Please enter only Swedish letters and spaces.">
                 </div>
 
                 <div class="mb-3" th:if="${updatingStatus}">

@@ -4,9 +4,7 @@ import com.example.roombooking.configurations.IntegrationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -61,5 +59,4 @@ public class UserDataSeeder {
                 .name(name)
                 .build());
     }
-
 }

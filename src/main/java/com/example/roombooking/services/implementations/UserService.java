@@ -6,16 +6,12 @@ import com.example.roombooking.security.Role;
 import com.example.roombooking.security.RoleRepository;
 import com.example.roombooking.security.User;
 import com.example.roombooking.security.UserRepository;
-import com.example.roombooking.security.token.ConfirmationToken;
-import com.example.roombooking.security.token.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -24,7 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final ConfirmationTokenService confirmationTokenService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
@@ -165,56 +160,6 @@ public class UserService {
                 })
                 .orElseGet(() -> {
                     message.set("User with username: %s not found".formatted(userName));
-                    LOGGER.warn(message.get());
-                    return message.get();
-                });
-    }
-
-    public String requestPasswordReset(String username) {
-        var message = new AtomicReference<String>();
-
-        return userRepository.findByUsername(username)
-                .map(foundUser -> {
-
-
-                    String token = UUID.randomUUID().toString();
-                    ConfirmationToken confirmationToken = new ConfirmationToken(
-                            token,
-                            LocalDateTime.now(),
-                            LocalDateTime.now().plusHours(24),
-                            foundUser
-                    );
-                    confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-                    String link = "http://localhost:8080/password/validation?token=" + token;
-
-                    message.set("User with username: %s password link sent".formatted(foundUser.getUsername()));
-                    LOGGER.info(message.get());
-                    return link;
-                })
-                .orElseGet(() -> {
-                    message.set("User with username: %s not found".formatted(username));
-                    LOGGER.warn(message.get());
-                    return "failed";
-                });
-    }
-
-    public String resetPassword(String username, String password) {
-        var message = new AtomicReference<String>();
-
-        return userRepository.findByUsername(username)
-                .map(foundUser -> {
-
-                    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                    foundUser.setPassword(bCryptPasswordEncoder.encode(password));
-                    userRepository.save(foundUser);
-
-                    message.set("User with username: %s password updated".formatted(foundUser.getUsername()));
-                    LOGGER.info(message.get());
-                    return message.get();
-                })
-                .orElseGet(() -> {
-                    message.set("User with username: %s not found".formatted(username));
                     LOGGER.warn(message.get());
                     return message.get();
                 });

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ConfirmationToken {
+public class SecurityToken {
 
     @Id
     @GeneratedValue
@@ -33,10 +33,10 @@ public class ConfirmationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public ConfirmationToken(String token,
-                             LocalDateTime createdAt,
-                             LocalDateTime expiresAt,
-                             User user) {
+    public SecurityToken(String token,
+                         LocalDateTime createdAt,
+                         LocalDateTime expiresAt,
+                         User user) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;

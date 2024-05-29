@@ -66,7 +66,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    // Usage: When a new customer creates a new booking!
     @Override
     public Customer convertLiteDtoToCustomer(CustomerLiteDTO customer) {
         return Customer.builder()
