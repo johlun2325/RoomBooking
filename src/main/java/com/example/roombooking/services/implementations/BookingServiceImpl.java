@@ -4,17 +4,19 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
-import com.example.roombooking.models.*;
+import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.Customer;
 import com.example.roombooking.models.External.BlacklistStatus;
+import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,16 +24,24 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
+    @Autowired
+    private BlacklistService blacklistService;
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
-    private final BlacklistService blacklistService;
     private final DateUtility dateUtility = new DateStrategy();
     private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
+
+    public BookingServiceImpl(BookingRepo bookingRepo,
+                              CustomerRepo customerRepo,
+                              RoomRepo roomRepo) {
+        this.bookingRepo = bookingRepo;
+        this.customerRepo = customerRepo;
+        this.roomRepo = roomRepo;
+    }
 
     @Override
     public BookingLiteDTO convertToBookingLiteDto(Booking booking) {
