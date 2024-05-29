@@ -90,25 +90,4 @@ public class SecurityController {
 
         return page;
     }
-
-    //    @GetMapping(path="/admin")
-//    @PreAuthorize("hasAuthority('Admin')")
-//    public String empty(Model model) {
-//
-//        model.addAttribute("activeFunction", "queues");
-//        model.addAttribute("page", "Admin");
-//        return "security/admin";
-//    }
-//
-//    @GetMapping(path="/receptionist")
-//    @PreAuthorize("isAuthenticated()")
-//    public String edit(Model model){
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//
-//        String username = auth.getName();
-//        model.addAttribute("username", username);
-//
-//        return "security/profile";
-//    }
-
 }
