@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Entity
 @DiscriminatorValue("RoomClosed")
-public class RoomClosed extends Message{
+public class RoomClosed extends Message {
+
     @Override
     public String getMessage() {
         return "Dörren stängd " + getTimeStamp();

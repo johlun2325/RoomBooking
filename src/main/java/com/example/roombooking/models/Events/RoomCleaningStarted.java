@@ -18,6 +18,7 @@ public class RoomCleaningStarted extends Message{
     @JsonProperty("CleaningByUser")
     @Column(name = "cleaning_by_user", nullable = true)
     public String cleaningByUser;
+
     @Override
     public String getMessage() {
         return "Städning påbörjat av " +  getCleaningByUser() + " " + getTimeStamp();

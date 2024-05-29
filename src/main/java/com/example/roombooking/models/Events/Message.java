@@ -33,10 +33,6 @@ public abstract class Message {
     @GeneratedValue
     private Long id;
 
-//    @JsonProperty("Type")
-//    @Column(name = "type", nullable = false)
-//    public String type;
-
     @JsonProperty("TimeStamp")
     @Column(name = "time_stamp", nullable = false)
     public Date timeStamp;
