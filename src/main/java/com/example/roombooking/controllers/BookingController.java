@@ -20,6 +20,11 @@ class BookingController {
     private final BookingService bookingService;
     private final DateUtility dateUtility = new DateStrategy();
 
+    @GetMapping("/email")
+    String getEmail(Model model){
+        return "confirmationEmail";
+    }
+
     @GetMapping("/all")
     String getAllBookings(Model model) {
         List<BookingDTO> all = bookingService.findAllBookings();

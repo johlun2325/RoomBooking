@@ -1,9 +1,13 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -16,9 +20,12 @@ class BlacklistServiceIntegrationTest {
     @Autowired
     StreamProvider streamProvider;
 
+    @Autowired
+    IntegrationProperties integrationProperties;
+
     @Test
     void willFetchBlacklistedCustomersTest() throws IOException {
-        Scanner s = new Scanner(streamProvider.getDataStream("https://javabl.systementor.se/api/jeri/blacklist")).useDelimiter("\\A");
+        Scanner s = new Scanner(streamProvider.getDataStream(integrationProperties.getBlacklist().getUrl())).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
         assertTrue(result.contains("\"id\""));
