@@ -26,11 +26,27 @@ public class SecurityController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        model.addAttribute("pageTitle", "Logga in");
+        model.addAttribute("header", "Logga in");
+        model.addAttribute("usernameLabelText", "E-postadress");
+        model.addAttribute("usernamePlaceholder", "email@example.com");
+        model.addAttribute("passwordLabelText", "Lösenord");
+        model.addAttribute("passwordPlaceholder", "Hemligt");
+        model.addAttribute("submitText", "Logga in");
+        model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
+
         return "security/login.html";
     }
 
     @GetMapping("/password/request")
     public String forgotPasswordForm(Model model) {
+        model.addAttribute("pageTitle", "Lösenord");
+        model.addAttribute("header", "Begär nytt lösenord");
+        model.addAttribute("usernameLabelText", "E-postadress");
+        model.addAttribute("placeholder", "email@example.com");
+        model.addAttribute("usernameRepeatLabelText", "Upprepa e-postadress");
+        model.addAttribute("plasubmitTextceholder", "Nytt lösenord");
+
         return "security/password-request.html";
     }
 
