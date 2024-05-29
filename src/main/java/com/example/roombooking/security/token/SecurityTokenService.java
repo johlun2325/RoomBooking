@@ -53,11 +53,9 @@ public class SecurityTokenService {
         var securityToken = securityTokenRepository.findByToken(token)
                 .orElseThrow(NoSuchElementException::new);
 
-        String message;
         if (securityToken.getConfirmedAt() != null) {
-            message = "Rejected: Återställningslänken för lösenord har redan använts.";
-            LOGGER.warn(message);
-            return message;
+            LOGGER.warn("Security token has already been used.");
+            return "Rejected: Återställningslänken för lösenord har redan använts.";
         }
 
         securityToken.setConfirmedAt(LocalDateTime.now());
@@ -67,9 +65,8 @@ public class SecurityTokenService {
             LOGGER.info("Security token has been confirmed");
             return securityToken.getUser().getUsername();
         } else {
-            message = "Rejected: Token har gått ut. Vänligen begär en ny återställning av lösenordet.";
-            LOGGER.warn(message);
-            return message;
+            LOGGER.warn("Security token has expired.");
+            return "Rejected: Token har gått ut. Vänligen begär en ny återställning av lösenordet.";
         }
     }
 

@@ -22,7 +22,7 @@ public class EmailService {
         <p>Du kan återställa ditt lösenord genom att klicka på länken nedan.<br>
         Observera att denna länk kommer att förfalla om <strong>24 timmar</strong> och att den endast kan användas <strong>en gång</strong>.</p>
         
-        <p><a href="%s">Återställ ditt lösenord</a></p>
+        <p><a href="%s" target="_blank">Återställ ditt lösenord</a></p>
         
         <p>Om du inte har begärt en återställning av lösenordet, vänligen ignorera detta e-postmeddelande och kontakta support.</p>
         
