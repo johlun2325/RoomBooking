@@ -54,6 +54,15 @@ public class SecurityController {
     @Async
     public CompletableFuture<String> sendResetPasswordLink(Model model, @RequestParam String username) throws MessagingException {
 
+        model.addAttribute("pageTitle", "Logga in");
+        model.addAttribute("header", "Logga in");
+        model.addAttribute("usernameLabelText", "E-postadress");
+        model.addAttribute("usernamePlaceholder", "email@example.com");
+        model.addAttribute("passwordLabelText", "Lösenord");
+        model.addAttribute("passwordPlaceholder", "Hemligt");
+        model.addAttribute("submitText", "Logga in");
+        model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
+
         final String link =  userService.requestPasswordReset(username);
         if (!link.equalsIgnoreCase("failed")) {
             emailService.send(username, link);
@@ -68,6 +77,15 @@ public class SecurityController {
     public String resetPassword(Model model, @RequestParam String password, @RequestParam String username) {
 
         userService.resetPassword(username, password);
+
+        model.addAttribute("pageTitle", "Logga in");
+        model.addAttribute("header", "Logga in");
+        model.addAttribute("usernameLabelText", "E-postadress");
+        model.addAttribute("usernamePlaceholder", "email@example.com");
+        model.addAttribute("passwordLabelText", "Lösenord");
+        model.addAttribute("passwordPlaceholder", "Hemligt");
+        model.addAttribute("submitText", "Logga in");
+        model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
 
         return "security/login.html";
     }
@@ -84,7 +102,18 @@ public class SecurityController {
             model.addAttribute("username", confirmationToken.getUser().getUsername());
             page = "security/password-reset.html";
         } else {
+
             // TODO: We need to send in the "expired time" token message with Model
+
+            model.addAttribute("pageTitle", "Logga in");
+            model.addAttribute("header", "Logga in");
+            model.addAttribute("usernameLabelText", "E-postadress");
+            model.addAttribute("usernamePlaceholder", "email@example.com");
+            model.addAttribute("passwordLabelText", "Lösenord");
+            model.addAttribute("passwordPlaceholder", "Hemligt");
+            model.addAttribute("submitText", "Logga in");
+            model.addAttribute("forgotPasswordText", "Glömt Lösenord?");
+
             page = "security/login.html";
         }
 
