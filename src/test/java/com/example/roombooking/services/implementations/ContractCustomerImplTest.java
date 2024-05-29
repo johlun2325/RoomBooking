@@ -5,18 +5,19 @@ import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class ContractCustomerImplTest {
 
     private final StreamProvider streamProvider = mock(StreamProvider.class);
-    private final ContractCustomerRepo contractCustomerRepo  = mock(ContractCustomerRepo.class);
+    private final ContractCustomerRepo contractCustomerRepo = mock(ContractCustomerRepo.class);
     private ContractCustomerImpl systemUnderTest;
 
     private static final String URL = "https://javaintegration.systementor.se/customers";
@@ -69,5 +70,16 @@ class ContractCustomerImplTest {
         assertEquals("8653-585976", result.get(2).getFax());
     }
 
+    @Test
+    void fetchAndSaveContractCustomerShouldInsertNewRecords() throws IOException {
+        // Arrange
+        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomer.xml"));
+        when(contractCustomerRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
+        // Act
+        contractCustomerRepo.saveAll(systemUnderTest.fetchContractCustomers());
+
+        //Assert
+        verify(contractCustomerRepo, times(3)).save(argThat(contractCustomer -> contractCustomer.getInternalId() == null));
+    }
 }
