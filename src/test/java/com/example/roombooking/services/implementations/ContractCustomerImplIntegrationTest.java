@@ -4,16 +4,22 @@ import com.example.roombooking.repos.ContractCustomerRepo;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@ContextConfiguration(locations = "/webapp/WEB-INF/contract-customer-test-context.xml")
 class ContractCustomerImplIntegrationTest {
 
     @Autowired
@@ -22,6 +28,7 @@ class ContractCustomerImplIntegrationTest {
     @Autowired
     StreamProvider streamProvider;
 
+    @Autowired
     ContractCustomerImpl systemUnderTest;
 
     @Test

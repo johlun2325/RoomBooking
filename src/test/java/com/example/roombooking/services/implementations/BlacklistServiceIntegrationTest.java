@@ -2,19 +2,19 @@ package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
+@ContextConfiguration(locations = "/webapp/WEB-INF/blacklist-test-context.xml")
 class BlacklistServiceIntegrationTest {
 
-    @Autowired
-    StreamProvider streamProvider;
+    StreamProvider streamProvider = new StreamProvider();
 
     @Test
     void willFetchBlacklistedCustomersTest() throws IOException {
