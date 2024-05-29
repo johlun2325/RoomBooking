@@ -5,10 +5,12 @@ import com.example.roombooking.dto.BookingLiteDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.Confirmation;
 import com.example.roombooking.models.Customer;
 import com.example.roombooking.models.External.BlacklistStatus;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.repos.ConfEmailRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
@@ -19,6 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,16 +37,18 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepo bookingRepo;
     private final CustomerRepo customerRepo;
     private final RoomRepo roomRepo;
+    private final ConfEmailRepo emailRepo;
+
     private final DateUtility dateUtility = new DateStrategy();
     private final DiscountService discountService = new DiscountService();
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
-
     public BookingServiceImpl(BookingRepo bookingRepo,
                               CustomerRepo customerRepo,
-                              RoomRepo roomRepo) {
+                              RoomRepo roomRepo, ConfEmailRepo emailRepo) {
         this.bookingRepo = bookingRepo;
         this.customerRepo = customerRepo;
         this.roomRepo = roomRepo;
+        this.emailRepo = emailRepo;
     }
 
     @Override
@@ -163,4 +171,20 @@ public class BookingServiceImpl implements BookingService {
             LOGGER.info("Booking with ID: {} deleted", id);
         }, () -> LOGGER.warn("Booking with ID: {} not found", id));
     }
+
+//    private void saveEmail() {
+//        String path = "src/main/resources/confirmationEmail.txt";
+//
+//        StringBuilder lines = new StringBuilder();
+//        try (BufferedReader reader = Files.newBufferedReader(Paths.get("file"))) {
+//            reader.lines().forEach(line -> lines.append(line).append(System.lineSeparator()));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        String content = lines.toString();
+//        Confirmation conf = new Confirmation(content);
+//        emailRepo.save(conf);
+//
+//        LOGGER.info("Email template saved to database");
+//    }
 }

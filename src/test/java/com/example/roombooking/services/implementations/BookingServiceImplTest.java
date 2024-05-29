@@ -6,6 +6,7 @@ import com.example.roombooking.models.Customer;
 import com.example.roombooking.models.Room;
 import com.example.roombooking.models.RoomType;
 import com.example.roombooking.repos.BookingRepo;
+import com.example.roombooking.repos.ConfEmailRepo;
 import com.example.roombooking.repos.CustomerRepo;
 import com.example.roombooking.repos.RoomRepo;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,11 @@ class BookingServiceImplTest {
     private CustomerRepo customerRepo;
     @Mock
     private RoomRepo roomRepo;
+    @Mock
+    private ConfEmailRepo emailRepo;
 
     @InjectMocks
-    private BookingServiceImpl service = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+    private BookingServiceImpl service = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailRepo);
 
     //Customer
     private final Long customerId = 1L;
@@ -114,7 +117,7 @@ class BookingServiceImplTest {
     void findAllBookings() {
 
         when(bookingRepo.findAll()).thenReturn(List.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailRepo);
 
         List<BookingDTO> allCustomers = serv.findAllBookings();
         assertEquals(1, allCustomers.size());
@@ -125,7 +128,7 @@ class BookingServiceImplTest {
     void findBookingById() {
 
         when(bookingRepo.findById(booking.getId())).thenReturn(Optional.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailRepo);
         BookingDTO foundBooking = serv.findBookingById(booking.getId());
 
         assertEquals(booking.getId(), foundBooking.getId());
@@ -157,7 +160,7 @@ class BookingServiceImplTest {
     void deleteBookingById() {
 
         when(bookingRepo.findById(booking.getId())).thenReturn(Optional.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailRepo);
         serv.deleteBookingById(booking.getId());
         verify(bookingRepo, times(1)).findById(booking.getId());
 //        verify(repo, times(1)).deleteById(id);

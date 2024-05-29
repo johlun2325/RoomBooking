@@ -2,6 +2,7 @@ package com.example.roombooking;
 
 import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.security.UserDataSeeder;
+import com.example.roombooking.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +43,10 @@ public class RoomBookingApplication {
             application.run(args);
         } else if (Objects.equals(args[0], "loadDefaultBookingData")) {
             SpringApplication application = new SpringApplication(LoadDefaultBookingData.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        }else if (Objects.equals(args[0], "loadDefaultEmailTemplate")) {
+            SpringApplication application = new SpringApplication(LoadDefaultEmailTemplate.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         }

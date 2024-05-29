@@ -65,6 +65,8 @@ class BookingController {
                                                dateUtility.convertToLocalDate(startDate),
                                                dateUtility.convertToLocalDate(endDate));
         bookingService.addBooking(bookingDTO);
+
+
         return "redirect:/booking/all";
     }
 

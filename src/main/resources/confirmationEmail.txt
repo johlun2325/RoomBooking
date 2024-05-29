@@ -76,8 +76,6 @@
     <h1>Tack Kund! Din <span class="highlight">bokning</span> är bekräftad.</h1>
     <p><strong>Ditt rum</strong> väntar på dig den <strong>första datumet</strong></p>
     <p>Använd länken här nedanför för att enkelt <a href="#" class="highlight">ändra eller avboka</a> din <span class="highlight">bokning</span></p>
-
-
     <table class="booking-details">
         <tr>
             <th>Incheckning</th>
