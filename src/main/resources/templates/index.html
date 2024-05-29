@@ -31,14 +31,14 @@
 
 <nav class="d-flex justify-content-start p-3">
     <div class="me- mt-2" sec:authorize="isAnonymous()">
-        <a href="/login" class="d-flex align-items-center login-link">
+        <a th:href="@{/login}" class="d-flex align-items-center login-link">
             <i class="bi bi-door-closed-fill"></i>
             Logga in
         </a>
     </div>
 
     <div class="me- mt-2" sec:authorize="isAuthenticated()">
-        <a href="/logout" class="d-flex align-items-center login-link">
+        <a th:href="@{/logout}" class="d-flex align-items-center login-link">
             <i class="bi bi-door-open-fill"></i>
             Logga ut
         </a>
