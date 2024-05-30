@@ -4,6 +4,7 @@ import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -11,6 +12,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ContextConfiguration(locations = "/webapp/WEB-INF/blacklist-test-context.xml")
 class BlacklistServiceIntegrationTest {
 
     @Autowired

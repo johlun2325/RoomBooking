@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class ContractCustomerImplTest {
 
     private final StreamProvider streamProvider = mock(StreamProvider.class);
-    private final ContractCustomerRepo contractCustomerRepo = mock(ContractCustomerRepo.class);
+    private final ContractCustomerRepo contractCustomerRepo  = mock(ContractCustomerRepo.class);
     private ContractCustomerImpl systemUnderTest;
 
     private static final String URL = "https://javaintegration.systementor.se/customers";
@@ -30,7 +30,6 @@ class ContractCustomerImplTest {
 
     @Test
     void fetchingContractCustomersShouldMapCorrectly() throws IOException {
-
         when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
         List<ContractCustomer> result = systemUnderTest.fetchContractCustomers();
 
@@ -72,14 +71,57 @@ class ContractCustomerImplTest {
 
     @Test
     void fetchAndSaveContractCustomerShouldInsertNewRecords() throws IOException {
-        // Arrange
-        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomer.xml"));
+        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
         when(contractCustomerRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
-        // Act
-        contractCustomerRepo.saveAll(systemUnderTest.fetchContractCustomers());
+        systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
+        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
+    }
 
-        //Assert
-        verify(contractCustomerRepo, times(3)).save(argThat(contractCustomer -> contractCustomer.getInternalId() == null));
+    @Test
+    void fetchAndSaveContractCustomersCorrectly() throws IOException {
+        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
+        when(contractCustomerRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getId() == 1 &&
+                        customer.getCompanyName().equals("Persson Kommanditbolag") &&
+                        customer.getContactName().equals("Maria Åslund") &&
+                        customer.getContactTitle().equals("gardener") &&
+                        customer.getStreetAddress().equals("Anderssons Gata 259") &&
+                        customer.getCity().equals("Kramland") &&
+                        customer.getPostalCode() == 60843 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("076-340-7143") &&
+                        customer.getFax().equals("1500-16026")
+        ));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getId() == 2 &&
+                        customer.getCompanyName().equals("Karlsson-Eriksson") &&
+                        customer.getContactName().equals("Jörgen Gustafsson") &&
+                        customer.getContactTitle().equals("philosopher") &&
+                        customer.getStreetAddress().equals("Undre Villagatan 451") &&
+                        customer.getCity().equals("Alingtorp") &&
+                        customer.getPostalCode() == 28838 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("070-369-5518") &&
+                        customer.getFax().equals("7805-209976")
+        ));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getId() == 3 &&
+                        customer.getCompanyName().equals("Eriksson Group") &&
+                        customer.getContactName().equals("Anna Karlsson") &&
+                        customer.getContactTitle().equals("journalist") &&
+                        customer.getStreetAddress().equals("Johanssons Väg 036") &&
+                        customer.getCity().equals("Arlöv") &&
+                        customer.getPostalCode() == 77616 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("076-904-2433") &&
+                        customer.getFax().equals("8653-585976")
+        ));
     }
 }
