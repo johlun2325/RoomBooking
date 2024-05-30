@@ -19,25 +19,25 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class ContractCustomerImpl implements ContractCustomerService {
 
-    @Getter
-    private final StreamProvider streamProvider;
-
-    private final ContractCustomerRepo contractCustomerRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractCustomerImpl.class);
 
-    @Autowired
-    private IntegrationProperties integrationProperties;
+    @Getter
+    private final StreamProvider streamProvider;
+    private final ContractCustomerRepo contractCustomerRepo;
+    private final IntegrationProperties integrationProperties;
 
     @Autowired
-    public ContractCustomerImpl(StreamProvider streamProvider, ContractCustomerRepo contractCustomerRepo) {
+    public ContractCustomerImpl(StreamProvider streamProvider, ContractCustomerRepo contractCustomerRepo, IntegrationProperties integrationProperties) {
         this.streamProvider = streamProvider;
         this.contractCustomerRepo = contractCustomerRepo;
+        this.integrationProperties = integrationProperties;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
 
         } catch (IOException e) {
             LOGGER.error("An unexpected error occurred when fetching or saving contract customers", e);
+            return Collections.emptyList();
         }
-        return null;
     }
 }

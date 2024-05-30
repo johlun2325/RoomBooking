@@ -1,11 +1,14 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.models.External.Shipper;
 import com.example.roombooking.repos.ShipperRepo;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,23 +17,27 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class ShipperServiceImplTest {
 
+    @Autowired
+    private IntegrationProperties integrationProperties;
     private final StreamProvider streamProvider = mock(StreamProvider.class);
     private final ShipperRepo shipperRepo  = mock(ShipperRepo.class);
     private ShipperServiceImpl systemUnderTest;
 
-    private static final String URL = "https://javaintegration.systementor.se/shippers";
+    private String url;
     private static final String JSON_FILE = "shippers.json";
 
     @BeforeEach()
     void setUp() {
-        systemUnderTest = new ShipperServiceImpl(streamProvider, shipperRepo);
+        systemUnderTest = new ShipperServiceImpl(streamProvider, shipperRepo, integrationProperties);
+        url = integrationProperties.getShipper().getUrl();
     }
 
     @Test
     void whenGetShippersShouldMapCorrectly() throws IOException {
-        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
+        when(streamProvider.getDataStream(url)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
 
         Shipper[] shippers = systemUnderTest.fetchShippers();
 
@@ -51,7 +58,7 @@ public class ShipperServiceImplTest {
 
     @Test
     void fetchAndSaveShippersShouldInsertNewRecords() throws IOException {
-        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
+        when(streamProvider.getDataStream(url)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
         when(shipperRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         Arrays.stream(systemUnderTest.fetchShippers()).forEach(shipper -> shipperRepo.save(shipper));
@@ -60,7 +67,7 @@ public class ShipperServiceImplTest {
 
     @Test
     void fetchAndSaveShippersCorrectly() throws IOException {
-        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
+        when(streamProvider.getDataStream(url)).thenReturn(getClass().getClassLoader().getResourceAsStream(JSON_FILE));
         when(shipperRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         Arrays.stream(systemUnderTest.fetchShippers()).forEach(shipper -> shipperRepo.save(shipper));

@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.repos.ShipperRepo;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
@@ -20,17 +21,22 @@ class ShipperServiceImplIntegrationTest {
 
     @Autowired
     private ShipperRepo shipperRepo;
+
     @Autowired
     private StreamProvider streamProvider;
 
-    private ShipperServiceImpl sut;
-    String url = "https://javaintegration.systementor.se/shippers";
+    @Autowired
+    IntegrationProperties integrationProperties;
+
+    @Autowired
+    private ShipperServiceImpl systemUnderTest;
 
     @Test
     void fetchShippersWillFetch() throws IOException {
-        sut = new ShipperServiceImpl(streamProvider, shipperRepo);
+        systemUnderTest = new ShipperServiceImpl(streamProvider, shipperRepo, integrationProperties);
+        Scanner s = new Scanner(systemUnderTest.getStreamProvider().getDataStream(integrationProperties.getShipper().getUrl()))
+                .useDelimiter("\\A");
 
-        Scanner s = new Scanner(sut.streamProvider.getDataStream(url)).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
         assertTrue(result.contains("\"id\""));
@@ -47,15 +53,13 @@ class ShipperServiceImplIntegrationTest {
 
     @Test
     void fetchAndSaveShippersShouldSaveToDatabaseTest() throws IOException {
-        final String URL = "https://javaintegration.systementor.se/shippers"; //properties
-
         StreamProvider provider = mock(StreamProvider.class);
-        when(provider.getDataStream(URL))
+        when(provider.getDataStream(integrationProperties.getShipper().getUrl()))
                 .thenReturn(getClass().getClassLoader().getResourceAsStream("shippers.json"));
 
-        sut = new ShipperServiceImpl(provider, shipperRepo);
+        systemUnderTest = new ShipperServiceImpl(provider, shipperRepo, integrationProperties);
         shipperRepo.deleteAll();
-        shipperRepo.saveAll(Arrays.asList(sut.fetchShippers()));
+        shipperRepo.saveAll(Arrays.asList(systemUnderTest.fetchShippers()));
         assertEquals(3, shipperRepo.count());
     }
 }
