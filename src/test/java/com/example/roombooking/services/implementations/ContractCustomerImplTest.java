@@ -30,7 +30,6 @@ class ContractCustomerImplTest {
 
     @Test
     void fetchingContractCustomersShouldMapCorrectly() throws IOException {
-
         when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
         List<ContractCustomer> result = systemUnderTest.fetchContractCustomers();
 
@@ -71,12 +70,11 @@ class ContractCustomerImplTest {
     }
 
     @Test
-    void fetchAndSaveBooksShouldInsertNewRecords() throws IOException {
+    void fetchAndSaveContractCustomerShouldInsertNewRecords() throws IOException {
         when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
         when(contractCustomerRepo.findByExternalId(Mockito.anyLong())).thenReturn(Optional.empty());
 
         systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
-
         verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
     }
 
@@ -127,6 +125,5 @@ class ContractCustomerImplTest {
                         customer.getFax().equals("8653-585976")
         ));
     }
-
 
 }
