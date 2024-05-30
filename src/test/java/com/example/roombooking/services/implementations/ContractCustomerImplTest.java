@@ -6,6 +6,7 @@ import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class ContractCustomerImplTest {
 
     private final StreamProvider streamProvider = mock(StreamProvider.class);
@@ -75,7 +77,7 @@ class ContractCustomerImplTest {
         when(contractCustomerRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
-        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
+        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getInternalId() == null));
     }
 
     @Test
