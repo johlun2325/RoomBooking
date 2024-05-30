@@ -82,7 +82,6 @@ public class CustomerController {
         return "redirect:/customer/all";
     }
 
-    // TODO: Add error message on the frontend for trying to remove customer with bookings
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);

@@ -1,6 +1,5 @@
 package com.example.roombooking;
 
-import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.models.Events.Message;
 import com.example.roombooking.repos.EventRepo;
 import com.example.roombooking.services.EventService;
@@ -8,7 +7,6 @@ import com.example.roombooking.services.implementations.ContractCustomerImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Transactional;
