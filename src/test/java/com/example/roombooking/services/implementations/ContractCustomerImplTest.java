@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.awt.print.Book;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +34,7 @@ class ContractCustomerImplTest {
 
         assertEquals(3, result.size());
 
-        assertEquals(1, result.get(0).getLocalId());
+        assertEquals(1, result.get(0).getExternalId());
         assertEquals("Persson Kommanditbolag", result.get(0).getCompanyName());
         assertEquals("Maria Åslund", result.get(0).getContactName());
         assertEquals("gardener", result.get(0).getContactTitle());
@@ -46,7 +45,7 @@ class ContractCustomerImplTest {
         assertEquals("076-340-7143", result.get(0).getPhone());
         assertEquals("1500-16026", result.get(0).getFax());
 
-        assertEquals(2, result.get(1).getLocalId());
+        assertEquals(2, result.get(1).getExternalId());
         assertEquals("Karlsson-Eriksson", result.get(1).getCompanyName());
         assertEquals("Jörgen Gustafsson", result.get(1).getContactName());
         assertEquals("philosopher", result.get(1).getContactTitle());
@@ -57,7 +56,7 @@ class ContractCustomerImplTest {
         assertEquals("070-369-5518", result.get(1).getPhone());
         assertEquals("7805-209976", result.get(1).getFax());
 
-        assertEquals(3, result.get(2).getLocalId());
+        assertEquals(3, result.get(2).getExternalId());
         assertEquals("Eriksson Group", result.get(2).getCompanyName());
         assertEquals("Anna Karlsson", result.get(2).getContactName());
         assertEquals("journalist", result.get(2).getContactTitle());
