@@ -4,13 +4,15 @@ import com.example.roombooking.models.External.ContractCustomer;
 import com.example.roombooking.repos.ContractCustomerRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ContractCustomerImplTest {
 
@@ -66,23 +68,65 @@ class ContractCustomerImplTest {
         assertEquals("Sverige", result.get(2).getCountry());
         assertEquals("076-904-2433", result.get(2).getPhone());
         assertEquals("8653-585976", result.get(2).getFax());
-
-
     }
 
-//    @Test
-//    void fetchAndSaveBooksShouldInsertNewRecords() throws IOException {
-//        // Arrange
-//        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream("contractCustomer.xml"));
-//        when(contractCustomerRepo.findByExternalId(Mockito.anyLong())).thenReturn(Optional.empty());
-//
-//        // Act
-//        systemUnderTest.fetchContractCustomers().forEach(c -> contractCustomerRepo.save(c));
-//
-//        //Assert
-//        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
-//
-//    }
+    @Test
+    void fetchAndSaveBooksShouldInsertNewRecords() throws IOException {
+        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
+        when(contractCustomerRepo.findByExternalId(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
+
+        verify(contractCustomerRepo,times(3)).save(argThat(contractCustomer -> contractCustomer.getLocalId() == null));
+    }
+
+
+    @Test
+    void fetchAndSaveContractCustomersCorrectly() throws IOException {
+        when(streamProvider.getDataStream(URL)).thenReturn(getClass().getClassLoader().getResourceAsStream(XML_FILE));
+        when(contractCustomerRepo.findByExternalId(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        systemUnderTest.fetchContractCustomers().forEach(contractCustomer -> contractCustomerRepo.save(contractCustomer));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getExternalId() == 1 &&
+                        customer.getCompanyName().equals("Persson Kommanditbolag") &&
+                        customer.getContactName().equals("Maria Åslund") &&
+                        customer.getContactTitle().equals("gardener") &&
+                        customer.getStreetAddress().equals("Anderssons Gata 259") &&
+                        customer.getCity().equals("Kramland") &&
+                        customer.getPostalCode() == 60843 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("076-340-7143") &&
+                        customer.getFax().equals("1500-16026")
+        ));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getExternalId() == 2 &&
+                        customer.getCompanyName().equals("Karlsson-Eriksson") &&
+                        customer.getContactName().equals("Jörgen Gustafsson") &&
+                        customer.getContactTitle().equals("philosopher") &&
+                        customer.getStreetAddress().equals("Undre Villagatan 451") &&
+                        customer.getCity().equals("Alingtorp") &&
+                        customer.getPostalCode() == 28838 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("070-369-5518") &&
+                        customer.getFax().equals("7805-209976")
+        ));
+
+        verify(contractCustomerRepo, times(1)).save(argThat(customer ->
+                customer.getExternalId() == 3 &&
+                        customer.getCompanyName().equals("Eriksson Group") &&
+                        customer.getContactName().equals("Anna Karlsson") &&
+                        customer.getContactTitle().equals("journalist") &&
+                        customer.getStreetAddress().equals("Johanssons Väg 036") &&
+                        customer.getCity().equals("Arlöv") &&
+                        customer.getPostalCode() == 77616 &&
+                        customer.getCountry().equals("Sverige") &&
+                        customer.getPhone().equals("076-904-2433") &&
+                        customer.getFax().equals("8653-585976")
+        ));
+    }
 
 
 }

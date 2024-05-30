@@ -100,7 +100,7 @@ public class ContractCustomerImpl implements ContractCustomerService {
 
         } catch (IOException e) {
             LOGGER.error("An unexpected error occurred when fetching or saving contract customers", e);
+            return List.of();
         }
-        return null;
     }
 }
