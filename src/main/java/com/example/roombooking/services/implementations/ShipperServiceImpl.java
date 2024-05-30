@@ -10,23 +10,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.io.InputStream;
 
 @Service
 public class ShipperServiceImpl implements ShipperService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
+    private final ShipperRepo repo;
+    StreamProvider streamProvider;
 
     @Autowired
     public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
         this.streamProvider = streamProvider;
         this.repo = repo;
     }
-
-    StreamProvider streamProvider;
-
-    private final ShipperRepo repo;
 
     @Override
     public Shipper[] fetchShippers(String url) {
@@ -41,10 +39,9 @@ public class ShipperServiceImpl implements ShipperService {
             LOGGER.info("Fetched {} shippers.", shippers.length);
 
             return shippers;
-
         } catch (IOException e) {
             LOGGER.error("An unexpected error occurred when fetching or saving shippers", e);
+            return new Shipper[0];
         }
-        return null;
     }
 }
