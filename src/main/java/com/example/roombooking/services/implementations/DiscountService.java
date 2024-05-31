@@ -19,7 +19,7 @@ public class DiscountService {
     private static final BigDecimal ZERO_POINT_FIVE_PERCENT_DISCOUNT = BigDecimal.valueOf(0.005);
     private static final BigDecimal TWO_PERCENT_DISCOUNT = BigDecimal.valueOf(0.02);
 
-    private BigDecimal calculateDiscount(Booking booking, BigDecimal discountAmount, long discountedDays) {
+    public BigDecimal calculateDiscount(Booking booking, BigDecimal discountAmount, long discountedDays) {
         BigDecimal roomPricePerPerson = booking.getRoom().getPrice()
                 .multiply(BigDecimal.valueOf(booking.getNumberOfPeople()));
 

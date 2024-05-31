@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.configurations.IntegrationProperties;
 import com.example.roombooking.utilities.StreamProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class BlacklistServiceIntegrationTest {
@@ -16,9 +17,12 @@ class BlacklistServiceIntegrationTest {
     @Autowired
     StreamProvider streamProvider;
 
+    @Autowired
+    IntegrationProperties integrationProperties;
+
     @Test
     void willFetchBlacklistedCustomersTest() throws IOException {
-        Scanner s = new Scanner(streamProvider.getDataStream("https://javabl.systementor.se/api/jeri/blacklist")).useDelimiter("\\A");
+        Scanner s = new Scanner(streamProvider.getDataStream(integrationProperties.getBlacklist().getUrl())).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
         assertTrue(result.contains("\"id\""));
@@ -31,10 +35,10 @@ class BlacklistServiceIntegrationTest {
 
     @Test
     void willFetchBlacklistStatusTest() throws IOException {
-        final String EMAIL = "john.doe@email.com";
-        final String URL = "https://javabl.systementor.se/api/jeri/blacklistcheck/%s".formatted(EMAIL);
+        String email = "john.doe@email.com";
+        String url = integrationProperties.getBlacklist().getCheck().concat("/%s").formatted(email);
 
-        Scanner s = new Scanner(streamProvider.getDataStream(URL)).useDelimiter("\\A");
+        Scanner s = new Scanner(streamProvider.getDataStream(url)).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
 
         assertTrue(result.contains("\"statusText\""));

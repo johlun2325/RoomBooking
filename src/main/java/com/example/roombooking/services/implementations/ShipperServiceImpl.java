@@ -8,6 +8,7 @@ import com.example.roombooking.services.ShipperService;
 import com.example.roombooking.utilities.StreamProvider;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,18 @@ import java.io.InputStream;
 @Service
 public class ShipperServiceImpl implements ShipperService {
 
-    StreamProvider streamProvider;
-    private final ShipperRepo repo;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadContractCustomerApplication.class);
 
-    @Autowired
-    private IntegrationProperties integrationProperties;
+    @Getter
+    private final StreamProvider streamProvider;
+    private final ShipperRepo shipperRepo;
+    private final IntegrationProperties integrationProperties;
 
-    public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo repo) {
+    @Autowired
+    public ShipperServiceImpl(StreamProvider streamProvider, ShipperRepo shipperRepo, IntegrationProperties integrationProperties) {
         this.streamProvider = streamProvider;
-        this.repo = repo;
+        this.shipperRepo = shipperRepo;
+        this.integrationProperties = integrationProperties;
     }
 
     @Override

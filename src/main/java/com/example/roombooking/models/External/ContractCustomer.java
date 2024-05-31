@@ -24,7 +24,7 @@ public class ContractCustomer {
         private Long internalId;
 
         @JacksonXmlProperty(localName = "id")
-        private Long id;
+        private Long externalId;
 
         @JacksonXmlProperty(localName = "companyName")
         @Pattern(regexp = "^[A-Öa-ö0-9.,-_\\s]+", message = "Contact name must contain only swedish letters spaces, numbers, hyphen, dot, comma and underscore.")

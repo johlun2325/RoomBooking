@@ -27,7 +27,7 @@ public class LoadContractCustomerApplication implements CommandLineRunner {
         if (customers != null) {
             long newCustomersCount = customers
                     .stream()
-                    .filter(customer -> repo.findById(customer.getId()).isEmpty())
+                    .filter(customer -> repo.findByExternalId(customer.getExternalId()).isEmpty())
                     .peek(repo::save)
                     .count();
 
