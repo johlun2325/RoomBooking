@@ -24,15 +24,13 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <h1 class="mt-3 mb-3" th:text="${header}"></h1>
             <form action="#" th:action="@{/update-email-confirmation}" method="post">
 
-                <input type="hidden" name="oldMessageContent" th:value="${oldMessageContent}"/>
-
                 <div class="mb-3">
-                    <label for="name" class="form-label" th:text="${confirmationText}"></label>
-                    <textarea class="form-control" id="name" name="confirmationMessage" rows="10" required th:text="${messageContent}"></textarea>
+                    <label for="messageContent"></label>
+                    <textarea class="form-control" id="messageContent" name="confirmationMessage" rows="30" required th:text="${messageContent}"></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary" th:text="${buttonText}"></button>

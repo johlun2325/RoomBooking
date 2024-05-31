@@ -1,6 +1,71 @@
-<html> 
- <head></head> 
- <body>
-  Bokningsbekräftelse Bokningsbekräftelse Tack för din bokning, ! Vi är glada att kunna bekräfta din bokning. Nedan följer detaljerna för din reservation: Incheckningsdatum: Utcheckningsdatum: Rumstyp: Antal personer: Bokningsregler: Vänligen observera följande regler för din bokning: Avbokning måste göras 48 timmar före incheckningsdatum för att undvika avgifter. För frågor eller ändringar av din bokning, vänligen kontakta vår personal. Incheckningstid är 15:00 och utcheckningstid är 15:00. Vänligen ha med dig giltig ID-handling eller pass vid incheckning.
- </body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bokningsbekräftelse</title>
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .card-header {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .card-title {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .card-text {
+            font-size: 16px;
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Bokningsbekräftelse
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Tack för din bokning, <span th:text="${customerName}"></span>!</h5>
+            <p class="card-text">Vi är glada att kunna bekräfta din bokning. Nedan följer detaljerna för din
+                reservation:</p>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Incheckningsdatum:</strong> <span th:text="${checkInDate}"></span></li>
+                <li class="list-group-item"><strong>Utcheckningsdatum:</strong> <span th:text="${checkOutDate}"></span></li>
+                <li class="list-group-item"><strong>Rumstyp:</strong> <span th:text="${roomType}"></span></li>
+                <li class="list-group-item"><strong>Antal personer:</strong> <span th:text="${numberOfPeople}"></span>
+                <li class="list-group-item"><strong>Total pris:</strong> <span th:text="${totalPrice}"></span> SEK</li>
+            </ul>
+            <div class="mt-4">
+                <h6>Bokningsregler:</h6>
+                <p>Vänligen observera följande regler för din bokning:</p>
+                <ul>
+                    <li>Avbokning måste göras 48 timmar före incheckningsdatum för att undvika avgifter.</li>
+                    <li>För frågor eller ändringar av din bokning, vänligen kontakta vår personal.</li>
+                    <li>Incheckningstid är 15:00 och utcheckningstid är 12:00.</li>
+                    <li>Vänligen ha med dig giltig ID-handling vid incheckning.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>

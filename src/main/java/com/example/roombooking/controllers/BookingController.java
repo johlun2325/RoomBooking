@@ -17,6 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Controller
@@ -86,6 +88,11 @@ class BookingController {
         context.setVariable("checkOutDate", newBooking.getEndDate());
         context.setVariable("roomType", newBooking.getRoom().getRoomType().getType());
         context.setVariable("numberOfPeople", newBooking.getNumberOfPeople());
+        context.setVariable("totalPrice", newBooking.getTotalPrice());
+
+        BigDecimal totalPrice = newBooking.getTotalPrice();
+        totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
+        context.setVariable("totalPrice", totalPrice);
 
         String emailContent = templateEngine.process("booking_confirmation_template", context);
         emailService.sendBookingConfirmation(newBooking, emailContent);
