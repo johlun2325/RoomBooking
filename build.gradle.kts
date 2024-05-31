@@ -45,6 +45,7 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     implementation ("com.rabbitmq:amqp-client")
 

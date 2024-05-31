@@ -1,6 +1,7 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.security.token.SecurityTokenService;
+import com.example.roombooking.utilities.FileReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.concurrent.CompletableFuture;
 
 @Controller
@@ -16,6 +18,8 @@ import java.util.concurrent.CompletableFuture;
 public class SecurityController {
 
     private final SecurityTokenService securityTokenService;
+    private final FileReader fileReader = new FileReader();
+    private static final String BOOKING_CONFIRMATION_FILE = "src/main/resources/templates/booking_confirmation_template.html";
 
     @GetMapping("/login")
     public String toLogin(Model model, @RequestParam(required = false) String message) {
@@ -77,5 +81,24 @@ public class SecurityController {
 
         model.addAttribute("username", message.replace("Rejected: ", ""));
         return "security/password-reset.html";
+    }
+
+    @GetMapping("/email-confirmation")
+    public String toBookingConfirmationMessageForm(Model model) {
+        String confirmationMessagePlainText = fileReader.readFile(BOOKING_CONFIRMATION_FILE);
+        model.addAttribute("pageTitle", "Bekräftelsemejl");
+        model.addAttribute("header", "Uppdatera Bekräftelsemejl");
+        model.addAttribute("messageContent", confirmationMessagePlainText);
+        model.addAttribute("buttonText", "Uppdatera");
+
+        return "security/update-booking-confirmation.html";
+    }
+
+    @PostMapping("/update-email-confirmation")
+    public String updateConfirmationForm(Model model, @RequestParam String confirmationMessage) {
+        fileReader.updateFile(BOOKING_CONFIRMATION_FILE, confirmationMessage);
+        model.addAttribute("message", "Confirmation booking message updated");
+
+        return "index.html";
     }
 }

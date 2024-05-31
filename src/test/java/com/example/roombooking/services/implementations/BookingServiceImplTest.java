@@ -35,9 +35,11 @@ class BookingServiceImplTest {
     private CustomerRepo customerRepo;
     @Mock
     private RoomRepo roomRepo;
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
-    private BookingServiceImpl service = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+    private BookingServiceImpl service = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailService);
 
     //Customer
     private final Long customerId = 1L;
@@ -114,7 +116,7 @@ class BookingServiceImplTest {
     void findAllBookings() {
 
         when(bookingRepo.findAll()).thenReturn(List.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailService);
 
         List<BookingDTO> allCustomers = serv.findAllBookings();
         assertEquals(1, allCustomers.size());
@@ -125,7 +127,7 @@ class BookingServiceImplTest {
     void findBookingById() {
 
         when(bookingRepo.findById(booking.getId())).thenReturn(Optional.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailService);
         BookingDTO foundBooking = serv.findBookingById(booking.getId());
 
         assertEquals(booking.getId(), foundBooking.getId());
@@ -157,7 +159,7 @@ class BookingServiceImplTest {
     void deleteBookingById() {
 
         when(bookingRepo.findById(booking.getId())).thenReturn(Optional.of(booking));
-        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo);
+        BookingServiceImpl serv = new BookingServiceImpl(bookingRepo, customerRepo, roomRepo, emailService);
         serv.deleteBookingById(booking.getId());
         verify(bookingRepo, times(1)).findById(booking.getId());
 //        verify(repo, times(1)).deleteById(id);

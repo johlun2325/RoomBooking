@@ -33,14 +33,18 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepo roomRepo;
     private final DateUtility dateUtility = new DateStrategy();
     private final DiscountService discountService = new DiscountService();
+    private final EmailService emailService;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     public BookingServiceImpl(BookingRepo bookingRepo,
                               CustomerRepo customerRepo,
-                              RoomRepo roomRepo) {
+                              RoomRepo roomRepo,
+                              EmailService emailService) {
+
         this.bookingRepo = bookingRepo;
         this.customerRepo = customerRepo;
         this.roomRepo = roomRepo;
+        this.emailService = emailService;
     }
 
     @Override
@@ -97,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
 
     // TODO: Fungerar bara med befintliga kunder
     @Override
-    public void addBooking(BookingDTO booking) {
+    public Booking addBooking(BookingDTO booking) {
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
@@ -108,9 +112,10 @@ public class BookingServiceImpl implements BookingService {
             discountService.applyDiscounts(newBooking);
             bookingRepo.save(newBooking);
             LOGGER.info("Booking add");
-            return;
+            return newBooking;
         }
         LOGGER.warn("Customer is blacklisted");
+        return null;
     }
 
     @Override
@@ -163,4 +168,5 @@ public class BookingServiceImpl implements BookingService {
             LOGGER.info("Booking with ID: {} deleted", id);
         }, () -> LOGGER.warn("Booking with ID: {} not found", id));
     }
+
 }
