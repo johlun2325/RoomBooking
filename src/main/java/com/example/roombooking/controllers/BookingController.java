@@ -65,7 +65,8 @@ class BookingController {
                              @RequestParam int numberOfPeople,
                              @RequestParam Long roomId,
                              @RequestParam double roomPrice,
-                             RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes,
+                             Model model) {
 
         BookingDTO bookingDTO = new BookingDTO(new CustomerLiteDTO(ssn),
                                                new RoomLiteDTO(roomId, roomPrice),
@@ -74,10 +75,16 @@ class BookingController {
                                                dateUtility.convertToLocalDate(endDate));
 
         // TODO: If addBooking() returns null (customer is blacklisted) redirect to "/booking/all" with an error message
-        Booking newBooking = bookingService.addBooking(bookingDTO);
-        redirectAttributes.addFlashAttribute("newBooking", newBooking);
 
-        return "redirect:/booking/send-confirmation";
+
+        Booking newBooking = bookingService.addBooking(bookingDTO);
+        if (newBooking == null) {
+            redirectAttributes.addFlashAttribute("newBooking", newBooking);
+            return "redirect:/booking/send-confirmation";
+        }
+        model.addAttribute("message", "Customer is blacklisted. No booking was added");
+
+        return "index.html";
     }
 
     @RequestMapping("/send-confirmation")
