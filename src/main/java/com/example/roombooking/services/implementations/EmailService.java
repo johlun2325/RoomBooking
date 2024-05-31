@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.models.Booking;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class EmailService {
 
     private static final String ETHEREAL_EMAIL = "zion78@ethereal.email";
     private static final String SUBJECT = "Begäran om Återställning av Lösenord";
-    private static final String MESSAGE_TEMPLATE = """
+    private static final String MESSAGE_TEMPLATE_PASSWORD = """
         <p>Hej %s,</p>
         
         <p>Vi har mottagit en begäran om att återställa lösenordet för ditt konto.</p>
@@ -37,7 +38,18 @@ public class EmailService {
             helper.setFrom(ETHEREAL_EMAIL);
             helper.setTo(to);
             helper.setSubject(SUBJECT);
-            helper.setText(MESSAGE_TEMPLATE.formatted(to, link), true);
+            helper.setText(MESSAGE_TEMPLATE_PASSWORD.formatted(to, link), true);
             mailSender.send(mimeMessage);
+    }
+
+    public void sendBookingConfirmation(Booking booking) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+
+        helper.setFrom(ETHEREAL_EMAIL);
+        helper.setTo(booking.getCustomer().getEmail());
+        helper.setSubject(SUBJECT);
+        helper.setText(MESSAGE_TEMPLATE_PASSWORD, true);
+        mailSender.send(mimeMessage);
     }
 }
