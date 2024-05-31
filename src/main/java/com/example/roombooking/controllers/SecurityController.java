@@ -97,7 +97,7 @@ public class SecurityController {
     @PostMapping("/update-email-confirmation")
     public String updateConfirmationForm(Model model, @RequestParam String confirmationMessage) {
         fileReader.updateFile(BOOKING_CONFIRMATION_FILE, confirmationMessage);
-        model.addAttribute("message", "Confirmation booking message updated");
+        model.addAttribute("message", "EmailConfirmation booking message updated");
 
         return "index.html";
     }

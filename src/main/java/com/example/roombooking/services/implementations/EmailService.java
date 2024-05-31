@@ -1,15 +1,21 @@
 package com.example.roombooking.services.implementations;
 
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.EmailConfirmation;
+import com.example.roombooking.repos.EmailConfirmationRepo;
 import com.example.roombooking.utilities.FileReader;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
+@AllArgsConstructor
 public class EmailService {
 
     @Autowired

@@ -4,6 +4,8 @@ import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
+import com.example.roombooking.models.EmailConfirmation;
+import com.example.roombooking.repos.EmailConfirmationRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.implementations.EmailService;
 import com.example.roombooking.utilities.DateStrategy;
@@ -20,6 +22,7 @@ import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/booking")
@@ -31,6 +34,7 @@ class BookingController {
     private final BookingService bookingService;
     private final EmailService emailService;
     private final DateUtility dateUtility = new DateStrategy();
+    private final EmailConfirmationRepo emailConfirmationRepo;
 
     @GetMapping("/all")
     String getAllBookings(Model model) {
@@ -79,13 +83,17 @@ class BookingController {
             redirectAttributes.addFlashAttribute("newBooking", newBooking);
             return "redirect:/booking/send-confirmation";
         }
-
         model.addAttribute("message", "Customer is blacklisted. No booking was added");
+
         return "index.html";
     }
 
     @RequestMapping("/send-confirmation")
     public String sendConfirmationEmail(@ModelAttribute("newBooking") Booking newBooking) {
+
+        EmailConfirmation confirmation = emailConfirmationRepo.findByName("Booking Confirmation Message")
+                .orElseThrow(NoSuchElementException::new);
+
         Context context = new Context();
         context.setVariable("customerName", newBooking.getCustomer().getName());
         context.setVariable("checkInDate", newBooking.getStartDate());
@@ -98,11 +106,13 @@ class BookingController {
         totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
         context.setVariable("totalPrice", totalPrice);
 
-        String emailContent = templateEngine.process("booking_confirmation_template", context);
+        String emailContent = templateEngine.process(confirmation.getTemplate(), context);
+
         emailService.sendBookingConfirmation(newBooking, emailContent);
 
         return "redirect:/booking/all";
     }
+
 
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {

@@ -38,6 +38,8 @@ public class RoomBookingApplication {
                 application = new SpringApplication(LoadMessagesApplication.class);
             } else if (Objects.equals(args[0], "loadDefaultBookingData")) {
                 application = new SpringApplication(LoadDefaultBookingData.class);
+            } else if (Objects.equals(args[0], "loadDefaultEmailTemplate")) {
+                application = new SpringApplication(LoadDefaultEmailTemplate.class);
             } else {
                 throw new IllegalArgumentException("Unknown argument: " + args[0]);
             }
