@@ -33,16 +33,6 @@ public class FileReader {
         }
     }
 
-//    public void updateFile(String content)  {
-//        byte[] bytes = content.getBytes();
-//        Path path = Paths.get(BOOKING_CONFIRMATION_FILE);
-//        try {
-//            Files.write(path, bytes);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     public String extractPlainTextFromFile(String filePath) {
         try {
             File input = new File(filePath);
@@ -66,10 +56,13 @@ public class FileReader {
                 String modifiedHtml = originalHtml.replaceAll(oldText, newText);
                 element.html(modifiedHtml);
             }
+
+            try (FileWriter writer = new FileWriter(filePath)) {
+                writer.write(doc.outerHtml());
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
 }
