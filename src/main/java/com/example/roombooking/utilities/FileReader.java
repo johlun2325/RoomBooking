@@ -1,11 +1,14 @@
 package com.example.roombooking.utilities;
 
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Service
 public class FileReader {
 
     public String readFile(String path) {
