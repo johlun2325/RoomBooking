@@ -3,13 +3,20 @@ package com.example.roombooking.controllers;
 import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
+import com.example.roombooking.models.Booking;
 import com.example.roombooking.services.BookingService;
+import com.example.roombooking.services.implementations.EmailService;
 import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
 import java.util.List;
 
 @Controller
@@ -17,7 +24,10 @@ import java.util.List;
 @RequiredArgsConstructor
 class BookingController {
 
+    @Autowired
+    private TemplateEngine templateEngine;
     private final BookingService bookingService;
+    private final EmailService emailService;
     private final DateUtility dateUtility = new DateStrategy();
 
     @GetMapping("/all")
@@ -52,14 +62,37 @@ class BookingController {
                              @RequestParam String endDate,
                              @RequestParam int numberOfPeople,
                              @RequestParam Long roomId,
-                             @RequestParam double roomPrice) {
+                             @RequestParam double roomPrice,
+                             RedirectAttributes redirectAttributes) {
 
         BookingDTO bookingDTO = new BookingDTO(new CustomerLiteDTO(ssn),
                                                new RoomLiteDTO(roomId, roomPrice),
                                                numberOfPeople,
                                                dateUtility.convertToLocalDate(startDate),
                                                dateUtility.convertToLocalDate(endDate));
-        bookingService.addBooking(bookingDTO);
+
+        // TODO: If addBooking() returns null (customer is blacklisted) redirect to "/booking/all" with an error message
+        Booking newBooking = bookingService.addBooking(bookingDTO);
+
+
+        redirectAttributes.addFlashAttribute("newBooking", newBooking);
+
+        return "redirect:/booking/send-confirmation";
+    }
+
+    @RequestMapping("/send-confirmation")
+    public String sendConfirmationEmail(@ModelAttribute("newBooking") Booking newBooking) {
+
+        Context context = new Context();
+        context.setVariable("customerName", newBooking.getCustomer().getName());
+        context.setVariable("checkInDate", newBooking.getStartDate());
+        context.setVariable("checkOutDate", newBooking.getEndDate());
+        context.setVariable("roomType", newBooking.getRoom().getRoomType().getType());
+        context.setVariable("numberOfPeople", newBooking.getNumberOfPeople());
+
+        String emailContent = templateEngine.process("booking_confirmation_template", context);
+
+        emailService.sendBookingConfirmation(newBooking, emailContent);
         return "redirect:/booking/all";
     }
 

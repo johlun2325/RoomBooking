@@ -1,5 +1,6 @@
 package com.example.roombooking.services.implementations;
 
+import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.utilities.FileReader;
 import jakarta.mail.MessagingException;
@@ -33,14 +34,11 @@ public class EmailService {
         mailSender.send(mimeMessage);
     }
 
-    public void sendBookingConfirmation(Booking booking) {
+    public void sendBookingConfirmation(Booking booking, String message) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
-
-            List<String> lines = fileReader.readFile("src/main/resources/booking_confirmation_template.html");
-            String message = fileReader.fileContentToString(lines);
 
             helper.setFrom(ETHEREAL_EMAIL);
             helper.setTo(booking.getCustomer().getEmail());

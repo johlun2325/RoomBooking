@@ -14,7 +14,6 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
 
     // TODO: Fungerar bara med befintliga kunder
     @Override
-    public void addBooking(BookingDTO booking) {
+    public Booking addBooking(BookingDTO booking) {
         Customer customer = customerRepo.findCustomerBySsn(booking.getCustomer().getSsn()).orElseThrow(NoSuchElementException::new);
         Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow(NoSuchElementException::new);
 
@@ -112,12 +111,11 @@ public class BookingServiceImpl implements BookingService {
             Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
             discountService.applyDiscounts(newBooking);
             bookingRepo.save(newBooking);
-            emailService.sendBookingConfirmation(newBooking);
             LOGGER.info("Booking add");
-            LOGGER.info("Confirmation message sent");
-            return;
+            return newBooking;
         }
         LOGGER.warn("Customer is blacklisted");
+        return null;
     }
 
     @Override
@@ -170,4 +168,5 @@ public class BookingServiceImpl implements BookingService {
             LOGGER.info("Booking with ID: {} deleted", id);
         }, () -> LOGGER.warn("Booking with ID: {} not found", id));
     }
+
 }

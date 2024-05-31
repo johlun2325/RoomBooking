@@ -42,7 +42,6 @@ public class SecurityTokenService {
         securityTokenRepository.save(securityToken);
         try {
             emailService.sendResetPasswordLink(username, link);
-            LOGGER.info("Password reset-link emailed to user: '{}'", foundUser.getUsername());
             return true;
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send reset-password email", e);
