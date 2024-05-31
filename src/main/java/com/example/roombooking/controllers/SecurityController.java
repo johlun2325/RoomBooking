@@ -2,7 +2,6 @@ package com.example.roombooking.controllers;
 
 import com.example.roombooking.security.token.SecurityTokenService;
 import com.example.roombooking.services.implementations.EmailConfigurationsService;
-import com.example.roombooking.utilities.FileReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
@@ -20,8 +19,6 @@ public class SecurityController {
 
     private final EmailConfigurationsService emailConfigurationsService;
     private final SecurityTokenService securityTokenService;
-//    private final FileReader fileReader = new FileReader();
-    private static final String BOOKING_CONFIRMATION_FILE = "src/main/resources/templates/booking_confirmation_template.html";
 
     @GetMapping("/login")
     public String toLogin(Model model, @RequestParam(required = false) String message) {

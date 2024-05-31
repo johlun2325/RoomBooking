@@ -5,7 +5,6 @@ import com.example.roombooking.dto.CustomerLiteDTO;
 import com.example.roombooking.dto.RoomLiteDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.EmailConfirmation;
-import com.example.roombooking.repos.EmailConfirmationRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.services.implementations.EmailConfigurationsService;
 import com.example.roombooking.services.implementations.EmailSenderService;
@@ -23,7 +22,6 @@ import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/booking")
@@ -84,14 +82,13 @@ class BookingController {
             redirectAttributes.addFlashAttribute("newBooking", newBooking);
             return "redirect:/booking/send-confirmation";
         }
-        model.addAttribute("message", "Customer is blacklisted. No booking was added");
 
+        model.addAttribute("message", "Customer is blacklisted. No booking was added");
         return "index.html";
     }
 
     @RequestMapping("/send-confirmation")
     public String sendConfirmationEmail(@ModelAttribute("newBooking") Booking newBooking) {
-
         EmailConfirmation confirmation = emailConfigurationsService.findEmailConfigurationByName("Booking Confirmation Message");
 
         Context context = new Context();
@@ -111,7 +108,6 @@ class BookingController {
 
         return "redirect:/booking/all";
     }
-
 
     @RequestMapping("/delete/{id}")
     public String deleteBooking(@PathVariable Long id) {
