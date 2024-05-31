@@ -23,16 +23,6 @@ public class FileReader {
         }
     }
 
-    public void updateFile(String filePath, String content)  {
-        byte[] bytes = content.getBytes();
-        Path path = Paths.get(filePath);
-        try {
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 //    public String extractPlainTextFromFile(String filePath) {
 //        try {
 //            File input = new File(filePath);

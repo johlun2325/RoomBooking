@@ -1,6 +1,7 @@
 package com.example.roombooking.controllers;
 
 import com.example.roombooking.security.token.SecurityTokenService;
+import com.example.roombooking.services.implementations.EmailConfigurationsService;
 import com.example.roombooking.utilities.FileReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -17,8 +18,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class SecurityController {
 
+    private final EmailConfigurationsService emailConfigurationsService;
     private final SecurityTokenService securityTokenService;
-    private final FileReader fileReader = new FileReader();
+//    private final FileReader fileReader = new FileReader();
     private static final String BOOKING_CONFIRMATION_FILE = "src/main/resources/templates/booking_confirmation_template.html";
 
     @GetMapping("/login")
@@ -85,7 +87,7 @@ public class SecurityController {
 
     @GetMapping("/email-confirmation")
     public String toBookingConfirmationMessageForm(Model model) {
-        String confirmationMessagePlainText = fileReader.readFile(BOOKING_CONFIRMATION_FILE);
+        String confirmationMessagePlainText = emailConfigurationsService.findEmailConfigurationById(1L).getTemplate();
         model.addAttribute("pageTitle", "Bekräftelsemejl");
         model.addAttribute("header", "Uppdatera Bekräftelsemejl");
         model.addAttribute("messageContent", confirmationMessagePlainText);
@@ -96,7 +98,7 @@ public class SecurityController {
 
     @PostMapping("/update-email-confirmation")
     public String updateConfirmationForm(Model model, @RequestParam String confirmationMessage) {
-        fileReader.updateFile(BOOKING_CONFIRMATION_FILE, confirmationMessage);
+        emailConfigurationsService.updateConfirmationTemplate(1L, confirmationMessage);
         model.addAttribute("message", "EmailConfirmation booking message updated");
 
         return "index.html";

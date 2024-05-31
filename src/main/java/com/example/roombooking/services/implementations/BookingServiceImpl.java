@@ -33,18 +33,15 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepo roomRepo;
     private final DateUtility dateUtility = new DateStrategy();
     private final DiscountService discountService = new DiscountService();
-    private final EmailService emailService;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     public BookingServiceImpl(BookingRepo bookingRepo,
                               CustomerRepo customerRepo,
-                              RoomRepo roomRepo,
-                              EmailService emailService) {
+                              RoomRepo roomRepo) {
 
         this.bookingRepo = bookingRepo;
         this.customerRepo = customerRepo;
         this.roomRepo = roomRepo;
-        this.emailService = emailService;
     }
 
     @Override

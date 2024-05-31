@@ -7,7 +7,8 @@ import com.example.roombooking.models.Booking;
 import com.example.roombooking.models.EmailConfirmation;
 import com.example.roombooking.repos.EmailConfirmationRepo;
 import com.example.roombooking.services.BookingService;
-import com.example.roombooking.services.implementations.EmailService;
+import com.example.roombooking.services.implementations.EmailConfigurationsService;
+import com.example.roombooking.services.implementations.EmailSenderService;
 import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ class BookingController {
     @Autowired
     private TemplateEngine templateEngine;
     private final BookingService bookingService;
-    private final EmailService emailService;
+    private final EmailConfigurationsService emailConfigurationsService;
+    private final EmailSenderService emailSenderService;
     private final DateUtility dateUtility = new DateStrategy();
-    private final EmailConfirmationRepo emailConfirmationRepo;
 
     @GetMapping("/all")
     String getAllBookings(Model model) {
@@ -91,8 +92,7 @@ class BookingController {
     @RequestMapping("/send-confirmation")
     public String sendConfirmationEmail(@ModelAttribute("newBooking") Booking newBooking) {
 
-        EmailConfirmation confirmation = emailConfirmationRepo.findByName("Booking Confirmation Message")
-                .orElseThrow(NoSuchElementException::new);
+        EmailConfirmation confirmation = emailConfigurationsService.findEmailConfigurationByName("Booking Confirmation Message");
 
         Context context = new Context();
         context.setVariable("customerName", newBooking.getCustomer().getName());
@@ -107,8 +107,7 @@ class BookingController {
         context.setVariable("totalPrice", totalPrice);
 
         String emailContent = templateEngine.process(confirmation.getTemplate(), context);
-
-        emailService.sendBookingConfirmation(newBooking, emailContent);
+        emailSenderService.sendBookingConfirmation(newBooking, emailContent);
 
         return "redirect:/booking/all";
     }

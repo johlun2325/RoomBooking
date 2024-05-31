@@ -2,7 +2,7 @@ package com.example.roombooking.security.token;
 
 import com.example.roombooking.security.User;
 import com.example.roombooking.security.UserRepository;
-import com.example.roombooking.services.implementations.EmailService;
+import com.example.roombooking.services.implementations.EmailSenderService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class SecurityTokenService {
 
     private final UserRepository userRepository;
     private final SecurityTokenRepository securityTokenRepository;
-    private final EmailService emailService;
+    private final EmailSenderService emailSenderService;
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTokenService.class);
 
     public boolean resetPasswordRequestConfirmation(String username) {
@@ -41,7 +41,7 @@ public class SecurityTokenService {
                                                         foundUser);
         securityTokenRepository.save(securityToken);
         try {
-            emailService.sendResetPasswordLink(username, link);
+            emailSenderService.sendResetPasswordLink(username, link);
             return true;
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send reset-password email", e);
