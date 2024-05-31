@@ -73,8 +73,6 @@ class BookingController {
 
         // TODO: If addBooking() returns null (customer is blacklisted) redirect to "/booking/all" with an error message
         Booking newBooking = bookingService.addBooking(bookingDTO);
-
-
         redirectAttributes.addFlashAttribute("newBooking", newBooking);
 
         return "redirect:/booking/send-confirmation";
@@ -82,7 +80,6 @@ class BookingController {
 
     @RequestMapping("/send-confirmation")
     public String sendConfirmationEmail(@ModelAttribute("newBooking") Booking newBooking) {
-
         Context context = new Context();
         context.setVariable("customerName", newBooking.getCustomer().getName());
         context.setVariable("checkInDate", newBooking.getStartDate());
@@ -91,8 +88,8 @@ class BookingController {
         context.setVariable("numberOfPeople", newBooking.getNumberOfPeople());
 
         String emailContent = templateEngine.process("booking_confirmation_template", context);
-
         emailService.sendBookingConfirmation(newBooking, emailContent);
+
         return "redirect:/booking/all";
     }
 

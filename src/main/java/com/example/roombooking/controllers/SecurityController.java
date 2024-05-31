@@ -85,22 +85,23 @@ public class SecurityController {
     }
 
     @GetMapping("/email-confirmation")
-    public String toBookingConfirmationForm(Model model) {
-        List<String> lines = fileReader.readFile(BOOKING_CONFIRMATION_FILE);
-        String confirmationMessage = fileReader.fileContentToString(lines);
+    public String toBookingConfirmationMessageForm(Model model) {
+        String confirmationMessagePlainText = fileReader.extractPlainTextFromFile(BOOKING_CONFIRMATION_FILE);
 
         model.addAttribute("pageTitle", "Bekräftelsemejl");
         model.addAttribute("header", "Uppdatera Bekräftelsemejl");
         model.addAttribute("confirmationText", "Bekräftelsemejl");
-        model.addAttribute("messageContent", confirmationMessage);
+        model.addAttribute("messageContent", confirmationMessagePlainText);
         model.addAttribute("buttonText", "Uppdatera");
+
+        model.addAttribute("oldMessageContent", confirmationMessagePlainText);
 
         return "security/update-booking-confirmation.html";
     }
 
     @PostMapping("/update-email-confirmation")
-    public String updateConfirmationForm(Model model, @RequestParam String confirmationMessage) {
-        fileReader.updateFile(BOOKING_CONFIRMATION_FILE, confirmationMessage);
+    public String updateConfirmationForm(Model model, @RequestParam String confirmationMessage, @RequestParam String oldMessageContent) {
+        fileReader.updateMessagePlainText(BOOKING_CONFIRMATION_FILE, oldMessageContent, confirmationMessage);
         model.addAttribute("message", "Confirmation booking message updated");
 
         return "index.html";

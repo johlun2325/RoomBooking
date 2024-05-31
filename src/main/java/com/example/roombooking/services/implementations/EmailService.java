@@ -1,6 +1,5 @@
 package com.example.roombooking.services.implementations;
 
-import com.example.roombooking.dto.BookingDTO;
 import com.example.roombooking.models.Booking;
 import com.example.roombooking.utilities.FileReader;
 import jakarta.mail.MessagingException;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EmailService {
@@ -24,8 +21,7 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 
-        List<String> lines = fileReader.readFile("src/main/resources/reset_password_template.html");
-        String message = fileReader.fileContentToString(lines);
+        String message = fileReader.readFile("src/main/resources/reset_password_template.html");
 
         helper.setFrom(ETHEREAL_EMAIL);
         helper.setTo(to);
