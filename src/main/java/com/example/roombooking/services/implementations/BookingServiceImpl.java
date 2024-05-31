@@ -14,6 +14,7 @@ import com.example.roombooking.repos.RoomRepo;
 import com.example.roombooking.services.BookingService;
 import com.example.roombooking.utilities.DateStrategy;
 import com.example.roombooking.utilities.DateUtility;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,18 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepo roomRepo;
     private final DateUtility dateUtility = new DateStrategy();
     private final DiscountService discountService = new DiscountService();
+    private final EmailService emailService;
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     public BookingServiceImpl(BookingRepo bookingRepo,
                               CustomerRepo customerRepo,
-                              RoomRepo roomRepo) {
+                              RoomRepo roomRepo,
+                              EmailService emailService) {
+
         this.bookingRepo = bookingRepo;
         this.customerRepo = customerRepo;
         this.roomRepo = roomRepo;
+        this.emailService = emailService;
     }
 
     @Override
@@ -107,7 +112,9 @@ public class BookingServiceImpl implements BookingService {
             Booking newBooking = new Booking(customer, room, booking.getNumberOfPeople(), booking.getStartDate(), booking.getEndDate());
             discountService.applyDiscounts(newBooking);
             bookingRepo.save(newBooking);
+            emailService.sendBookingConfirmation(newBooking);
             LOGGER.info("Booking add");
+            LOGGER.info("Confirmation message sent");
             return;
         }
         LOGGER.warn("Customer is blacklisted");

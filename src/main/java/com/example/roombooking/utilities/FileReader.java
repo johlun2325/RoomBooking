@@ -1,7 +1,6 @@
 package com.example.roombooking.utilities;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,6 +44,13 @@ public class FileReader {
         }
 
         writeFile(path, updatedLines);
+    }
+
+    public String fileContentToString(List<String> lines) {
+        StringBuilder builder = new StringBuilder();
+
+        lines.forEach(line -> builder.append(line).append("\n"));
+        return builder.toString();
     }
 
 }

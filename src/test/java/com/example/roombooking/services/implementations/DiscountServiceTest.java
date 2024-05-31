@@ -8,6 +8,7 @@ import com.example.roombooking.repos.BookingRepo;
 import com.example.roombooking.utilities.BookingPriceCalculator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
+@SpringBootTest
 class DiscountServiceTest {
 
     Booking booking = mock(Booking.class);
