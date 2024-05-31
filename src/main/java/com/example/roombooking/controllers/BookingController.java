@@ -74,16 +74,13 @@ class BookingController {
                                                dateUtility.convertToLocalDate(startDate),
                                                dateUtility.convertToLocalDate(endDate));
 
-        // TODO: If addBooking() returns null (customer is blacklisted) redirect to "/booking/all" with an error message
-
-
         Booking newBooking = bookingService.addBooking(bookingDTO);
         if (newBooking == null) {
             redirectAttributes.addFlashAttribute("newBooking", newBooking);
             return "redirect:/booking/send-confirmation";
         }
-        model.addAttribute("message", "Customer is blacklisted. No booking was added");
 
+        model.addAttribute("message", "Customer is blacklisted. No booking was added");
         return "index.html";
     }
 
