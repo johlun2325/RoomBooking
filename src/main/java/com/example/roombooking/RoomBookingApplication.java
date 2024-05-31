@@ -28,21 +28,22 @@ public class RoomBookingApplication {
 
         if (args.length == 0) {
             SpringApplication.run(RoomBookingApplication.class, args);
-        } else if (Objects.equals(args[0], "loadShippersApp")) {
-            SpringApplication application = new SpringApplication(LoadShippersApplication.class);
+        } else {
+            SpringApplication application;
+            if (Objects.equals(args[0], "loadShippersApp")) {
+                application = new SpringApplication(LoadShippersApplication.class);
+            } else if (Objects.equals(args[0], "loadContractCustomerApp")) {
+                application = new SpringApplication(LoadContractCustomerApplication.class);
+            } else if (Objects.equals(args[0], "loadMessagesApp")) {
+                application = new SpringApplication(LoadMessagesApplication.class);
+            } else if (Objects.equals(args[0], "loadDefaultBookingData")) {
+                application = new SpringApplication(LoadDefaultBookingData.class);
+            } else {
+                throw new IllegalArgumentException("Unknown argument: " + args[0]);
+            }
+
             application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
-        } else if (Objects.equals(args[0], "loadContractCustomerApp")) {
-            SpringApplication application = new SpringApplication(LoadContractCustomerApplication.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
-        } else if (Objects.equals(args[0], "loadMessagesApp")) {
-            SpringApplication application = new SpringApplication(LoadMessagesApplication.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
-        } else if (Objects.equals(args[0], "loadDefaultBookingData")) {
-            SpringApplication application = new SpringApplication(LoadDefaultBookingData.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
+//            application.setAdditionalProfiles("production");
             application.run(args);
         }
     }
