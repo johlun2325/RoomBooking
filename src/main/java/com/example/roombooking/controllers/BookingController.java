@@ -75,7 +75,7 @@ class BookingController {
                                                dateUtility.convertToLocalDate(endDate));
 
         Booking newBooking = bookingService.addBooking(bookingDTO);
-        if (newBooking == null) {
+        if (newBooking != null) {
             redirectAttributes.addFlashAttribute("newBooking", newBooking);
             return "redirect:/booking/send-confirmation";
         }
